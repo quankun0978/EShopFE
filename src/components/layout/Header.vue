@@ -16,7 +16,7 @@
           style="display: flex; align-items: center"
         >
           <ArrowLeftOutlined />
-          <span class="span">Quay lai trang bat dau su dung</span>
+          <span class="span">Quay lại trang bắt đầu sử dụng</span>
         </a-space>
         <Select
           :options="options"

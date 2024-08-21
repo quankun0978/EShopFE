@@ -96,10 +96,17 @@ const onSelectChange = (selectedRowKeys) => {
         pageSize: 50,
       }"
     >
-      <a-column v-for="column in columns" :key="column.dataIndex">
+      <a-column
+        v-for="column in columns"
+        :key="column.dataIndex"
+        :dataIndex="column.dataIndex"
+      >
         <template #title>
           <div>{{ column.title }}</div>
           <a-input />
+        </template>
+        <template #bodyCell="{ record }">
+          {{ record[column.dataIndex] }}
         </template>
       </a-column>
     </a-table>

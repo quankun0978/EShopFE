@@ -83,13 +83,18 @@ const onSelectChange = (selectedRowKeys) => {
         Nap
       </div>
     </div>
+
     <a-table
+      :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
       :row-selection="{
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
       }"
       :columns="columns"
       :data-source="items"
+      :pagination="{
+        pageSize: 50,
+      }"
     >
     </a-table>
   </a-config-provider>
@@ -99,5 +104,8 @@ const onSelectChange = (selectedRowKeys) => {
   padding: 8px;
   color: #fff;
   border-right: 1px solid black;
+}
+:root {
+  --table-height: 100vh;
 }
 </style>

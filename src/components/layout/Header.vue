@@ -1,17 +1,16 @@
 <template>
   <a-layout-header
     :style="{
-      height: '32px',
       background: '#fff',
       paddingLeft: '8px',
       paddingRight: '0px',
     }"
   >
-    <div style="display: flex; justify-content: space-between; height: 32px">
+    <div style="display: flex; justify-content: space-between">
       <h3 style="display: flex; align-items: center">
         {{ menuStore.namePath }}
       </h3>
-      <a-space style="display: flex; align-items: center; height: 100%">
+      <a-space style="display: flex; align-items: center; ">
         <a-space
           direction="horizontal"
           style="display: flex; align-items: center"

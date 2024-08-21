@@ -34,7 +34,8 @@ const value = ref(props.defaultSelectedKey);
         <template v-if="payload.icon">
           <component
             :style="{
-              height: '32px',
+              height: '64px',
+
               padding: 0,
               borderRadius: 0,
             }"

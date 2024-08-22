@@ -10,6 +10,6 @@ onMounted(() => {
 });
 
 const Init = () => {
-  useMenuStore().updatePathName("Hang hoa / Sua");
+  useMenuStore().updatePathName("Hàng hóa / Sửa");
 };
 </script>

@@ -45,6 +45,7 @@ const onSelectChange = (selectedRowKeys) => {
         horizontalItemMargin: '0',
         horizontalItemMarginRTL: '0',
         horizontalItemGutter: 0,
+        fontSize: 11,
       }, // Sử dụng theme từ file config
     }"
   >
@@ -59,11 +60,11 @@ const onSelectChange = (selectedRowKeys) => {
         class="item-action"
       >
         <PlusOutlined />
-        Them moi
+        Thêm mới
       </RouterLink>
       <RouterLink class="item-action">
         <CopyOutlined />
-        Nhan ban
+        Nhân bản
       </RouterLink>
       <RouterLink
         :to="{
@@ -72,15 +73,15 @@ const onSelectChange = (selectedRowKeys) => {
         class="item-action"
       >
         <EditOutlined />
-        Sua
+        Sửa
       </RouterLink>
       <div class="item-action">
         <DeleteOutlined />
-        Xoa
+        Xóa
       </div>
       <div class="item-action">
         <SyncOutlined />
-        Nap
+        Nạp
       </div>
     </div>
 
@@ -90,12 +91,24 @@ const onSelectChange = (selectedRowKeys) => {
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
       }"
-      :columns="columns"
       :data-source="items"
       :pagination="{
         pageSize: 50,
       }"
     >
+      <a-column
+        v-for="column in columns"
+        :key="column.dataIndex"
+        :dataIndex="column.dataIndex"
+      >
+        <template #title>
+          <div>{{ column.title }}</div>
+          <a-input />
+        </template>
+        <template #bodyCell="{ record }">
+          {{ record[column.dataIndex] }}
+        </template>
+      </a-column>
     </a-table>
   </a-config-provider>
 </template>

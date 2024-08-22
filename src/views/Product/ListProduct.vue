@@ -1,49 +1,50 @@
 <template>
   <div>
-    <Table :columns="columns" :items="data" :is-action="true" />
+    <Table :items="data" :columns="columns" :isAction="true" />
   </div>
 </template>
 <script setup>
 import Table from "@/components/common/Table/Table.vue";
+import TableTest from "@/components/common/Table/TableTest.vue";
 import { useMenuStore } from "@/store/menu";
 import { h, onMounted, reactive, render } from "vue";
 
 const columns = [
   {
-    title: "Ma SKU",
+    title: "Mã SKU",
     dataIndex: "codeSKU",
   },
   {
-    title: "Ten hang hoa",
+    title: "Tên hàng hóa",
     dataIndex: "name",
     width: "30%",
   },
   {
-    title: "Nhom hang hoa",
+    title: "Nhóm hàng hóa",
     dataIndex: "group",
   },
   {
-    title: "Don vi tinh",
+    title: "Đơn vị tính",
     dataIndex: "unit",
   },
   {
-    title: "Gia ban TB",
+    title: "Giá bán TB",
     dataIndex: "price",
   },
   {
-    title: "Hien thi tren MH ban hang",
+    title: "Hiển thị trên MH bán hàng",
     dataIndex: "isHide",
   },
   {
-    title: "Loai hang hoa",
+    title: "Loại hàng hóa",
     dataIndex: "type",
   },
   {
-    title: "Quan ly theo",
+    title: "Quản lý theo",
     dataIndex: "managerBy",
   },
   {
-    title: "Trang thai",
+    title: "Trạng thái",
     dataIndex: "status",
   },
 ];
@@ -81,6 +82,6 @@ onMounted(() => {
 });
 
 const Init = () => {
-  useMenuStore().updatePathName("Hang hoa");
+  useMenuStore().updatePathName("Hàng hóa");
 };
 </script>

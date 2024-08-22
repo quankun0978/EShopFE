@@ -1,6 +1,6 @@
 <template>
   <a-layout-sider
-    style="width: 80px; background-color: #00577b"
+    style="width: 80px; background-color: #00577b; min-height: 100vh"
     breakpoint="lg"
     collapsed-width="0"
     @collapse="onCollapse"

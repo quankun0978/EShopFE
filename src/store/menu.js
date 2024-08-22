@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
 
 export const useMenuStore = defineStore("menu", {
-  state: () => ({ namePath: "" }),
+  state: () => ({ namePath: "", isBack: false }),
   getters: {
     doubleCount: (state) => state.count * 2,
   },
   actions: {
-    updatePathName(value) {
-      this.namePath = value;
+    updateHeader(data) {
+      this.namePath = data.namePath;
+      this.isBack = data.isBack;
     },
   },
 });

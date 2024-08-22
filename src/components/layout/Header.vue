@@ -10,14 +10,21 @@
       <h3 style="display: flex; align-items: center">
         {{ menuStore.namePath }}
       </h3>
-      <a-space style="display: flex; align-items: center; ">
-        <a-space
-          direction="horizontal"
-          style="display: flex; align-items: center"
+      <a-space style="display: flex; align-items: center">
+        <router-link
+          :to="{
+            name: 'list_product',
+          }"
+          v-if="menuStore.isBack"
         >
-          <ArrowLeftOutlined />
-          <span class="span">Quay lại trang bắt đầu sử dụng</span>
-        </a-space>
+          <a-space
+            direction="horizontal"
+            style="display: flex; align-items: center"
+          >
+            <ArrowLeftOutlined />
+            <span class="span">Quay lại trang bắt đầu sử dụng</span>
+          </a-space>
+        </router-link>
         <Select
           :options="options"
           :style="{
@@ -45,7 +52,6 @@ import {
   BellOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons-vue";
-import { h, onMounted } from "vue";
 import { useMenuStore } from "@/store/menu";
 const options = [
   {

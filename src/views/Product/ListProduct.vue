@@ -1,13 +1,18 @@
 <template>
   <div>
-    <Table :items="data" :columns="columns" :isAction="true" />
+    <Table
+      :bordered="true"
+      :isInput="true"
+      :items="data"
+      :columns="columns"
+      :isAction="true"
+    />
   </div>
 </template>
 <script setup>
 import Table from "@/components/common/Table/Table.vue";
-import TableTest from "@/components/common/Table/TableTest.vue";
 import { useMenuStore } from "@/store/menu";
-import { h, onMounted, reactive, render } from "vue";
+import { onMounted, reactive } from "vue";
 
 const columns = [
   {
@@ -34,18 +39,22 @@ const columns = [
   {
     title: "Hiển thị trên MH bán hàng",
     dataIndex: "isHide",
+    isSelect: true,
   },
   {
     title: "Loại hàng hóa",
     dataIndex: "type",
+    isSelect: true,
   },
   {
     title: "Quản lý theo",
     dataIndex: "managerBy",
+    isSelect: true,
   },
   {
     title: "Trạng thái",
     dataIndex: "status",
+    isSelect: true,
   },
 ];
 
@@ -82,6 +91,9 @@ onMounted(() => {
 });
 
 const Init = () => {
-  useMenuStore().updatePathName("Hàng hóa");
+  useMenuStore().updateHeader({
+    namePath: "Hàng hóa",
+    isBack: true,
+  });
 };
 </script>

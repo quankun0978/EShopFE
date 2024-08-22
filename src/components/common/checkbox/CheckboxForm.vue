@@ -6,22 +6,28 @@
       },
     }"
   >
-    <a-input
-      :value="val"
-      :placeholder="placeholder"
-      :style="style"
-      :wrapper-col="{ span: 8 }"
-    />
+    <a-form-item
+      :name="item.name && item.name"
+      :label="item.label && item.label"
+      :rules="rules"
+    >
+      <a-checkbox-group v-model:value="val" :options="options" />
+    </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { DownOutlined } from "@ant-design/icons-vue";
+import { Item } from "ant-design-vue/es/menu";
 import { ref } from "vue";
 const props = defineProps({
-  value: String,
+  defaultValue: String,
   placeholder: String,
-  style: Object,
+  item: Object,
+  name: String,
+  rules: Array,
+  options: Array,
+  value: String,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
+
 const val = ref(props.value);
 </script>

@@ -10,6 +10,8 @@ onMounted(() => {
 });
 
 const Init = () => {
-  useMenuStore().updatePathName("Hàng hóa / Sửa");
+  useMenuStore().updateHeader({
+    namePath: "Hàng hóa / Sửa",
+  });
 };
 </script>

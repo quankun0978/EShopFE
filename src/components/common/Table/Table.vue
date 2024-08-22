@@ -1,5 +1,6 @@
 <script setup>
 import { computed, reactive } from "vue";
+// import "./table.css";
 import {
   PlusOutlined,
   CopyOutlined,
@@ -7,13 +8,16 @@ import {
   DeleteOutlined,
   SyncOutlined,
 } from "@ant-design/icons-vue";
-
+import Input from "../Input/Input.vue";
+import Select from "../Select/Select.vue";
 const props = defineProps({
   items: Array,
   columns: Array,
   placeholder: String,
   style: Object,
   isAction: Boolean,
+  isInput: Boolean,
+  bordered: Boolean,
 });
 
 const state = reactive({
@@ -34,6 +38,21 @@ const onSelectChange = (selectedRowKeys) => {
   console.log("selectedRowKeys changed: ", selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
 };
+
+const pagination = computed(() => ({
+  position: ["bottomLeft"],
+  pageSize: 50,
+  // itemRender: (_, type, originalElement) => {
+  //   if (type === "prev") {
+  //     console.log("ahihi");
+  //     return () => h(PlusOutlined);
+  //   }
+  //   if (type === "next") {
+  //     return () => h(PlusOutlined);
+  //   }
+  //   return originalElement;
+  // },
+}));
 </script>
 
 <template>
@@ -86,33 +105,49 @@ const onSelectChange = (selectedRowKeys) => {
     </div>
 
     <a-table
+      v-if="isInput"
+      class="table-custom"
+      :bordered="bordered"
       :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
       :row-selection="{
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
       }"
       :data-source="items"
-      :pagination="{
-        pageSize: 50,
-      }"
+      :pagination="pagination"
+      :style="style"
     >
       <a-column
         v-for="column in columns"
         :key="column.dataIndex"
         :dataIndex="column.dataIndex"
       >
-        <template #title>
-          <div>{{ column.title }}</div>
-          <a-input />
+        <template #title v-if="column.isSelect">
+          <h1 style="text-align: center">{{ column.title }}</h1>
+          <Select
+            :default-value="'Tat ca'"
+            :style="{
+              width: '100%',
+            }"
+          />
+        </template>
+        <template #title v-else>
+          <h1 style="text-align: center">{{ column.title }}</h1>
+          <Input />
         </template>
         <template #bodyCell="{ record }">
           {{ record[column.dataIndex] }}
         </template>
       </a-column>
     </a-table>
+    <a-table
+      v-else
+      :data-source="items"
+      :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
+    />
   </a-config-provider>
 </template>
-<style scoped>
+<style lang="scss">
 .item-action {
   padding: 8px;
   color: #fff;
@@ -120,5 +155,10 @@ const onSelectChange = (selectedRowKeys) => {
 }
 :root {
   --table-height: 100vh;
+}
+.table-custom {
+  .ant-table-thead > tr > .ant-table-cell {
+    padding: 0 !important;
+  }
 }
 </style>

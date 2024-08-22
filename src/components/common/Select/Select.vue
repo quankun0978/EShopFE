@@ -37,10 +37,11 @@ const props = defineProps({
   options: Array,
   placeholder: String,
   style: Object,
+  defaultValue: String,
 });
 let index = 0;
 const items = ref(props.options);
-const value = ref(["1"]);
+const value = ref([props.defaultValue]);
 const inputRef = ref();
 const name = ref();
 // const addItem = (e) => {

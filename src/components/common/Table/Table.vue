@@ -10,14 +10,17 @@ import {
 } from "@ant-design/icons-vue";
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
+import Button from "../Button/Button.vue";
 const props = defineProps({
   items: Array,
   columns: Array,
   placeholder: String,
+  objectQuery: Object,
   style: Object,
   isAction: Boolean,
   isInput: Boolean,
   bordered: Boolean,
+  handleSearch: Function,
 });
 
 const state = reactive({
@@ -42,6 +45,7 @@ const onSelectChange = (selectedRowKeys) => {
 const pagination = computed(() => ({
   position: ["bottomLeft"],
   pageSize: 50,
+
   // itemRender: (_, type, originalElement) => {
   //   if (type === "prev") {
   //     console.log("ahihi");
@@ -53,6 +57,7 @@ const pagination = computed(() => ({
   //   return originalElement;
   // },
 }));
+console.log(state.selectedRowKeys);
 </script>
 
 <template>
@@ -133,7 +138,15 @@ const pagination = computed(() => ({
         </template>
         <template #title v-else>
           <h1 style="text-align: center">{{ column.title }}</h1>
-          <Input />
+          <div style="display: flex">
+            <Button
+              :handle-click="handleSearch"
+              :text="'<='"
+              v-if="column.dataIndex === 'price'"
+            />
+            <Button :handle-click="handleSearch" :text="'*'" v-else />
+            <Input :value="column.input" />
+          </div>
         </template>
         <template #bodyCell="{ record }">
           {{ record[column.dataIndex] }}

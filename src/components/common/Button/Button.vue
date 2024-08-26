@@ -6,19 +6,30 @@
       },
     }"
   >
-    <a-button :style="style" v-if="isSave">
+    <a-button
+      @click="handleClick"
+      style="background-color: rgb(0, 87, 123); color: #fff; height: 35px"
+      v-if="isSave"
+    >
       <MessageOutlined />
       {{ text }}
     </a-button>
-    <a-button :style="style" v-else-if="isExit">
+    <a-button
+      @click="handleClick"
+      style="background-color: rgb(0, 87, 123); color: #fff; height: 35px"
+      v-else-if="isExit"
+    >
       <CloseOutlined />
+      {{ text }}
+    </a-button>
+    <a-button @click="handleClick" style="border-radius: 0" v-else>
       {{ text }}
     </a-button>
   </a-config-provider>
 </template>
 <script setup>
 import { ref } from "vue";
-import selectTheme from "@/config/select";
+
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons-vue";
 
 const props = defineProps({
@@ -26,6 +37,7 @@ const props = defineProps({
   style: Object,
   isSave: Boolean,
   isExit: Boolean,
+  handleClick: Function,
 });
 let index = 0;
 const items = ref(props.options);
@@ -43,9 +55,9 @@ const name = ref();
 // };
 </script>
 <style>
-.ant-btn-default {
+/* .ant-btn-default {
   background-color: rgb(0, 87, 123);
   color: #fff;
   height: 35px;
-}
+} */
 </style>

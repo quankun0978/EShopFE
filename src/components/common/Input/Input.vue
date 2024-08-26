@@ -11,6 +11,7 @@
       :placeholder="placeholder"
       :style="style"
       :wrapper-col="{ span: 8 }"
+      @change=""
     />
   </a-config-provider>
 </template>
@@ -24,4 +25,8 @@ const props = defineProps({
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const val = ref(props.value);
+const OnChange = (e) => {
+  val.value = e.target.value;
+};
+console.log(val);
 </script>

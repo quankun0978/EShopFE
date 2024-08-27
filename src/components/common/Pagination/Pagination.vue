@@ -25,7 +25,7 @@
         paginationProp.pageNumber && paginationProp.pageNumber
       }}</a-button>
       <span
-        >tren {{ paginationProp.totalPage && paginationProp.totalPage }}</span
+        >trên {{ paginationProp.totalPage && paginationProp.totalPage }}</span
       >
       <a-button
         @click="HandleClickNextPage"
@@ -54,8 +54,8 @@
       ></a-select>
     </div>
     <div>
-      Hien thi 1-{{ pagination.pageSize && pagination.pageSize }} tren
-      {{ pagination.totalRecord && pagination.totalRecord }} ket qua
+      Hiển thị 1-{{ pagination.pageSize && pagination.pageSize }} trên
+      {{ pagination.totalRecord && pagination.totalRecord }} kết quả
     </div>
   </div>
 </template>

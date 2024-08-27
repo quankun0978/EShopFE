@@ -17,18 +17,18 @@
       style="padding: 8px; height: 76vh; overflow-y: scroll"
     >
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THONG TIN CO BAN</p>
+        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
         <RadioForm
           :value="formState.status"
           :options="optionsStatus"
           :item="{
-            label: 'Trang thai kinh doanh',
+            label: 'Trạng thái kinh doanh',
             value: 'status',
           }"
         />
         <InputForm
           :item="{
-            label: 'Ten hang hoa',
+            label: 'Tên hàng hóa',
             value: 'name',
           }"
           :value="formState.name"
@@ -36,7 +36,7 @@
         />
         <SelectForm
           :item="{
-            label: 'Nhom hang hoa',
+            label: 'Nhóm hàng hóa',
             value: 'group',
           }"
           :value="formState.group"
@@ -45,7 +45,7 @@
         />
         <InputForm
           :item="{
-            label: 'Ma SKU',
+            label: 'Mã SKU',
             value: 'codeSKU',
           }"
           :value="formState.codeSKU"
@@ -53,7 +53,7 @@
         />
         <InputForm
           :item="{
-            label: 'Gia mua',
+            label: 'Giá mua',
             value: 'price',
           }"
           :value="formState.price"
@@ -61,7 +61,7 @@
         />
         <InputForm
           :item="{
-            label: 'Gia ban',
+            label: 'Giá bán',
             value: 'sell',
           }"
           :value="formState.sell"
@@ -69,7 +69,7 @@
         />
         <SelectForm
           :item="{
-            label: 'Don vi tinh',
+            label: 'Đơn vị tính',
             value: 'unit',
           }"
           :value="formState.unit"
@@ -86,12 +86,12 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          THONG TIN THUOC TINH
+          THÔNG TIN THUỘC TÍNH
         </p>
         <SelectForm
           :is-mode-tag="true"
           :item="{
-            label: 'Thuoc tinh',
+            label: 'Thuộc tính',
             value: 'color',
           }"
           :value="formState.color"
@@ -104,16 +104,16 @@
           :columns="columns"
           888888
           :item="{
-            label: 'chi tiet thuoc tinh',
+            label: 'Chi tiết thuộc tính',
             name: 'detail',
           }"
         />
       </div>
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THONG TIN BO SUNG</p>
+        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: 'Mo ta',
+            label: 'Mô tả',
             value: 'description',
           }"
           :value="formState.description"
@@ -121,7 +121,7 @@
         />
         <UploadForm
           :item="{
-            label: 'Anh hang hoa',
+            label: 'Anh hàng hóa',
             value: 'image',
           }"
         />
@@ -142,11 +142,11 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 const optionsStatus = [
   {
-    label: "Dang kinh doanh",
+    label: "Đang kinh doanh",
     value: "progress",
   },
   {
-    label: "Ngung kinh doanh",
+    label: "Ngừng kinh doanh",
     value: "stop",
   },
 ];
@@ -164,11 +164,11 @@ const optionsGroup = [
 
 const optionsUnit = [
   {
-    label: "Don",
+    label: "Đơn",
     value: "first",
   },
   {
-    label: "Doi",
+    label: "Đôi",
     value: "double",
   },
 ];
@@ -185,7 +185,7 @@ const columns = [
   },
 
   {
-    title: "Ma vach",
+    title: "Mã vạch",
     dataIndex: "unit",
   },
   {
@@ -193,7 +193,7 @@ const columns = [
     dataIndex: "price",
   },
   {
-    title: "Giá ban",
+    title: "Giá bán",
     dataIndex: "sell",
   },
   {
@@ -203,7 +203,7 @@ const columns = [
 ];
 
 const optionsiSHide = [
-  { label: "Hien thi tren man hinh ban hang", value: "show" },
+  { label: "Hiển thị lên màn hình bán hàng", value: "show" },
 ];
 
 const formState = reactive({

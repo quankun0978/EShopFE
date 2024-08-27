@@ -15,12 +15,14 @@
             <p class="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
-            <a-button>...</a-button>
+
+            <p class="ant-upload-hint">
+              - Lựa chọn biểu tượng để thấy nếu không có ảnh
+            </p>
+            <p class="ant-upload-hint">
+              - Định dạng ảnh(.jpg,.jepg,.png,.gif) va dung lượng < 5MB
+            </p>
           </a-upload-dragger>
-          <div>
-            <li>- Lua chon bieu tuong de thay the neu khong co anh</li>
-            <li>- Dinh dang anh(.jpg,.jepg,.png,.gif) va dung luong < 5MB</li>
-          </div>
         </a-space>
       </a-form-item>
     </a-form-item>

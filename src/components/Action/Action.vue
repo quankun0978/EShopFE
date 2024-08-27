@@ -2,8 +2,8 @@
   <div :style="style">
     <a-divider v-if="isFirst" />
     <a-space style="padding: 8px">
-      <Button :is-save="true" :text="'Luu'" />
-      <Button :text="'Huy'" :is-exit="true" />
+      <Button :is-save="true" :text="'Lưu'" />
+      <Button :text="'Hủy'" :is-exit="true" />
     </a-space>
     <a-divider style="margin: 0" />
   </div>

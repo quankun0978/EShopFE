@@ -1,28 +1,29 @@
 <template>
   <a-config-provider
     :theme="{
-      token: {
-        defaultBg: '#00b96b',
+      components: {
+        Button: {
+          colorPrimary: '#026b97',
+          borderRadius: 0,
+          colorPrimaryHover: 'rgb(0, 87, 123)',
+        },
       },
     }"
   >
     <a-button
       @click="handleClick"
-      style="background-color: rgb(0, 87, 123); color: #fff; height: 35px"
+      style="height: 35px"
       v-if="isSave"
+      type="primary"
     >
-      <MessageOutlined />
+      <FontAwesomeIcon :icon="faFloppyDisk" style="margin-right: 4px" />
       {{ text }}
     </a-button>
-    <a-button
-      @click="handleClick"
-      style="background-color: rgb(0, 87, 123); color: #fff; height: 35px"
-      v-else-if="isExit"
-    >
+    <a-button @click="handleClick" style="height: 35px" v-else-if="isExit">
       <CloseOutlined />
       {{ text }}
     </a-button>
-    <a-button @click="handleClick" style="border-radius: 0" v-else>
+    <a-button @click="handleClick" v-else>
       {{ text }}
     </a-button>
   </a-config-provider>
@@ -31,7 +32,8 @@
 import { ref } from "vue";
 
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons-vue";
-
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 const props = defineProps({
   text: String,
   style: Object,

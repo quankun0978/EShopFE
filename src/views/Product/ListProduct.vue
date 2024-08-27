@@ -10,6 +10,7 @@
       :objectQuery="objectQuery"
       :pagination="pagination"
       :handleSearch="handleGetData"
+      :handleRefreshQuery="handleRefreshQuery"
     />
   </div>
 </template>
@@ -163,11 +164,11 @@ const columns = [
           value: "all",
         },
         {
-          label: "Dang kinh doanh",
+          label: "Đang kinh doanh",
           value: "1",
         },
         {
-          label: "Ngung kinh doanh",
+          label: "Ngừng kinh doanh",
           value: "0",
         },
       ],
@@ -205,6 +206,19 @@ const Init = () => {
   });
   handleGetData();
 };
+
+const handleRefreshQuery = () => {
+  objectQuery.codeSKU = "";
+  objectQuery.group = "";
+  objectQuery.name = "";
+  objectQuery.unit = "";
+  objectQuery.price = "10000000";
+  objectQuery.isHide = "2";
+  objectQuery.type = "";
+  objectQuery.managerBy = "";
+  objectQuery.status = "";
+};
+
 const handleGetData = async () => {
   try {
     const res = await GetAllProduct({

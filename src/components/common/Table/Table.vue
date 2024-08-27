@@ -23,6 +23,7 @@ const props = defineProps({
   bordered: Boolean,
   handleSearch: Function,
   pagination: Object,
+  handleRefreshQuery: Function,
 });
 
 const state = reactive({
@@ -86,6 +87,12 @@ const HandleClickNextFirstPage = (value, dataIndex) => {
   props.handleSearch();
 };
 
+const HandleClickRefreshPage = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.handleRefreshQuery();
+  props.handleSearch();
+};
+
 const HandleClickNextLastPage = (value, dataIndex) => {
   // Xử lý sự kiện thay đổi giá trị của column.input ở đây
   props.objectQuery.pageNumber = props.pagination.totalPage;
@@ -121,14 +128,13 @@ console.log(state.selectedRowKeys.length);
         :to="{
           name: 'create_product',
         }"
-        :class="{ disabled: state.selectedRowKeys.length > 0 }"
         class="item-action"
       >
         <PlusOutlined />
         Thêm mới
       </RouterLink>
       <RouterLink
-        :disabled="state.selectedRowKeys.length > 1"
+        :disabled="state.selectedRowKeys.length === 1 ? null : true"
         :to="{
           name: 'create_product',
         }"
@@ -138,7 +144,7 @@ console.log(state.selectedRowKeys.length);
         Nhân bản
       </RouterLink>
       <RouterLink
-        :disabled="state.selectedRowKeys.length > 1"
+        :disabled="state.selectedRowKeys.length === 1 ? null : true"
         :to="{
           name: 'update_product',
         }"
@@ -176,7 +182,7 @@ console.log(state.selectedRowKeys.length);
         :dataIndex="column.dataIndex"
       >
         <template #title v-if="column.isSelect">
-          <div style="text-align: center; font-weight: bold">
+          <div style="text-align: center; font-weight: 600">
             {{ column.title }}
           </div>
           <Select
@@ -191,7 +197,7 @@ console.log(state.selectedRowKeys.length);
           />
         </template>
         <template #title v-else>
-          <div style="text-align: center; font-weight: bold">
+          <div style="text-align: center; font-weight: 600">
             {{ column.title }}
           </div>
           <div style="display: flex">
@@ -224,7 +230,7 @@ console.log(state.selectedRowKeys.length);
       :-handle-click-prev-page="HandleClickPrevPage"
       :-handle-click-next-first-page="HandleClickNextFirstPage"
       :-handle-click-next-last-page="HandleClickNextLastPage"
-      :-handle-click-refresh-page="handleSearch"
+      :-handle-click-refresh-page="HandleClickRefreshPage"
       v-bind:-handle-select-change="HandleChangePageSize"
     />
   </a-config-provider>

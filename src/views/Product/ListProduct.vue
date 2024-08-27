@@ -1,4 +1,5 @@
 <template>
+  {{ console.log(pagination) }}
   <div>
     <Table
       :bordered="true"
@@ -6,6 +7,8 @@
       :items="data"
       :columns="columns"
       :isAction="true"
+      :objectQuery="objectQuery"
+      :pagination="pagination"
       :handleSearch="handleGetData"
     />
   </div>
@@ -22,14 +25,44 @@ const objectQuery = reactive({
   name: "",
   group: "",
   unit: "",
-  price: 10000000,
-  isHide: 1,
-  type: "",
-  managerBy: "",
-  status: "",
-  pageNumber: 1,
-  pageSize: 50,
+  price: "10000000",
+  isHide: "2",
+  type: "all",
+  managerBy: "all",
+  status: "all",
+  pageNumber: "1",
+  pageSize: "5",
 });
+
+const pagination = reactive({
+  pageNumber: "1",
+  pageSize: "5",
+  totalPage: "5",
+  totalRecord: "96",
+  optionPageSize: [
+    {
+      label: "5",
+      value: 5,
+    },
+    {
+      label: "10",
+      value: 10,
+    },
+    {
+      label: "15",
+      value: 15,
+    },
+    {
+      label: "20",
+      value: 20,
+    },
+    {
+      label: "50",
+      value: 50,
+    },
+  ],
+});
+
 const columns = [
   {
     title: "Mã SKU",
@@ -61,6 +94,23 @@ const columns = [
     title: "Hiển thị trên MH bán hàng",
     dataIndex: "isHide",
     isSelect: true,
+    select: {
+      options: [
+        {
+          label: "Tất cả",
+          value: "2",
+        },
+        {
+          label: "Có",
+          value: "1",
+        },
+        {
+          label: "Không",
+          value: "0",
+        },
+      ],
+      defaultValue: "2",
+    },
     input: objectQuery.isHide,
   },
   {
@@ -68,22 +118,66 @@ const columns = [
     dataIndex: "type",
     isSelect: true,
     input: objectQuery.type,
+    select: {
+      options: [
+        {
+          label: "Tất cả",
+          value: "all",
+        },
+        {
+          label: "Hàng hóa",
+          value: "stock",
+        },
+      ],
+      defaultValue: "all",
+    },
   },
   {
     title: "Quản lý theo",
     dataIndex: "managerBy",
     isSelect: true,
     input: objectQuery.managerBy,
+    select: {
+      options: [
+        {
+          label: "Tất cả",
+          value: "all",
+        },
+        {
+          label: "Khác",
+          value: "other",
+        },
+      ],
+      defaultValue: "all",
+    },
   },
   {
     title: "Trạng thái",
     dataIndex: "status",
     isSelect: true,
     input: objectQuery.status,
+    select: {
+      options: [
+        {
+          label: "Tất cả",
+          value: "all",
+        },
+        {
+          label: "Dang kinh doanh",
+          value: "1",
+        },
+        {
+          label: "Ngung kinh doanh",
+          value: "0",
+        },
+      ],
+      defaultValue: "all",
+    },
   },
 ];
 
 const data = ref();
+
 // for (let i = 0; i < 100; i++) {
 //   data.push({
 //     key: i,
@@ -100,6 +194,7 @@ const data = ref();
 // }
 
 onMounted(() => {
+  console.log("Mount 1");
   Init();
 });
 
@@ -112,9 +207,22 @@ const Init = () => {
 };
 const handleGetData = async () => {
   try {
-    const res = await GetAllProduct(objectQuery);
+    const res = await GetAllProduct({
+      ...objectQuery,
+      price: +objectQuery.price,
+      isHide: +objectQuery.isHide,
+      pageNumber: +objectQuery.pageNumber,
+      pageSize: +objectQuery.pageSize,
+    });
     console.log(res);
     if (res.data.success) {
+      const copy = {
+        totalPage: res.data.data.totalPage,
+        pageNumber: res.data.data.currentPage,
+        totalRecord: res.data.data.totalRecord,
+      };
+      Object.assign(pagination, copy);
+      console.log(pagination);
       const dt =
         res.data.data.data &&
         res.data.data.data.length > 0 &&
@@ -125,11 +233,10 @@ const handleGetData = async () => {
           };
         });
       data.value = dt;
-      console.log(dt);
     }
-    console.log(objectQuery);
   } catch (e) {
     console.error(e);
   }
 };
+console.log(pagination);
 </script>

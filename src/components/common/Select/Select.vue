@@ -9,6 +9,7 @@
       :placeholder="placeholder"
       :style="style"
       :options="items"
+      @change="OnChange"
     >
       <!-- <template #dropdownRender="{ menuNode: menu }">
         <v-nodes :vnodes="menu" />
@@ -38,12 +39,10 @@ const props = defineProps({
   placeholder: String,
   style: Object,
   defaultValue: String,
+  OnChange: Function,
 });
-let index = 0;
 const items = ref(props.options);
 const value = ref([props.defaultValue]);
-const inputRef = ref();
-const name = ref();
 // const addItem = (e) => {
 //   e.preventDefault();
 //   console.log("addItem");

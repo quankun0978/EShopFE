@@ -1,0 +1,86 @@
+<template>
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 8px;
+    "
+  >
+    <div style="display: flex; align-items: center; gap: 4px">
+      <a-button
+        @click="HandleClickNextFirstPage"
+        :disabled="pagination.pageNumber === 1"
+      >
+        <DoubleLeftOutlined />
+      </a-button>
+      <a-button
+        @click="HandleClickPrevPage"
+        :disabled="pagination.pageNumber === 1"
+      >
+        <LeftOutlined />
+      </a-button>
+      <span>Trang</span>
+      <a-button>{{
+        paginationProp.pageNumber && paginationProp.pageNumber
+      }}</a-button>
+      <span
+        >tren {{ paginationProp.totalPage && paginationProp.totalPage }}</span
+      >
+      <a-button
+        @click="HandleClickNextPage"
+        :disabled="paginationProp.pageNumber === paginationProp.totalPage"
+      >
+        <RightOutlined />
+      </a-button>
+      <a-button
+        @click="HandleClickNextLastPage"
+        :disabled="paginationProp.pageNumber === paginationProp.totalPage"
+      >
+        <DoubleRightOutlined />
+      </a-button>
+      <a-button @click="HandleClickRefreshPage">
+        <SyncOutlined />
+      </a-button>
+      <a-select
+        v-model:value="valPageSize"
+        @change="HandleSelectChange"
+        :options="
+          paginationProp.optionPageSize && paginationProp.optionPageSize
+            ? paginationProp.optionPageSize
+            : []
+        "
+        style="width: 50px"
+      ></a-select>
+    </div>
+    <div>
+      Hien thi 1-{{ pagination.pageSize && pagination.pageSize }} tren
+      {{ pagination.totalRecord && pagination.totalRecord }} ket qua
+    </div>
+  </div>
+</template>
+<script setup>
+import { ref } from "vue";
+import {
+  DoubleLeftOutlined,
+  DoubleRightOutlined,
+  LeftOutlined,
+  RightOutlined,
+  SyncOutlined,
+} from "@ant-design/icons-vue";
+
+const props = defineProps({
+  paginationProp: Object,
+  HandleSelectChange: Function,
+  HandleClickNextPage: Function,
+  HandleClickPrevPage: Function,
+  HandleClickRefreshPage: Function,
+  HandleClickNextLastPage: Function,
+  HandleClickNextFirstPage: Function,
+
+  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
+});
+const pagination = props.paginationProp;
+const valPageSize = ref([pagination.pageSize && pagination.pageSize]);
+console.log(props.paginationProp);
+</script>

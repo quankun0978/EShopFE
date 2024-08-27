@@ -11,6 +11,7 @@ import {
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
 import Button from "../Button/Button.vue";
+import Pagination from "../Pagination/Pagination.vue";
 const props = defineProps({
   items: Array,
   columns: Array,
@@ -21,6 +22,7 @@ const props = defineProps({
   isInput: Boolean,
   bordered: Boolean,
   handleSearch: Function,
+  pagination: Object,
 });
 
 const state = reactive({
@@ -38,26 +40,63 @@ const start = () => {
   }, 1000);
 };
 const onSelectChange = (selectedRowKeys) => {
-  console.log("selectedRowKeys changed: ", selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
 };
 
-const pagination = computed(() => ({
-  position: ["bottomLeft"],
-  pageSize: 50,
+// const pagination = computed(() => ({
+//   position: ["bottomLeft"],
+//   pageSize: 50,
 
-  // itemRender: (_, type, originalElement) => {
-  //   if (type === "prev") {
-  //     console.log("ahihi");
-  //     return () => h(PlusOutlined);
-  //   }
-  //   if (type === "next") {
-  //     return () => h(PlusOutlined);
-  //   }
-  //   return originalElement;
-  // },
-}));
-console.log(state.selectedRowKeys);
+//   // itemRender: (_, type, originalElement) => {
+//   //   if (type === "prev") {
+//   //     console.log("ahihi");
+//   //     return () => h(PlusOutlined);
+//   //   }
+//   //   if (type === "next") {
+//   //     return () => h(PlusOutlined);
+//   //   }
+//   //   return originalElement;
+//   // },
+// }));
+const handleColumnInputChange = (event, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.objectQuery[dataIndex] = event.target.value;
+};
+const handleColumnSelectChange = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.objectQuery[dataIndex] = value;
+  props.handleSearch();
+};
+
+const HandleClickNextPage = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  +props.objectQuery.pageNumber++;
+  props.handleSearch();
+};
+
+const HandleClickPrevPage = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  +props.objectQuery.pageNumber--;
+  props.handleSearch();
+};
+
+const HandleClickNextFirstPage = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.objectQuery.pageNumber = 1;
+  props.handleSearch();
+};
+
+const HandleClickNextLastPage = (value, dataIndex) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.objectQuery.pageNumber = props.pagination.totalPage;
+  props.handleSearch();
+};
+const HandleChangePageSize = (value) => {
+  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+  props.objectQuery.pageSize = value;
+  props.handleSearch();
+};
+console.log(state.selectedRowKeys.length);
 </script>
 
 <template>
@@ -77,20 +116,29 @@ console.log(state.selectedRowKeys);
       v-if="isAction"
       style="display: flex; width: 100%; background-color: rgb(0, 87, 123)"
     >
+      {{ console.log(state.selectedRowKeys.length) }}
       <RouterLink
         :to="{
           name: 'create_product',
         }"
+        :class="{ disabled: state.selectedRowKeys.length > 0 }"
         class="item-action"
       >
         <PlusOutlined />
         Thêm mới
       </RouterLink>
-      <RouterLink class="item-action">
+      <RouterLink
+        :disabled="state.selectedRowKeys.length > 1"
+        :to="{
+          name: 'create_product',
+        }"
+        class="item-action"
+      >
         <CopyOutlined />
         Nhân bản
       </RouterLink>
       <RouterLink
+        :disabled="state.selectedRowKeys.length > 1"
         :to="{
           name: 'update_product',
         }"
@@ -119,8 +167,8 @@ console.log(state.selectedRowKeys);
         onChange: onSelectChange,
       }"
       :data-source="items"
-      :pagination="pagination"
       :style="style"
+      :pagination="false"
     >
       <a-column
         v-for="column in columns"
@@ -128,24 +176,35 @@ console.log(state.selectedRowKeys);
         :dataIndex="column.dataIndex"
       >
         <template #title v-if="column.isSelect">
-          <h1 style="text-align: center">{{ column.title }}</h1>
+          <div style="text-align: center; font-weight: bold">
+            {{ column.title }}
+          </div>
           <Select
-            :default-value="'Tat ca'"
+            :options="column.select.options"
+            :-on-change="
+              (val) => handleColumnSelectChange(val, column.dataIndex)
+            "
+            :default-value="objectQuery[column.dataIndex]"
             :style="{
               width: '100%',
             }"
           />
         </template>
         <template #title v-else>
-          <h1 style="text-align: center">{{ column.title }}</h1>
+          <div style="text-align: center; font-weight: bold">
+            {{ column.title }}
+          </div>
           <div style="display: flex">
             <Button
               :handle-click="handleSearch"
-              :text="'<='"
+              :text="'≤'"
               v-if="column.dataIndex === 'price'"
             />
             <Button :handle-click="handleSearch" :text="'*'" v-else />
-            <Input :value="column.input" />
+            <Input
+              :value="objectQuery[column.dataIndex]"
+              :-on-change="(e) => handleColumnInputChange(e, column.dataIndex)"
+            />
           </div>
         </template>
         <template #bodyCell="{ record }">
@@ -157,6 +216,16 @@ console.log(state.selectedRowKeys);
       v-else
       :data-source="items"
       :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
+    />
+    {{ console.log(pagination) }}
+    <Pagination
+      :pagination-prop="pagination"
+      :-handle-click-next-page="HandleClickNextPage"
+      :-handle-click-prev-page="HandleClickPrevPage"
+      :-handle-click-next-first-page="HandleClickNextFirstPage"
+      :-handle-click-next-last-page="HandleClickNextLastPage"
+      :-handle-click-refresh-page="handleSearch"
+      v-bind:-handle-select-change="HandleChangePageSize"
     />
   </a-config-provider>
 </template>

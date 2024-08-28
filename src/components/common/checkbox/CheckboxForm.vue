@@ -7,11 +7,14 @@
     }"
   >
     <a-form-item
-      :name="item.name && item.name"
+      :name="item.value && item.value"
       :label="item.label && item.label"
       :rules="rules"
     >
-      <a-checkbox-group v-model:value="val" :options="options" />
+      <a-checkbox-group
+        v-model:value="formSate[`${item && item.value && item.value}`]"
+        :options="options"
+      />
     </a-form-item>
   </a-config-provider>
 </template>
@@ -26,6 +29,8 @@ const props = defineProps({
   rules: Array,
   options: Array,
   value: String,
+  formSate: Object,
+
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 

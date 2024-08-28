@@ -6,11 +6,21 @@
       },
     }"
   >
-    <a-input
+    <a-textarea
+      v-if="isTextarea"
       :value="value"
       :placeholder="placeholder"
       :style="style"
-      :wrapper-col="{ span: 8 }"
+      style="resize: none"
+      @change="OnChange"
+      :rows="rows"
+      :maxlength="maxLength"
+    />
+    <a-input
+      v-else
+      :value="value"
+      :placeholder="placeholder"
+      :style="style"
       @change="OnChange"
     />
   </a-config-provider>
@@ -22,6 +32,9 @@ const props = defineProps({
   placeholder: String,
   style: Object,
   OnChange: Function,
+  isTextarea: Boolean,
+  rows: Number,
+  maxLength: Number,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const val = ref(props.value);

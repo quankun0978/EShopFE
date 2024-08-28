@@ -11,10 +11,10 @@
     }"
   >
     <a-button
-      @click="handleClick"
       style="height: 35px"
       v-if="isSave"
       type="primary"
+      html-type="submit"
     >
       <FontAwesomeIcon :icon="faFloppyDisk" style="margin-right: 4px" />
       {{ text }}
@@ -41,11 +41,7 @@ const props = defineProps({
   isExit: Boolean,
   handleClick: Function,
 });
-let index = 0;
-const items = ref(props.options);
-const value = ref([props.defaultValue]);
-const inputRef = ref();
-const name = ref();
+
 // const addItem = (e) => {
 //   e.preventDefault();
 //   console.log("addItem");

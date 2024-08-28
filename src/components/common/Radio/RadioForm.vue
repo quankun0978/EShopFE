@@ -7,13 +7,13 @@
     }"
   >
     <a-form-item
-      :name="item.name && item.name"
+      :name="item.value && item.value"
       :label="item.label && item.label"
       :rules="rules"
     >
       <a-radio-group
         :defaultValue="defaultValue"
-        :value="val"
+        v-model:value="formState[`${item && item.value && item.value}`]"
         @change="handleChange"
         :placeholder="placeholder"
       >
@@ -25,8 +25,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { DownOutlined } from "@ant-design/icons-vue";
-import { Item } from "ant-design-vue/es/menu";
 import { ref } from "vue";
 const props = defineProps({
   defaultValue: String,
@@ -36,6 +34,7 @@ const props = defineProps({
   rules: Array,
   options: Array,
   value: String,
+  formState: Object,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 

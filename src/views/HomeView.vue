@@ -3,7 +3,7 @@
     <Sider />
     <a-layout>
       <Header />
-      <a-layout-content :style="{ margin: '8px' }">
+      <a-layout-content :style="{ margin: '8px', height: '80vh' }">
         <div :style="{ background: '#fff' }">
           <RouterView />
         </div>

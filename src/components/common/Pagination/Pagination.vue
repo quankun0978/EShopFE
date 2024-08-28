@@ -50,7 +50,7 @@
             ? paginationProp.optionPageSize
             : []
         "
-        style="width: 50px"
+        style="width: 60px"
       ></a-select>
     </div>
     <div>
@@ -82,5 +82,6 @@ const props = defineProps({
 });
 const pagination = props.paginationProp;
 const valPageSize = ref([pagination.pageSize && pagination.pageSize]);
+console.log(valPageSize.value);
 console.log(props.paginationProp);
 </script>

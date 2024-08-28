@@ -6,6 +6,8 @@ const instance = axios.create({
     Accept: "*/*",
   },
 });
+const CancelToken = axios.CancelToken;
+export const source = CancelToken.source();
 
 instance.interceptors.request.use(
   function (config) {
@@ -32,5 +34,7 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const cancelRequest = () => {};
 
 export default instance;

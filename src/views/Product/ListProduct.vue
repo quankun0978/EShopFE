@@ -32,12 +32,12 @@ const objectQuery = reactive({
   managerBy: "all",
   status: "all",
   pageNumber: "1",
-  pageSize: "5",
+  pageSize: "20",
 });
 
 const pagination = reactive({
-  pageNumber: "1",
-  pageSize: "5",
+  pageNumber: objectQuery.pageNumber,
+  pageSize: objectQuery.pageSize,
   totalPage: "5",
   totalRecord: "96",
   optionPageSize: [

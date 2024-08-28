@@ -14,9 +14,11 @@
     >
       <a-table
         bordered="bordered"
+        :pagination="false"
         :columns="columns"
-        :items="items"
-        style="width: 75vw"
+        :data-source="items"
+        style="width: 50vw"
+        :scroll="{ y: 230, scrollToFirstRowOnChange: true, x: 700 }"
       />
     </a-form-item>
   </a-config-provider>

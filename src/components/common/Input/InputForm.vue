@@ -7,34 +7,40 @@
     }"
   >
     <a-form-item
-      :label="item.label && item.label"
-      :name="item.name && item.name"
+      :label="item && item.label && item.label"
+      :name="item && item.value && item.value"
       :rules="rules"
     >
-      <Input
-        :style="style"
-        :value="value"
+      <a-textarea
+        v-if="isTextarea"
         :placeholder="placeholder"
-        @change="handleChange"
+        :style="style"
+        style="resize: none"
+        v-model:value="formSate[`${item && item.value && item.value}`]"
+        :rows="rows"
+        :maxlength="maxLength"
+      />
+      <a-input
+        v-else
+        v-model:value="formSate[`${item && item.value && item.value}`]"
+        @input="onInput"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { DownOutlined } from "@ant-design/icons-vue";
-import { Item } from "ant-design-vue/es/menu";
-import { ref } from "vue";
-import Input from "./Input.vue";
 const props = defineProps({
   value: String,
+  modelValue: String,
   placeholder: String,
   item: Object,
   rules: Array,
   style: Object,
+  isTextarea: Boolean,
+  rows: Number,
+  maxLength: Number,
+  formSate: Object,
+  onInput: Function,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
-const val = ref(props.value);
-const handleChange = (event) => {
-  val.value = event.target.value;
-};
 </script>

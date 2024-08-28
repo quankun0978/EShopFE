@@ -1,6 +1,5 @@
 <script setup>
 import { computed, reactive } from "vue";
-// import "./table.css";
 import {
   PlusOutlined,
   CopyOutlined,
@@ -31,15 +30,15 @@ const state = reactive({
   // Check here to configure the default column
   loading: false,
 });
-const hasSelected = computed(() => state.selectedRowKeys.length > 0);
-const start = () => {
-  state.loading = true;
-  // ajax request after empty completing
-  setTimeout(() => {
-    state.loading = false;
-    state.selectedRowKeys = [];
-  }, 1000);
-};
+
+// const start = () => {
+//   state.loading = true;
+//   // ajax request after empty completing
+//   setTimeout(() => {
+//     state.loading = false;
+//     state.selectedRowKeys = [];
+//   }, 1000);
+// };
 const onSelectChange = (selectedRowKeys) => {
   state.selectedRowKeys = selectedRowKeys;
 };
@@ -60,46 +59,38 @@ const onSelectChange = (selectedRowKeys) => {
 //   // },
 // }));
 const handleColumnInputChange = (event, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
   props.objectQuery[dataIndex] = event.target.value;
 };
 const handleColumnSelectChange = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
   props.objectQuery[dataIndex] = value;
   props.handleSearch();
 };
 
-const HandleClickNextPage = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+const HandleClickNextPage = () => {
   +props.objectQuery.pageNumber++;
   props.handleSearch();
 };
 
-const HandleClickPrevPage = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+const HandleClickPrevPage = () => {
   +props.objectQuery.pageNumber--;
   props.handleSearch();
 };
 
-const HandleClickNextFirstPage = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+const HandleClickNextFirstPage = () => {
   props.objectQuery.pageNumber = 1;
   props.handleSearch();
 };
 
-const HandleClickRefreshPage = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+const HandleClickRefreshPage = () => {
   props.handleRefreshQuery();
   props.handleSearch();
 };
 
-const HandleClickNextLastPage = (value, dataIndex) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
+const HandleClickNextLastPage = () => {
   props.objectQuery.pageNumber = props.pagination.totalPage;
   props.handleSearch();
 };
 const HandleChangePageSize = (value) => {
-  // Xử lý sự kiện thay đổi giá trị của column.input ở đây
   props.objectQuery.pageSize = value;
   props.handleSearch();
 };
@@ -167,7 +158,7 @@ console.log(state.selectedRowKeys.length);
       v-if="isInput"
       class="table-custom"
       :bordered="bordered"
-      :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
+      :scroll="{ y: '76vh', scrollToFirstRowOnChange: true, x: 1520 }"
       :row-selection="{
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
@@ -182,9 +173,9 @@ console.log(state.selectedRowKeys.length);
         :dataIndex="column.dataIndex"
       >
         <template #title v-if="column.isSelect">
-          <div style="text-align: center; font-weight: 600">
+          <h3 style="text-align: center">
             {{ column.title }}
-          </div>
+          </h3>
           <Select
             :options="column.select.options"
             :-on-change="
@@ -197,9 +188,9 @@ console.log(state.selectedRowKeys.length);
           />
         </template>
         <template #title v-else>
-          <div style="text-align: center; font-weight: 600">
+          <h3 style="text-align: center">
             {{ column.title }}
-          </div>
+          </h3>
           <div style="display: flex">
             <Button
               :handle-click="handleSearch"
@@ -221,7 +212,7 @@ console.log(state.selectedRowKeys.length);
     <a-table
       v-else
       :data-source="items"
-      :scroll="{ y: '71vh', scrollToFirstRowOnChange: true }"
+      :scroll="{ y: '76vh', scrollToFirstRowOnChange: true, x: 1000 }"
     />
     {{ console.log(pagination) }}
     <Pagination

@@ -8,7 +8,7 @@
   >
     <a-form-item
       :label="item.label && item.label"
-      :name="item.name && item.name"
+      :name="item.value && item.value"
       :rules="rules"
     >
       <a-select
@@ -16,10 +16,11 @@
         :placeholder="placeholder"
         :style="style"
         mode="tags"
+        @change="OnChange"
       />
       <a-select
         v-else
-        v-model:value="val"
+        v-model:value="formSate[`${item && item.value && item.value}`]"
         :placeholder="placeholder"
         :style="style"
         :options="options"
@@ -28,8 +29,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { DownOutlined } from "@ant-design/icons-vue";
-import { Item } from "ant-design-vue/es/menu";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -41,6 +40,9 @@ const props = defineProps({
   style: Object,
   mode: String,
   isModeTag: Boolean,
+  formSate: Object,
+  OnChange: Function,
+
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const val = ref(props.value);

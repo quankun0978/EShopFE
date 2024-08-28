@@ -30,6 +30,7 @@ const props = defineProps({
   options: Array,
   value: String,
   formSate: Object,
+  onChange: Function,
 
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });

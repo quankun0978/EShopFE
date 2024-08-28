@@ -79,6 +79,7 @@
             :form-sate="formState"
           />
           <SelectForm
+            :-on-change="handleChangeUnit"
             :item="{
               label: 'Đơn vị tính',
               value: 'unit',
@@ -111,6 +112,7 @@
             :form-sate="formState"
           />
           <TableForm
+            :is-action="true"
             :items="optionAtributes"
             :style="{
               width: '100%',
@@ -162,7 +164,7 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import { GenerateSKU } from "@/api/product";
+import { createProduct, GenerateSKU } from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 const optionsStatus = [
   {
@@ -202,27 +204,33 @@ const columns = [
     title: "Tên hàng hóa",
     dataIndex: "name",
     width: "30%",
+    key: "name",
   },
   {
     title: "Mã SKU",
     dataIndex: "codeSKU",
+    key: "codeSKU",
   },
 
   {
     title: "Mã vạch",
-    dataIndex: "unit",
+    dataIndex: "barcode",
+    key: "barcode",
   },
   {
     title: "Giá mua",
     dataIndex: "price",
+    key: "price",
   },
   {
     title: "Giá bán",
     dataIndex: "sell",
+    key: "sell",
   },
   {
     title: "",
     dataIndex: "action",
+    key: "action",
   },
 ];
 
@@ -238,13 +246,29 @@ const formState = reactive({
   unit: "double",
   price: "",
   sell: "",
-  isHide: "",
+  isHide: "0",
   type: "",
   managerBy: "",
   color: "",
   description: "",
-  image: "",
+  barcode: "",
+  size: 30,
+  isParent: 1,
+  imageUrl: "",
 });
+
+// const dataParent = reactive({
+//   codeSKU: formState.codeSKU,
+//   price: formState.price,
+//   sell: formState.sell,
+//   isHide: formState.isHide,
+//   name: formState.name,
+//   unit: formState.unit,
+//   isParent: 1,
+//   description: formState.description,
+//   image: formState.image,
+//   group: formState.group,
+// });
 
 const optionAtributes = ref();
 
@@ -267,19 +291,30 @@ const onClickExit = () => {
   });
 };
 
-const onFinish = (values) => {
-  console.log("Success:", values);
+const onFinish = async (values) => {
+  if (optionAtributes.value && optionAtributes.value.length > 0) {
+    const res = await createProduct([...optionAtributes.value, formState]);
+    console.log(res);
+  }
 };
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
-const handleChangeName = async (e) => {
+const handleChangeName = (e) => {
   if (formState.name) {
     formState.codeSKU = getInitials(e.target.value);
   } else {
     formState.codeSKU = "";
   }
+};
+
+const handleChangeIsHide = (values) => {
+  formState.isHide = values.length > 0 ? "1" : "0";
+};
+
+const handleChangeUnit = (value) => {
+  formState.unit = value;
 };
 
 const handleChangeColor = async (values) => {
@@ -289,6 +324,10 @@ const handleChangeColor = async (values) => {
     values.length > 0 &&
     values.map((item) => {
       return {
+        ...formState,
+        isParent: 0,
+        isHide: "0",
+        color: item,
         name: formState.name + `(${item})`,
         codeSKU: formState.codeSKU + "-" + getInitials(item),
         price: formState.price,

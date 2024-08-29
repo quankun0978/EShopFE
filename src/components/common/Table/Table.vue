@@ -94,7 +94,6 @@ const HandleChangePageSize = (value) => {
   props.objectQuery.pageSize = value;
   props.handleSearch();
 };
-console.log(state.selectedRowKeys.length);
 </script>
 
 <template>
@@ -114,7 +113,6 @@ console.log(state.selectedRowKeys.length);
       v-if="isAction"
       style="display: flex; width: 100%; background-color: rgb(0, 87, 123)"
     >
-      {{ console.log(state.selectedRowKeys.length) }}
       <RouterLink
         :to="{
           name: 'create_product',
@@ -214,7 +212,6 @@ console.log(state.selectedRowKeys.length);
       :data-source="items"
       :scroll="{ y: '76vh', scrollToFirstRowOnChange: true, x: 1000 }"
     />
-    {{ console.log(pagination) }}
     <Pagination
       :pagination-prop="pagination"
       :-handle-click-next-page="HandleClickNextPage"

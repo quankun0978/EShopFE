@@ -21,18 +21,51 @@
         style="width: 50vw"
         :scroll="{ y: 230, scrollToFirstRowOnChange: true, x: 700 }"
       >
-        {{ console.log("oke") }}
-        <template v-if="isAction" #bodyCell="{ column, index, record }">
-          {{ console.log("oke") }}
+        <template v-if="isAction" #bodyCell="{ column, text, record }">
           <template v-if="column.key === 'action'">
             <FontAwesomeIcon
+              @click="() => handleDeleteRow(record.codeSKU)"
               :icon="faTrash"
               style="color: red; cursor: pointer"
             />
           </template>
-          <template v-else>
+          <!-- <template v-else>
             <div>
               {{ record[column.dataIndex] }}
+            </div>
+          </template> -->
+
+          <template v-else>
+            <div class="editable-cell">
+              <div
+                v-if="
+                  editableData[record.codeSKU] &&
+                  column.key === columnKey &&
+                  column.key !== 'codeSKU'
+                "
+                class="editable-cell-input-wrapper"
+              >
+                <a-input
+                  v-model:value="editableData[record.codeSKU][column.key]"
+                  @pressEnter="handleSave(record.codeSKU)"
+                />
+                <!-- <check-outlined
+                  class="editable-cell-icon-check"
+                  @click="handleSave(record.key)"
+                /> -->
+              </div>
+
+              <div
+                @dblclick="handleEdit(record.codeSKU, column.key)"
+                v-else
+                class="editable-cell-text-wrapper"
+              >
+                {{ record[column.dataIndex] }}
+                <!-- <edit-outlined
+                  class="editable-cell-icon"
+                  @click="handleEdit(record.key)"
+                /> -->
+              </div>
             </div>
           </template>
         </template>
@@ -54,6 +87,11 @@ const props = defineProps({
   columns: Array,
   items: Array,
   isAction: Boolean,
+  handleDeleteRow: Function,
+  handleSave: Function,
+  handleEdit: Function,
+  editableData: Object,
+  columnKey: String,
 });
 
 const val = ref(props.value);

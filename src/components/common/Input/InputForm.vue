@@ -24,6 +24,7 @@
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @input="onInput"
+        :disabled="isDisable"
       />
     </a-form-item>
   </a-config-provider>
@@ -41,6 +42,7 @@ const props = defineProps({
   maxLength: Number,
   formSate: Object,
   onInput: Function,
+  isDisable: Boolean,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 </script>

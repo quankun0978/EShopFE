@@ -1,5 +1,4 @@
 <template>
-  {{ console.log(pagination) }}
   <div>
     <Table
       :bordered="true"
@@ -195,7 +194,6 @@ const data = ref();
 // }
 
 onMounted(() => {
-  console.log("Mount 1");
   Init();
 });
 
@@ -228,7 +226,6 @@ const handleGetData = async () => {
       pageNumber: +objectQuery.pageNumber,
       pageSize: +objectQuery.pageSize,
     });
-    console.log(res);
     if (res.data.success) {
       const copy = {
         totalPage: res.data.data.totalPage,
@@ -236,7 +233,6 @@ const handleGetData = async () => {
         totalRecord: res.data.data.totalRecord,
       };
       Object.assign(pagination, copy);
-      console.log(pagination);
       const dt =
         res.data.data.data &&
         res.data.data.data.length > 0 &&
@@ -252,5 +248,4 @@ const handleGetData = async () => {
     console.error(e);
   }
 };
-console.log(pagination);
 </script>

@@ -38,9 +38,7 @@ const items = [
   },
 ];
 
-const onCollapse = (collapsed, type) => {
-  console.log(collapsed, type);
-};
+const onCollapse = (collapsed, type) => {};
 const onBreakpoint = (broken) => {};
 const selectedKeys = ref(["1"]);
 </script>

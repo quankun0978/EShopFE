@@ -82,6 +82,4 @@ const props = defineProps({
 });
 const pagination = props.paginationProp;
 const valPageSize = ref([pagination.pageSize && pagination.pageSize]);
-console.log(valPageSize.value);
-console.log(props.paginationProp);
 </script>

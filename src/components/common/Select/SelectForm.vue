@@ -13,8 +13,10 @@
     >
       <a-select
         v-if="isModeTag"
+        v-model:value="items"
         :placeholder="placeholder"
         :style="style"
+        :disabled="isDisabledAtribute"
         mode="tags"
         @change="OnChange"
       />
@@ -24,12 +26,13 @@
         :placeholder="placeholder"
         :style="style"
         :options="options"
+        :disabled="isDisable"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 
 const props = defineProps({
   value: String,
@@ -42,8 +45,16 @@ const props = defineProps({
   isModeTag: Boolean,
   formSate: Object,
   OnChange: Function,
+  isDisable: Boolean,
+  isDisabledAtribute: Boolean,
 
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
-const val = ref(props.value);
+const items = ref([]);
+
+watchEffect(() => {
+  items.value = props.options;
+});
+
+console.log(props.options);
 </script>

@@ -18,12 +18,13 @@ import { ref, h } from "vue";
 import Logo from "@/assets/imgs/Logo_Full_White.png";
 import Menu from "@/components/common/Menu/Menu.vue";
 import { InboxOutlined } from "@ant-design/icons-vue";
+import IconBoxesStacked from "../icons/IconBoxesStacked.vue";
 
 const items = [
   {
     label: "Hàng hóa",
     key: "1",
-    icon: () => h(InboxOutlined),
+    icon: () => h(IconBoxesStacked),
     // icon: <font-awesome-icon :i />,
   },
   {

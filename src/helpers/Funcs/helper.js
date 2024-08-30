@@ -5,3 +5,10 @@ export const getInitials = (productName) => {
     .map((w) => w.charAt(0).toUpperCase()) // Get the first character and convert to uppercase
     .join(""); // Join the initials into a single string
 };
+export const convertNumber = (number) => {
+  return new Intl.NumberFormat("de-DE").format(number);
+};
+
+export const parseFormattedNumber = (formattedNumber) => {
+  return parseInt(formattedNumber.replace(/\./g, ""), 10);
+};

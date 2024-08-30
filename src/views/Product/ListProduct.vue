@@ -10,15 +10,21 @@
       :pagination="pagination"
       :handleSearch="handleGetData"
       :handleRefreshQuery="handleRefreshQuery"
+      :handleDeleteData="onClickDelete"
     />
   </div>
 </template>
+
 <script setup>
-import { GetAllProduct } from "@/api/product";
+import { deleteProduct, GetAllProduct } from "@/api/product";
+import { showConfirm } from "@/components/common/Modal/Confirm";
+import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
+import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
 import { useFetch } from "@/hooks/useFetch";
 import { useMenuStore } from "@/store/menu";
 import { onMounted, reactive, ref, watch, watchEffect } from "vue";
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 const objectQuery = reactive({
   codeSKU: "",
@@ -164,11 +170,11 @@ const columns = [
         },
         {
           label: "Đang kinh doanh",
-          value: "1",
+          value: "Đang kinh doanh",
         },
         {
           label: "Ngừng kinh doanh",
-          value: "0",
+          value: "Ngừng kinh doanh",
         },
       ],
       defaultValue: "all",
@@ -177,21 +183,6 @@ const columns = [
 ];
 
 const data = ref();
-
-// for (let i = 0; i < 100; i++) {
-//   data.push({
-//     key: i,
-//     codeSKU: `SKU${i + 1}`, // Add codeSKU
-//     name: `Edward King ${i}`,
-//     group: `Group ${(i % 5) + 1}`, // Add group
-//     unit: `Unit ${(i % 3) + 1}`, // Add unit
-//     price: Math.floor(Math.random() * 1000) + 1, // Add price
-//     isHide: "All", // Add isHide
-//     type: `Type ${(i % 4) + 1}`, // Add type
-//     managerBy: `Manager ${(i % 3) + 1}`, // Add managerBy
-//     status: `Status ${i % 2 === 0 ? "Active" : "Inactive"}`, // Add status
-//   });
-// }
 
 onMounted(() => {
   Init();
@@ -221,7 +212,7 @@ const handleGetData = async () => {
   try {
     const res = await GetAllProduct({
       ...objectQuery,
-      price: +objectQuery.price,
+      price: +parseFormattedNumber(objectQuery.price),
       isHide: +objectQuery.isHide,
       pageNumber: +objectQuery.pageNumber,
       pageSize: +objectQuery.pageSize,
@@ -239,6 +230,8 @@ const handleGetData = async () => {
         res.data.data.data.map((item) => {
           return {
             ...item,
+            isHide: item.isHide === 0 ? "Khong" : "Co",
+            price: convertNumber(item.price),
             key: item.codeSKU,
           };
         });
@@ -246,6 +239,35 @@ const handleGetData = async () => {
     }
   } catch (e) {
     console.error(e);
+  }
+};
+
+const handleDeleteData = async (data) => {
+  try {
+    const res = await deleteProduct(data);
+    if (res && res.data && res.data.success) {
+      Notification.success("Xoa thanh cong");
+      handleGetData();
+    } else {
+      Notification.error("Da co loi xay ra vui long thu lai");
+    }
+  } catch (error) {
+    Notification.error("Da co loi xay ra vui long thu lai");
+  }
+};
+
+const onClickDelete = (data) => {
+  if (data && data.length > 0) {
+    showConfirm({
+      title: "Ban muon xoa cac san pham nay khong?",
+      icon: ExclamationCircleOutlined,
+      content: "",
+      okText: "Xac nhan",
+      cancelText: "Huy",
+      handleOk: () => handleDeleteData(data),
+    });
+  } else {
+    Notification.warning("Vui long chon it nhat 1 san pham !");
   }
 };
 </script>

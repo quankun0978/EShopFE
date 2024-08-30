@@ -14,12 +14,12 @@
       <a-checkbox-group
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :options="options"
+        @change="onChange"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { Item } from "ant-design-vue/es/menu";
 import { ref } from "vue";
 const props = defineProps({
   defaultValue: String,
@@ -31,8 +31,6 @@ const props = defineProps({
   value: String,
   formSate: Object,
   onChange: Function,
-
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 
 const val = ref(props.value);

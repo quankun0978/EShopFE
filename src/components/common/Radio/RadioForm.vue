@@ -12,9 +12,10 @@
       :rules="rules"
     >
       <a-radio-group
+        :disabled="isDisable"
         :defaultValue="defaultValue"
         v-model:value="formState[`${item && item.value && item.value}`]"
-        @change="handleChange"
+        @change="onChange"
         :placeholder="placeholder"
       >
         <a-radio :value="option.value" v-for="option in options">{{
@@ -35,12 +36,11 @@ const props = defineProps({
   options: Array,
   value: String,
   formState: Object,
+  isDisable: Boolean,
+  onChange: Function,
+
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 
 const val = ref(props.value);
-
-const handleChange = (event) => {
-  val.value = event.target.value;
-};
 </script>

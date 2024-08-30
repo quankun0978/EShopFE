@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import {
   PlusOutlined,
   CopyOutlined,
@@ -11,6 +11,8 @@ import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
 import Button from "../Button/Button.vue";
 import Pagination from "../Pagination/Pagination.vue";
+import { convertNumber } from "@/helpers/Funcs/helper";
+import { useRouter } from "vue-router";
 const props = defineProps({
   items: Array,
   columns: Array,
@@ -23,6 +25,7 @@ const props = defineProps({
   handleSearch: Function,
   pagination: Object,
   handleRefreshQuery: Function,
+  handleDeleteData: Function,
 });
 
 const state = reactive({
@@ -30,6 +33,8 @@ const state = reactive({
   // Check here to configure the default column
   loading: false,
 });
+const router = useRouter();
+const priceQuery = ref(props.objectQuery.price);
 
 // const start = () => {
 //   state.loading = true;
@@ -94,6 +99,25 @@ const HandleChangePageSize = (value) => {
   props.objectQuery.pageSize = value;
   props.handleSearch();
 };
+
+// const handleChangeFormEdit = () => {
+//   if (state.selectedRowKeys.length > 0) {
+//     const id = state.selectedRowKeys[0];
+//     router.push({ name: "update_product", params: { id: id } });
+//   }
+// };
+const handlePreventDefault = (e) => {
+  if (state.selectedRowKeys.length > 0) {
+    router.push({
+      name: "update_product",
+      params: {
+        id: state.selectedRowKeys[0],
+      },
+    });
+  } else {
+    e.preventDefault();
+  }
+};
 </script>
 
 <template>
@@ -134,15 +158,22 @@ const HandleChangePageSize = (value) => {
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
+        @click.native.prevent.capture="handlePreventDefault"
         :to="{
           name: 'update_product',
+          params: {
+            id: state.selectedRowKeys[0] ? state.selectedRowKeys[0] : '#',
+          },
         }"
         class="item-action"
       >
         <EditOutlined />
         Sửa
       </RouterLink>
-      <div class="item-action">
+      <div
+        class="item-action"
+        @click="() => handleDeleteData(state.selectedRowKeys)"
+      >
         <DeleteOutlined />
         Xóa
       </div>
@@ -228,6 +259,7 @@ const HandleChangePageSize = (value) => {
   padding: 8px;
   color: #fff;
   border-right: 1px solid black;
+  cursor: pointer;
 }
 :root {
   --table-height: 100vh;

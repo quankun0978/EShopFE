@@ -25,7 +25,7 @@ const router = createRouter({
             },
             {
               name: "update_product",
-              path: "update",
+              path: "update/:id",
               component: () => import("@/views/Product/UpdateProduct.vue"),
             },
           ],

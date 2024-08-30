@@ -54,7 +54,12 @@
       ></a-select>
     </div>
     <div>
-      Hiển thị 1-{{ pagination.pageSize && pagination.pageSize }} trên
+      Hiển thị
+      {{
+        pagination.pageNumber > 1
+          ? valPageSize * (pagination.pageNumber - 1) + 1
+          : 1
+      }}-{{ valPageSize && valPageSize * pagination.pageNumber }} trên
       {{ pagination.totalRecord && pagination.totalRecord }} kết quả
     </div>
   </div>
@@ -81,5 +86,5 @@ const props = defineProps({
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const pagination = props.paginationProp;
-const valPageSize = ref([pagination.pageSize && pagination.pageSize]);
+const valPageSize = ref(pagination.pageSize && pagination.pageSize);
 </script>

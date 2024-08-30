@@ -18,6 +18,7 @@
         :style="style"
         :disabled="isDisabledAtribute"
         mode="tags"
+        :options="items"
         @change="OnChange"
       />
       <a-select
@@ -50,11 +51,11 @@ const props = defineProps({
 
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
-const items = ref([]);
+const items = ref(props.value);
 
 watchEffect(() => {
   items.value = props.options;
 });
 
-console.log(props.options);
+console.log(items.value);
 </script>

@@ -28,6 +28,11 @@ const router = createRouter({
               path: "update/:id",
               component: () => import("@/views/Product/UpdateProduct.vue"),
             },
+            {
+              name: "copy_product",
+              path: "copy/:id",
+              component: () => import("@/views/Product/CoppyProduct.vue"),
+            },
           ],
         },
       ],

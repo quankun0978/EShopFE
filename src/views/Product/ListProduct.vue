@@ -249,10 +249,10 @@ const handleDeleteData = async (data) => {
       Notification.success("Xoa thanh cong");
       handleGetData();
     } else {
-      Notification.error("Da co loi xay ra vui long thu lai");
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
     }
   } catch (error) {
-    Notification.error("Da co loi xay ra vui long thu lai");
+    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
 };
 

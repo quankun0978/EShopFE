@@ -40,12 +40,12 @@
           :is-disable="isDisable"
         />
         <!-- <a-form-item
-            label="Name"
-            name="name"
-            :rules="[{ required: true, message: 'Please input your name!' }]"
-          >
-            <a-input v-model:value="formState.name" />
-          </a-form-item> -->
+              label="Name"
+              name="name"
+              :rules="[{ required: true, message: 'Please input your name!' }]"
+            >
+              <a-input v-model:value="formState.name" />
+            </a-form-item> -->
         <SelectForm
           :item="{
             label: 'Nhóm hàng hóa',
@@ -293,17 +293,22 @@ onMounted(() => {
   Init();
 });
 
-// watchEffect(() => {
-//   if (formState.name) {
-//     isDisabledAtribute.value = false;
-//   } else {
-//     isDisabledAtribute.value = true;
-//   }
-// });
+watchEffect(async () => {
+  if (formState.name) {
+    formState.codeSKU = await handleGenerateCode(formState.name);
+    const dataMap = optionAtributes.value.map((item) => {
+      return {
+        ...item,
+        codeSKU: formState.codeSKU + "-" + getInitials(item.color),
+      };
+    });
+    optionAtributes.value = dataMap;
+  }
+});
 
 const Init = () => {
   useMenuStore().updateHeader({
-    namePath: "Hàng hóa / Sua",
+    namePath: "Hàng hóa / Nhân bản",
   });
   handleGetData();
 };
@@ -324,12 +329,19 @@ const handleGetData = async () => {
       //     };
       //   });
       const dataAtributes = res.data.data.atributes;
+      console.log(formState.codeSKU);
+      const dataMap = dataAtributes.map((item) => {
+        return {
+          ...item,
+          codeSKU: formState.codeSKU + "-" + getInitials(item.color),
+        };
+      });
       const dt = {
         ...res.data.data.data,
         unit: res.data.data.data.unit === "double" ? "Đôi" : "Đơn",
       };
       if (dataAtributes && dataAtributes.length > 0) {
-        optionAtributes.value = dataAtributes;
+        optionAtributes.value = dataMap;
         console.log(optionAtributes.value);
         const dataColor = dataAtributes.map((item) => {
           return {
@@ -355,24 +367,23 @@ const onClickExit = () => {
 
 const onFinish = async (values) => {
   try {
-    const payload = [...optionAtributes.value, formState].map((item) => {
-      return {
-        ...item,
-        description: formState.description,
-      };
-    });
-
-    const res = await updateProduct({
-      listSKUsUpdate: payload,
-      listSKUsDelele: listDelete.value,
-    });
-    if (res && res.data && res.data.success) {
-      Notification.success("Cập nhật thành công");
-      router.push({
-        name: "list_product",
+    if (optionAtributes.value && optionAtributes.value.length > 0) {
+      const payload = [...optionAtributes.value, formState].map((item) => {
+        return {
+          ...item,
+          description: formState.description,
+        };
       });
-    } else {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      const res = await createProduct(payload);
+
+      if (res && res.data && res.data.success) {
+        Notification.success("Thêm mới thành công");
+        router.push({
+          name: "list_product",
+        });
+      } else {
+        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      }
     }
   } catch (error) {
     Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
@@ -381,10 +392,18 @@ const onFinish = async (values) => {
 
 const handleChangeName = (e) => {
   if (formState.name) {
-    formState.codeSKU = getInitials(e.target.value);
+    formState.codeSKU = handleGenerateCode(e.target.value);
   } else {
     formState.codeSKU = "";
   }
+};
+
+const handleGenerateCode = async (name) => {
+  const res = await GenerateSKU(name);
+  if (res.data.success) {
+    return res.data.data;
+  }
+  return "";
 };
 
 const handleChangeIsHide = (values) => {

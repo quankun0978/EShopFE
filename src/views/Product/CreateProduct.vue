@@ -1,176 +1,173 @@
 <template>
-  <a-form
-    :model="formState"
-    name="basic"
-    :form="form"
-    autocomplete="off"
-    :label-col="{
-      style: {
-        width: '150px',
-        textAlign: 'left',
-      },
-    }"
-    :wrapper-col="{ span: 12, xxl: 6 }"
-    @finish="onFinish"
-    @finishFailed="onFinishFailed"
-  >
-    <Action :handle-exit="onClickExit" :handle-save="onClickSave" />
-    <div style="padding: 8px; height: 76vh; overflow-y: scroll">
-      <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
-        <RadioForm
-          :is-disable="isDisable"
-          :options="optionsStatus"
-          :form-state="formState"
-          :on-change="handleChangeStatus"
-          :item="{
-            label: 'Trạng thái kinh doanh',
-            value: 'status',
-          }"
-        />
-        <InputForm
-          :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
-          :item="{
-            label: 'Tên hàng hóa',
-            value: 'name',
-          }"
-          v-bind:model-value="formState.name"
-          :form-sate="formState"
-          :on-input="handleChangeName"
-          :is-disable="isDisable"
-        />
-        <!-- <a-form-item
+  <div>
+    <a-form
+      :model="formState"
+      name="basic"
+      :form="form"
+      autocomplete="off"
+      :label-col="{
+        style: {
+          width: '150px',
+          textAlign: 'left',
+        },
+      }"
+      :wrapper-col="{ span: 12, xxl: 6 }"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
+    >
+      <Action :handle-exit="onClickExit" :handle-save="onClickSave" />
+      <div style="padding: 8px; height: 76vh; overflow-y: scroll">
+        <div>
+          <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
+          <!-- <RadioForm
+            :options="optionsStatus"
+            :item="{
+              label: 'Trạng thái kinh doanh',
+              value: 'status',
+            }"
+          /> -->
+          <InputForm
+            :item="{
+              label: 'Tên hàng hóa',
+              value: 'name',
+            }"
+            v-bind:model-value="formState.name"
+            :form-sate="formState"
+            :on-input="handleChangeName"
+            :is-disable="isDisable"
+          />
+          <!-- <a-form-item
             label="Name"
             name="name"
             :rules="[{ required: true, message: 'Please input your name!' }]"
           >
             <a-input v-model:value="formState.name" />
           </a-form-item> -->
-        <SelectForm
-          :item="{
-            label: 'Nhóm hàng hóa',
-            value: 'group',
-          }"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :options="optionsGroup"
-          :is-disable="isDisable"
-        />
-        <InputForm
-          :item="{
-            label: 'Mã SKU',
-            value: 'codeSKU',
-          }"
-          :model-value="formState.codeSKU"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :is-disable="isDisable"
-        />
-        <InputForm
-          :item="{
-            label: 'Giá mua',
-            value: 'price',
-          }"
-          :model-value="formState.price"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :is-disable="isDisable"
-        />
-        <InputForm
-          :item="{
-            label: 'Giá bán',
-            value: 'sell',
-          }"
-          :model-value="formState.sell"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :is-disable="isDisable"
-        />
-        <SelectForm
-          :-on-change="handleChangeUnit"
-          :item="{
-            label: 'Đơn vị tính',
-            value: 'unit',
-          }"
-          :style="{ width: 200 }"
-          :options="optionsUnit"
-          :form-sate="formState"
-          :is-disable="isDisable"
-        />
-        <CheckboxForm
-          :item="{
-            value: 'isHide',
-          }"
-          :options="optionsiSHide"
-          :form-sate="formState"
-          :on-change="handleChangeIsHide"
-        />
+          <SelectForm
+            :item="{
+              label: 'Nhóm hàng hóa',
+              value: 'group',
+            }"
+            :style="{ width: 200 }"
+            :form-sate="formState"
+            :options="optionsGroup"
+            :is-disable="isDisable"
+          />
+          <InputForm
+            :item="{
+              label: 'Mã SKU',
+              value: 'codeSKU',
+            }"
+            :model-value="formState.codeSKU"
+            :style="{ width: 200 }"
+            :form-sate="formState"
+            :is-disable="isDisable"
+          />
+          <InputForm
+            :item="{
+              label: 'Giá mua',
+              value: 'price',
+            }"
+            :model-value="formState.price"
+            :style="{ width: 200 }"
+            :form-sate="formState"
+            :is-disable="isDisable"
+          />
+          <InputForm
+            :item="{
+              label: 'Giá bán',
+              value: 'sell',
+            }"
+            :model-value="formState.sell"
+            :style="{ width: 200 }"
+            :form-sate="formState"
+            :is-disable="isDisable"
+          />
+          <SelectForm
+            :-on-change="handleChangeUnit"
+            :item="{
+              label: 'Đơn vị tính',
+              value: 'unit',
+            }"
+            :style="{ width: 200 }"
+            :options="optionsUnit"
+            :form-sate="formState"
+            :is-disable="isDisable"
+          />
+          <CheckboxForm
+            :item="{
+              value: 'isHide',
+            }"
+            :options="optionsiSHide"
+            :form-sate="formState"
+          />
+        </div>
+        <div>
+          <p style="padding-bottom: 8px; font-weight: 600">
+            THÔNG TIN THUỘC TÍNH
+          </p>
+          <SelectForm
+            :is-mode-tag="true"
+            :-on-change="handleChangeColor"
+            :item="{
+              label: 'Thuộc tính',
+              value: 'color',
+            }"
+            :options="selectedRowKeys"
+            :value="formState.color"
+            :style="{ width: 200 }"
+            :form-sate="formState"
+            :is-disabled-atribute="isDisabledAtribute"
+          />
+          <TableForm
+            :is-action="true"
+            :handle-delete-row="handleDeleteRow"
+            :handle-save="handleSave"
+            :handle-edit="handleEdit"
+            :items="optionAtributes"
+            :column-key="columnValue"
+            :editable-data="editableData"
+            :style="{
+              width: '100%',
+            }"
+            :columns="columns"
+            :item="{
+              label: 'Chi tiết thuộc tính',
+              name: 'detail',
+            }"
+          />
+        </div>
+        <div>
+          <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
+          <InputForm
+            :item="{
+              label: 'Mô tả',
+              value: 'description',
+            }"
+            :is-textarea="true"
+            :max-length="200"
+            :placeholder="'Vui long nhap toi da 200 ky tu'"
+            :rows="3"
+            :model-value="formState.description"
+            :form-sate="formState"
+            :style="{ width: 200, height: '150px' }"
+          />
+          <UploadForm
+            :item="{
+              label: 'Anh hàng hóa',
+              value: 'image',
+            }"
+          />
+        </div>
       </div>
-      <div>
-        <p style="padding-bottom: 8px; font-weight: 600">
-          THÔNG TIN THUỘC TÍNH
-        </p>
-        <SelectForm
-          :is-mode-tag="true"
-          :-on-change="handleChangeColor"
-          :item="{
-            label: 'Thuộc tính',
-            value: 'color',
-          }"
-          :options="selectedRowKeys"
-          :value="formState.color"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :is-disabled-atribute="isDisabledAtribute"
-        />
-        <TableForm
-          :is-action="true"
-          :handle-delete-row="handleDeleteRow"
-          :handle-save="handleSave"
-          :handle-edit="handleEdit"
-          :items="optionAtributes"
-          :column-key="columnValue"
-          :editable-data="editableData"
-          :style="{
-            width: '100%',
-          }"
-          :columns="columns"
-          :item="{
-            label: 'Chi tiết thuộc tính',
-            name: 'detail',
-          }"
-        />
-      </div>
-      <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
-        <InputForm
-          :item="{
-            label: 'Mô tả',
-            value: 'description',
-          }"
-          :is-textarea="true"
-          :max-length="200"
-          :placeholder="'Vui long nhap toi da 200 ky tu'"
-          :rows="3"
-          :model-value="formState.description"
-          :form-sate="formState"
-          :style="{ width: 200, height: '150px' }"
-        />
-        <UploadForm
-          :item="{
-            label: 'Anh hàng hóa',
-            value: 'image',
-          }"
-        />
-      </div>
-    </div>
 
-    <Action :is-first="true" :handle-exit="onClickExit" />
-  </a-form>
+      <Action :is-first="true" :handle-exit="onClickExit" />
+    </a-form>
+  </div>
 </template>
 <script setup>
 import { useMenuStore } from "@/store/menu";
-import { onMounted, reactive, ref, watchEffect } from "vue";
+import { onMounted, reactive, ref, toRaw, watch, watchEffect } from "vue";
 import Action from "@/components/Action/Action.vue";
 import InputForm from "@/components/common/Input/InputForm.vue";
 import RadioForm from "@/components/common/Radio/RadioForm.vue";
@@ -183,38 +180,37 @@ import { Form } from "ant-design-vue";
 import { createProduct, GenerateSKU } from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
-import { Notification } from "@/components/common/Notification/Notification";
 
 const optionsStatus = [
   {
     label: "Đang kinh doanh",
-    value: "Đang kinh doanh",
+    value: "progress",
   },
   {
     label: "Ngừng kinh doanh",
-    value: "Ngừng kinh doanh",
+    value: "stop",
   },
 ];
 
 const optionsGroup = [
   {
     label: "Bet xuong",
-    value: "Bet xuong",
+    value: "bet",
   },
   {
-    label: "Do da dung",
-    value: "Do da dung",
+    label: "Bet xuong",
+    value: "stop",
   },
 ];
 
 const optionsUnit = [
   {
     label: "Đơn",
-    value: "Đơn",
+    value: "first",
   },
   {
     label: "Đôi",
-    value: "Đôi",
+    value: "double",
   },
 ];
 
@@ -254,14 +250,16 @@ const columns = [
   },
 ];
 
-const optionsiSHide = [{ label: "Hiển thị lên màn hình bán hàng", value: "0" }];
+const optionsiSHide = [
+  { label: "Hiển thị lên màn hình bán hàng", value: "show" },
+];
 
 const formState = reactive({
-  status: "Đang kinh doanh",
+  status: "progress",
   codeSKU: "",
-  group: "Bet xuong",
+  group: "bet",
   name: "",
-  unit: "Đôi",
+  unit: "double",
   price: "",
   sell: "",
   isHide: "0",
@@ -274,6 +272,7 @@ const formState = reactive({
   isParent: 1,
   imageUrl: "",
 });
+
 const optionAtributes = ref([]);
 const isDisable = ref(false);
 const isDisabledAtribute = ref(true);
@@ -283,9 +282,14 @@ const array = [];
 const selectedRowKeys = ref(array);
 const editableData = reactive({});
 const columnValue = ref("");
+
 onMounted(() => {
   Init();
 });
+
+const onPressEnterName = (e) => {
+  formState.codeSKU = getInitials(e.target.value);
+};
 
 watchEffect(() => {
   if (formState.name) {
@@ -308,43 +312,29 @@ const onClickExit = () => {
 };
 
 const onFinish = async (values) => {
-  try {
+  if (optionAtributes.value && optionAtributes.value.length > 0) {
     const payload = [...optionAtributes.value, formState].map((item) => {
       return {
         ...item,
         description: formState.description,
       };
     });
-
     const res = await createProduct(payload);
-    if (res && res.data && res.data.success) {
-      Notification.success("Them moi thanh cong");
-      router.push({
-        name: "list_product",
-      });
-    } else {
-      Notification.error("Da co loi xay ra vui long thu lai");
-    }
-  } catch (error) {
-    Notification.error("Da co loi xay ra vui long thu lai");
   }
 };
 const onFinishFailed = (errorInfo) => {};
 
-const handleChangeName = (e) => {
+const handleChangeName = async (e) => {
   if (formState.name) {
-    formState.codeSKU = getInitials(e.target.value);
+    const res = await GenerateSKU(e.target.value);
+    formState.codeSKU = res.data.data;
   } else {
     formState.codeSKU = "";
   }
 };
 
 const handleChangeIsHide = (values) => {
-  formState.isHide = values.length > 0 ? "0" : "1";
-};
-
-const handleChangeStatus = (e) => {
-  formState.status = e.target.value;
+  formState.isHide = values.length > 0 ? "1" : "0";
 };
 
 const handleChangeUnit = (value) => {
@@ -367,19 +357,23 @@ const handleChangeColor = async (values) => {
         sell: formState.sell ? formState.sell : "0",
       };
     });
+    console.log(1);
     const dt = [...optionAtributes.value];
     if (dt.length > items.length) {
       const dataUpdate = dt.filter((item) =>
         items.some((k) => k.codeSKU === item.codeSKU)
       );
+      console.log(2);
 
       optionAtributes.value = dataUpdate;
     } else {
       const index = optionAtributes.value.length === 0 ? 0 : values.length - 1;
       dt.push(items[index]);
       optionAtributes.value = dt;
+      console.log(3);
     }
   } else {
+    console.log(4);
     isDisable.value = false;
     optionAtributes.value = [];
   }
@@ -409,6 +403,7 @@ const handleEdit = (key, columnKey) => {
   editableData[key] = cloneDeep(
     optionAtributes.value.filter((item) => key === item.codeSKU)[0]
   );
+  console.log(editableData, columnKey);
 };
 
 const handleSave = (key) => {

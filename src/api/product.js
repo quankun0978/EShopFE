@@ -12,6 +12,10 @@ export const createProduct = async (data) => {
   return await axios.post("/product/add", data);
 };
 
+export const updateProduct = async (data) => {
+  return await axios.post("/product/update", data);
+};
+
 export const deleteProduct = async (data) => {
   return await axios.post("/product/delete", data);
 };

@@ -106,10 +106,10 @@ const HandleChangePageSize = (value) => {
 //     router.push({ name: "update_product", params: { id: id } });
 //   }
 // };
-const handlePreventDefault = (e) => {
+const handlePreventDefault = (e, route) => {
   if (state.selectedRowKeys.length > 0) {
     router.push({
-      name: "update_product",
+      name: route,
       params: {
         id: state.selectedRowKeys[0],
       },
@@ -148,6 +148,9 @@ const handlePreventDefault = (e) => {
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
+        @click.native.prevent.capture="
+          (e) => handlePreventDefault(e, 'copy_product')
+        "
         :to="{
           name: 'create_product',
         }"
@@ -158,7 +161,9 @@ const handlePreventDefault = (e) => {
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
-        @click.native.prevent.capture="handlePreventDefault"
+        @click.native.prevent.capture="
+          (e) => handlePreventDefault(e, 'update_product')
+        "
         :to="{
           name: 'update_product',
           params: {

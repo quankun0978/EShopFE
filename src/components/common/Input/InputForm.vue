@@ -42,6 +42,7 @@ const props = defineProps({
   maxLength: Number,
   formSate: Object,
   onInput: Function,
+  onPressEnter: Function,
   isDisable: Boolean,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });

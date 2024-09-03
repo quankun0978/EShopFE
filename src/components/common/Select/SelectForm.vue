@@ -51,10 +51,14 @@ const props = defineProps({
 
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
-const items = ref(props.value);
+const items = ref(props.options);
 
 watchEffect(() => {
-  items.value = props.options;
+  if (props.options) {
+    items.value = props.options;
+    console.log(items.value);
+    console.log(props.options);
+  }
 });
 
 console.log(items.value);

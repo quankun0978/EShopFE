@@ -38,11 +38,7 @@
           <template v-else>
             <div class="editable-cell">
               <div
-                v-if="
-                  editableData[record.codeSKU] &&
-                  column.key === columnKey &&
-                  column.key !== 'codeSKU'
-                "
+                v-if="editableData[record.codeSKU] && column.key === columnKey"
                 class="editable-cell-input-wrapper"
               >
                 <a-input

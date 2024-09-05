@@ -19,21 +19,25 @@
       <div style="padding: 8px; height: 76vh; overflow-y: scroll">
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
-          <!-- <RadioForm
+          <RadioForm
             :options="optionsStatus"
+            :form-state="formState"
             :item="{
               label: 'Trạng thái kinh doanh',
               value: 'status',
             }"
-          /> -->
+          />
           <InputForm
+            :rules="[
+              { required: true, message: 'Vui long khong bo trong ten!' },
+            ]"
             :item="{
               label: 'Tên hàng hóa',
               value: 'name',
             }"
             v-bind:model-value="formState.name"
             :form-sate="formState"
-            :on-input="handleChangeName"
+            @press-enter="handlePressEnterName"
             :is-disable="isDisable"
           />
           <!-- <a-form-item
@@ -71,7 +75,7 @@
             :model-value="formState.price"
             :style="{ width: 200 }"
             :form-sate="formState"
-            :is-disable="isDisable"
+            :is-disable="true"
           />
           <InputForm
             :item="{
@@ -81,7 +85,7 @@
             :model-value="formState.sell"
             :style="{ width: 200 }"
             :form-sate="formState"
-            :is-disable="isDisable"
+            :is-disable="true"
           />
           <SelectForm
             :-on-change="handleChangeUnit"
@@ -99,6 +103,7 @@
               value: 'isHide',
             }"
             :options="optionsiSHide"
+            v-on:change="handleChangeIsHide"
             :form-sate="formState"
           />
         </div>
@@ -180,37 +185,38 @@ import { Form } from "ant-design-vue";
 import { createProduct, GenerateSKU } from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
+import { Notification } from "@/components/common/Notification/Notification";
 
 const optionsStatus = [
   {
     label: "Đang kinh doanh",
-    value: "progress",
+    value: "Đang kinh doanh",
   },
   {
     label: "Ngừng kinh doanh",
-    value: "stop",
+    value: "Ngừng kinh doanh",
   },
 ];
 
 const optionsGroup = [
   {
     label: "Bet xuong",
-    value: "bet",
+    value: "Bet xuong",
   },
   {
-    label: "Bet xuong",
-    value: "stop",
+    label: "Do gia dung",
+    value: "Do gia dung",
   },
 ];
 
 const optionsUnit = [
   {
     label: "Đơn",
-    value: "first",
+    value: "Đơn",
   },
   {
     label: "Đôi",
-    value: "double",
+    value: "Đôi",
   },
 ];
 
@@ -251,20 +257,20 @@ const columns = [
 ];
 
 const optionsiSHide = [
-  { label: "Hiển thị lên màn hình bán hàng", value: "show" },
+  { label: "Hiển thị lên màn hình bán hàng", value: "Có" },
 ];
 
 const formState = reactive({
-  status: "progress",
+  status: "Đang kinh doanh",
   codeSKU: "",
-  group: "bet",
+  group: "Bet xuong",
   name: "",
-  unit: "double",
+  unit: "Đôi",
   price: "",
   sell: "",
-  isHide: "0",
-  type: "",
-  managerBy: "",
+  isHide: [],
+  type: "Hàng hóa",
+  managerBy: "khác",
   color: "",
   description: "",
   barcode: "",
@@ -287,15 +293,24 @@ onMounted(() => {
   Init();
 });
 
-const onPressEnterName = (e) => {
-  formState.codeSKU = getInitials(e.target.value);
-};
-
 watchEffect(() => {
   if (formState.name) {
     isDisabledAtribute.value = false;
   } else {
     isDisabledAtribute.value = true;
+  }
+});
+
+watchEffect(() => {
+  if (optionAtributes.value.length > 0) {
+    const price = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.price;
+    }, 0);
+    const sell = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.sell;
+    }, 0);
+    formState.sell = sell / optionAtributes.value.length;
+    formState.price = price / optionAtributes.value.length;
   }
 });
 
@@ -311,20 +326,45 @@ const onClickExit = () => {
   });
 };
 
-const onFinish = async (values) => {
-  if (optionAtributes.value && optionAtributes.value.length > 0) {
-    const payload = [...optionAtributes.value, formState].map((item) => {
-      return {
-        ...item,
-        description: formState.description,
-      };
-    });
-    const res = await createProduct(payload);
+const onFinish = async () => {
+  try {
+    if (optionAtributes.value && optionAtributes.value.length > 0) {
+      const payload = [...optionAtributes.value].map((item) => {
+        if (item.isParent !== 1) {
+          return {
+            ...item,
+            isHide: formState.isHide.length > 0 ? "Có" : "Không",
+            description: formState.description,
+          };
+        }
+        return {
+          ...item,
+          isHide: "Không",
+          description: formState.description,
+        };
+      });
+      const res = await createProduct({
+        ...formState,
+        products: payload,
+        color: "null",
+        isHide: "Có",
+      });
+      if (res && res.data && res.data.success) {
+        Notification.success("Them moi thành công");
+        router.push({
+          name: "list_product",
+        });
+      } else {
+        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      }
+    }
+  } catch (error) {
+    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
 };
 const onFinishFailed = (errorInfo) => {};
 
-const handleChangeName = async (e) => {
+const handlePressEnterName = async (e) => {
   if (formState.name) {
     const res = await GenerateSKU(e.target.value);
     formState.codeSKU = res.data.data;
@@ -334,7 +374,8 @@ const handleChangeName = async (e) => {
 };
 
 const handleChangeIsHide = (values) => {
-  formState.isHide = values.length > 0 ? "1" : "0";
+  console.log(values);
+  formState.isHide = values;
 };
 
 const handleChangeUnit = (value) => {
@@ -344,12 +385,11 @@ const handleChangeUnit = (value) => {
 const handleChangeColor = async (values) => {
   selectedRowKeys.value = values;
   if (values && values.length > 0) {
-    isDisable.value = true;
     const items = values.map((item) => {
       return {
         ...formState,
         isParent: 0,
-        isHide: "0",
+        isHide: "Không",
         color: item,
         name: formState.name + `(${item})`,
         codeSKU: formState.codeSKU + "-" + getInitials(item),
@@ -374,7 +414,6 @@ const handleChangeColor = async (values) => {
     }
   } else {
     console.log(4);
-    isDisable.value = false;
     optionAtributes.value = [];
   }
 };
@@ -382,7 +421,6 @@ const handleChangeColor = async (values) => {
 const handleDeleteRow = (codeSKU) => {
   if (optionAtributes.value && optionAtributes.value.length > 0) {
     if (optionAtributes.value.length === 1) {
-      isDisable.value = false;
     }
     const dtDelete = optionAtributes.value.find(
       (item) => item.codeSKU === codeSKU
@@ -394,7 +432,6 @@ const handleDeleteRow = (codeSKU) => {
     optionAtributes.value = dt;
     selectedRowKeys.value = selectedDelete;
   } else {
-    isDisable.value = false;
   }
 };
 

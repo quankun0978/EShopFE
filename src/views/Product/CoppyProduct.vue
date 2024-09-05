@@ -269,7 +269,7 @@ const formState = reactive({
   unit: "Đôi",
   price: "",
   sell: "",
-  isHide: "0",
+  isHide: [],
   type: "",
   managerBy: "",
   color: "",
@@ -293,18 +293,18 @@ onMounted(() => {
   Init();
 });
 
-watchEffect(async () => {
-  if (formState.name) {
-    formState.codeSKU = await handleGenerateCode(formState.name);
-    const dataMap = optionAtributes.value.map((item) => {
-      return {
-        ...item,
-        codeSKU: formState.codeSKU + "-" + getInitials(item.color),
-      };
-    });
-    optionAtributes.value = dataMap;
-  }
-});
+// watchEffect(async () => {
+//   if (formState.codeSKU) {
+//     const dt = await handleGenerateCode(formState.codeSKU);
+//     formState.codeSKU = dt;
+//     const dataMap = optionAtributes.value.map((item) => {
+//       return {
+//         ...item,
+//       };
+//     });
+//     optionAtributes.value = dataMap;
+//   }
+// });
 
 const Init = () => {
   useMenuStore().updateHeader({
@@ -323,7 +323,7 @@ const handleGetData = async () => {
       //   res.data.data.data.map((item) => {
       //     return {
       //       ...item,
-      //       isHide: item.isHide === 0 ? "Khong" : "Co",
+      //       isHide: item.isHide === 0 ? "Không" : "Có",
       //       price: convertNumber(item.price),
       //       key: item.codeSKU,
       //     };
@@ -333,12 +333,10 @@ const handleGetData = async () => {
       const dataMap = dataAtributes.map((item) => {
         return {
           ...item,
-          codeSKU: formState.codeSKU + "-" + getInitials(item.color),
         };
       });
       const dt = {
         ...res.data.data.data,
-        unit: res.data.data.data.unit === "double" ? "Đôi" : "Đơn",
       };
       if (dataAtributes && dataAtributes.length > 0) {
         optionAtributes.value = dataMap;
@@ -407,7 +405,7 @@ const handleGenerateCode = async (name) => {
 };
 
 const handleChangeIsHide = (values) => {
-  formState.isHide = values.length > 0 ? "0" : "1";
+  formState.isHide = values;
 };
 
 const handleChangeStatus = (e) => {
@@ -431,7 +429,7 @@ const handleChangeColor = async (values) => {
       return {
         ...formState,
         isParent: 0,
-        isHide: "0",
+        isHide: "Không",
         color: item,
         name: formState.name + `(${item})`,
         codeSKU: formState.codeSKU + "-" + getInitials(item),

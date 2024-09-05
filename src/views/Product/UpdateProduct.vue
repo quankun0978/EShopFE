@@ -259,7 +259,9 @@ const columns = [
   },
 ];
 
-const optionsiSHide = [{ label: "Hiển thị lên màn hình bán hàng", value: "0" }];
+const optionsiSHide = [
+  { label: "Hiển thị lên màn hình bán hàng", value: "Có" },
+];
 
 const formState = reactive({
   status: "Đang kinh doanh",
@@ -269,7 +271,7 @@ const formState = reactive({
   unit: "Đôi",
   price: "",
   sell: "",
-  isHide: "0",
+  isHide: [],
   type: "",
   managerBy: "",
   color: "",
@@ -318,7 +320,7 @@ const handleGetData = async () => {
       //   res.data.data.data.map((item) => {
       //     return {
       //       ...item,
-      //       isHide: item.isHide === 0 ? "Khong" : "Co",
+      //       isHide: item.isHide === 0 ? "Không" : "Có",
       //       price: convertNumber(item.price),
       //       key: item.codeSKU,
       //     };
@@ -353,17 +355,23 @@ const onClickExit = () => {
   });
 };
 
-const onFinish = async (values) => {
+const onFinish = async () => {
   try {
-    const payload = [...optionAtributes.value, formState].map((item) => {
+    const payload = [...optionAtributes.value].map((item) => {
       return {
         ...item,
         description: formState.description,
+        status: formState.status,
       };
     });
 
     const res = await updateProduct({
-      listSKUsUpdate: payload,
+      listSKUsUpdate: {
+        ...formState,
+        products: payload,
+        color: "null",
+        isHide: "Có",
+      },
       listSKUsDelele: listDelete.value,
     });
     if (res && res.data && res.data.success) {
@@ -388,7 +396,7 @@ const handleChangeName = (e) => {
 };
 
 const handleChangeIsHide = (values) => {
-  formState.isHide = values.length > 0 ? "0" : "1";
+  formState.isHide = values;
 };
 
 const handleChangeStatus = (e) => {
@@ -412,7 +420,7 @@ const handleChangeColor = async (values) => {
       return {
         ...formState,
         isParent: 0,
-        isHide: "0",
+        isHide: "Không",
         color: item,
         name: formState.name + `(${item})`,
         codeSKU: formState.codeSKU + "-" + getInitials(item),

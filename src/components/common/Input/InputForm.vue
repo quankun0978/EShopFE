@@ -24,6 +24,7 @@
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @input="onInput"
+        @pressEnter="onPressEnter"
         :disabled="isDisable"
       />
     </a-form-item>

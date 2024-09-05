@@ -14,7 +14,7 @@
       <a-radio-group
         :disabled="isDisable"
         :defaultValue="defaultValue"
-        v-model:value="formState[`${item && item.value && item.value}`]"
+        v-model:value="val"
         @change="onChange"
         :placeholder="placeholder"
       >
@@ -38,9 +38,8 @@ const props = defineProps({
   formState: Object,
   isDisable: Boolean,
   onChange: Function,
-
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 
-const val = ref(props.value);
+const val = ref(props.formState[props.item.value]);
 </script>

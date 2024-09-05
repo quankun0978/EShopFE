@@ -18,7 +18,6 @@
         :style="style"
         :disabled="isDisabledAtribute"
         mode="tags"
-        :options="items"
         @change="OnChange"
       />
       <a-select

@@ -32,10 +32,10 @@ const objectQuery = reactive({
   group: "",
   unit: "",
   price: "10000000",
-  isHide: "2",
-  type: "all",
-  managerBy: "all",
-  status: "all",
+  isHide: "Tất cả",
+  type: "Tất cả",
+  managerBy: "Tất cả",
+  status: "Tất cả",
   pageNumber: "1",
   pageSize: "20",
 });
@@ -104,18 +104,18 @@ const columns = [
       options: [
         {
           label: "Tất cả",
-          value: "2",
+          value: "Tất cả",
         },
         {
           label: "Có",
-          value: "1",
+          value: "Có",
         },
         {
           label: "Không",
-          value: "0",
+          value: "Không",
         },
       ],
-      defaultValue: "2",
+      defaultValue: "Tất cả",
     },
     input: objectQuery.isHide,
   },
@@ -128,14 +128,14 @@ const columns = [
       options: [
         {
           label: "Tất cả",
-          value: "all",
+          value: "Tất cả",
         },
         {
           label: "Hàng hóa",
-          value: "stock",
+          value: "Hàng hóa",
         },
       ],
-      defaultValue: "all",
+      defaultValue: "Tất cả",
     },
   },
   {
@@ -147,14 +147,14 @@ const columns = [
       options: [
         {
           label: "Tất cả",
-          value: "all",
+          value: "Tất cả",
         },
         {
           label: "Khác",
-          value: "other",
+          value: "Khác",
         },
       ],
-      defaultValue: "all",
+      defaultValue: "Tất cả",
     },
   },
   {
@@ -166,7 +166,7 @@ const columns = [
       options: [
         {
           label: "Tất cả",
-          value: "all",
+          value: "Tất cả",
         },
         {
           label: "Đang kinh doanh",
@@ -177,7 +177,7 @@ const columns = [
           value: "Ngừng kinh doanh",
         },
       ],
-      defaultValue: "all",
+      defaultValue: "Tất cả",
     },
   },
 ];
@@ -202,7 +202,7 @@ const handleRefreshQuery = () => {
   objectQuery.name = "";
   objectQuery.unit = "";
   objectQuery.price = "10000000";
-  objectQuery.isHide = "2";
+  objectQuery.isHide = "Tất cả";
   objectQuery.type = "";
   objectQuery.managerBy = "";
   objectQuery.status = "";
@@ -213,7 +213,6 @@ const handleGetData = async () => {
     const res = await GetAllProduct({
       ...objectQuery,
       price: +parseFormattedNumber(objectQuery.price),
-      isHide: +objectQuery.isHide,
       pageNumber: +objectQuery.pageNumber,
       pageSize: +objectQuery.pageSize,
     });
@@ -230,7 +229,6 @@ const handleGetData = async () => {
         res.data.data.data.map((item) => {
           return {
             ...item,
-            isHide: item.isHide === 0 ? "Khong" : "Co",
             price: convertNumber(item.price),
             key: item.codeSKU,
           };

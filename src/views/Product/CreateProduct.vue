@@ -113,7 +113,7 @@
           </p>
           <SelectForm
             :is-mode-tag="true"
-            :-on-change="handleChangeColor"
+            :-on-change="handleChangeColor1"
             :item="{
               label: 'Thuộc tính',
               value: 'color',
@@ -309,8 +309,8 @@ watchEffect(() => {
     const sell = optionAtributes.value.reduce((accumulator, currrent) => {
       return accumulator + +currrent.sell;
     }, 0);
-    formState.sell = sell / optionAtributes.value.length;
-    formState.price = price / optionAtributes.value.length;
+    formState.sell = Math.floor(sell / optionAtributes.value.length);
+    formState.price = Math.floor(price / optionAtributes.value.length);
   }
 });
 
@@ -350,7 +350,7 @@ const onFinish = async () => {
         isHide: "Có",
       });
       if (res && res.data && res.data.success) {
-        Notification.success("Them moi thành công");
+        Notification.success("Thêm mới thành công");
         router.push({
           name: "list_product",
         });
@@ -366,11 +366,25 @@ const onFinishFailed = (errorInfo) => {};
 
 const handlePressEnterName = async (e) => {
   if (formState.name) {
-    const res = await GenerateSKU(e.target.value);
-    formState.codeSKU = res.data.data;
+    formState.codeSKU = await hanldeGetCode(
+      getInitials(e.target.value),
+      "",
+      true
+    );
   } else {
     formState.codeSKU = "";
   }
+};
+
+const hanldeGetCode = async (name, color, isParent) => {
+  if (name) {
+    const res = await GenerateSKU(name, color, isParent);
+    if (res.data.success) {
+      return res.data.data;
+    }
+    return name;
+  }
+  return name;
 };
 
 const handleChangeIsHide = (values) => {
@@ -382,17 +396,59 @@ const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
+const hanldeGetCodeColor = (color, arrayCode) => {
+  if (color.replace) {
+  }
+};
+
+const indexColor = ref(0);
+
+const handleChangeColor1 = async (values) => {
+  selectedRowKeys.value = values;
+  const optionCp = [...optionAtributes.value];
+
+  if (optionCp.length > values.length) {
+
+  } else {  
+    const codeSkuChild =
+      formState.codeSKU +
+      "-" +
+      getInitials(values[indexColor.value]) +
+      (indexColor.value + 1);
+    // const res = await GenerateSKU(codeSkuChild, values[indexColor.value], false);
+    optionCp.push({
+      ...formState,
+      isParent: 0,
+      isHide: "Không",
+      color: values[indexColor.value],
+      codeSKU: codeSkuChild,
+      name: formState.name + `(${values[indexColor.value]})`,
+      price: formState.price ? formState.price : "0",
+      sell: formState.sell ? formState.sell : "0",
+    });
+    optionAtributes.value = optionCp;
+    indexColor.value++;
+  }
+};
+
 const handleChangeColor = async (values) => {
   selectedRowKeys.value = values;
   if (values && values.length > 0) {
-    const items = values.map((item) => {
+    // const res = await GenerateSKU(formState.codeSKU, values[indexColor.value]);
+
+    // if (res.data.success) {
+    //   console.log(res.data.data.maxId + indexColor.value + 1);
+    //   indexColor.value++;
+    // }
+    const items = values.map((item, index) => {
       return {
         ...formState,
         isParent: 0,
         isHide: "Không",
         color: item,
         name: formState.name + `(${item})`,
-        codeSKU: formState.codeSKU + "-" + getInitials(item),
+        codeSKU:
+          formState.codeSKU + "-" + getInitials(item) + (indexColor.value + 1),
         price: formState.price ? formState.price : "0",
         sell: formState.sell ? formState.sell : "0",
       };

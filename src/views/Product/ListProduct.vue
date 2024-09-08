@@ -208,32 +208,42 @@ const handleRefreshQuery = () => {
   objectQuery.status = "";
 };
 
+// const isNull = () => {
+//   for (let item in objectQuery) {
+//     if (!objectQuery[item]) {
+//       return false;
+//     }
+//   }
+//   return true;
+// };
 const handleGetData = async () => {
   try {
-    const res = await GetAllProduct({
-      ...objectQuery,
-      price: +parseFormattedNumber(objectQuery.price),
-      pageNumber: +objectQuery.pageNumber,
-      pageSize: +objectQuery.pageSize,
-    });
-    if (res.data.success) {
-      const copy = {
-        totalPage: res.data.data.totalPage,
-        pageNumber: res.data.data.currentPage,
-        totalRecord: res.data.data.totalRecord,
-      };
-      Object.assign(pagination, copy);
-      const dt =
-        res.data.data.data &&
-        res.data.data.data.length > 0 &&
-        res.data.data.data.map((item) => {
-          return {
-            ...item,
-            price: convertNumber(item.price),
-            key: item.codeSKU,
-          };
-        });
-      data.value = dt;
+    if (objectQuery.price) {
+      const res = await GetAllProduct({
+        ...objectQuery,
+        price: +parseFormattedNumber(objectQuery.price),
+        pageNumber: +objectQuery.pageNumber,
+        pageSize: +objectQuery.pageSize,
+      });
+      if (res.data.success) {
+        const copy = {
+          totalPage: res.data.data.totalPage,
+          pageNumber: res.data.data.currentPage,
+          totalRecord: res.data.data.totalRecord,
+        };
+        Object.assign(pagination, copy);
+        const dt =
+          res.data.data.data &&
+          res.data.data.data.length > 0 &&
+          res.data.data.data.map((item) => {
+            return {
+              ...item,
+              price: convertNumber(item.price),
+              key: item.codeSKU,
+            };
+          });
+        data.value = dt;
+      }
     }
   } catch (e) {
     console.error(e);

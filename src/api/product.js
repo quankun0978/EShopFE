@@ -20,10 +20,10 @@ export const deleteProduct = async (data) => {
   return await axios.post("/product/delete", data);
 };
 
-export const GenerateSKU = async (name) => {
+export const GenerateSKU = async (codeSKU, color = "", isParent) => {
   return await axios.post(
     "/product/generateSKU",
-    { name },
+    { codeSKU, color, isParent },
     {
       cancelToken: source.token,
     }

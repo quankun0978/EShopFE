@@ -180,12 +180,7 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRoute, useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import {
-  createProduct,
-  GenerateSKU,
-  GetProductByCodeSKU,
-  updateProduct,
-} from "@/api/product";
+import { GetProductByCodeSKU, updateProduct } from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
@@ -310,6 +305,35 @@ const Init = () => {
   handleGetData();
 };
 
+watchEffect(() => {
+  if (optionAtributes.value.length === 0) {
+    isDisabledAtribute.value = true;
+  } else {
+    isDisabledAtribute.value = false;
+  }
+});
+
+// watchEffect(() => {
+//   if (formState.name) {
+//     isDisabledAtribute.value = false;
+//   } else {
+//     isDisabledAtribute.value = true;
+//   }
+// });
+
+watchEffect(() => {
+  if (optionAtributes.value.length > 0) {
+    const price = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.price;
+    }, 0);
+    const sell = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.sell;
+    }, 0);
+    formState.sell = Math.floor(sell / optionAtributes.value.length);
+    formState.price = Math.floor(price / optionAtributes.value.length);
+  }
+});
+
 const handleGetData = async () => {
   try {
     const res = await GetProductByCodeSKU(route.params.id);
@@ -364,8 +388,7 @@ const onFinish = async () => {
         status: formState.status,
       };
     });
-
-    const res = await updateProduct({
+    console.log({
       listSKUsUpdate: {
         ...formState,
         products: payload,
@@ -374,14 +397,24 @@ const onFinish = async () => {
       },
       listSKUsDelele: listDelete.value,
     });
-    if (res && res.data && res.data.success) {
-      Notification.success("Cập nhật thành công");
-      router.push({
-        name: "list_product",
-      });
-    } else {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
-    }
+    // const res = await updateProduct({
+    //   listSKUsUpdate: {
+    //     ...formState,
+    //     products: payload,
+    //     color: "null",
+    //     isHide: "Có",
+    //   },
+    //   listSKUsDelele: listDelete.value,
+    // });
+    // console.log(res);
+    // if (res && res.data && res.data.success) {
+    //   Notification.success("Cập nhật thành công");
+    //   router.push({
+    //     name: "list_product",
+    //   });
+    // } else {
+    //   Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    // }
   } catch (error) {
     Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
@@ -407,9 +440,14 @@ const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
+const objectExists = (obj, array) => {
+  return array.some((item) => item.id === obj.id);
+};
+
 const handleChangeColor = async (values) => {
+  console.log(values);
   if (values && values.length > 0) {
-    isDisable.value = true;
+    // isDisable.value = true;
     selectedRowKeys.value = values.map((item) => {
       return {
         value: item,
@@ -438,9 +476,8 @@ const handleChangeColor = async (values) => {
       datas.push(codeSKU.codeSKU);
       listDelete.value = datas;
       console.log(listDelete.value);
-      const dataUpdate = dt.filter((item) =>
-        items.some((k) => k.codeSKU === item.codeSKU)
-      );
+      const dataUpdate = items.filter((item) => objectExists(item, dt));
+      console.log(dataUpdate);
 
       optionAtributes.value = dataUpdate;
       console.log(2);
@@ -459,10 +496,11 @@ const handleChangeColor = async (values) => {
 };
 
 const handleDeleteRow = (codeSKU) => {
+  console.log(codeSKU);
   if (optionAtributes.value && optionAtributes.value.length > 0) {
-    if (optionAtributes.value.length === 1) {
-      isDisable.value = false;
-    }
+    // if (optionAtributes.value.length === 1) {
+    //   isDisable.value = false;
+    // }
     const dtDelete = optionAtributes.value.find(
       (item) => item.codeSKU === codeSKU
     );

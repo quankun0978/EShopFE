@@ -20,12 +20,26 @@ export const deleteProduct = async (data) => {
   return await axios.post("/product/delete", data);
 };
 
-export const GenerateSKU = async (codeSKU, color = "", isParent) => {
+export const GenerateSKU = async (productName) => {
   return await axios.post(
     "/product/generateSKU",
-    { codeSKU, color, isParent },
+    { productName },
     {
       cancelToken: source.token,
     }
   );
+};
+
+export const GenerateListSKU = async (codeSKUParent, colors) => {
+  return await axios.post("/product/ListgenerateSKU", {
+    codeSKUParent,
+    colors,
+  });
+};
+
+export const GenerateListUpdateSKU = async (codeSKUParent, colors) => {
+  return await axios.post("/product/ListgenerateSKUUpdate", {
+    codeSKUParent,
+    colors,
+  });
 };

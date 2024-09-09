@@ -63,6 +63,7 @@
               value: 'codeSKU',
             }"
             :model-value="formState.codeSKU"
+            @press-enter="handlePressEnterCodeSKU"
             :style="{ width: 200 }"
             :form-sate="formState"
             :is-disable="isDisable"
@@ -113,7 +114,7 @@
           </p>
           <SelectForm
             :is-mode-tag="true"
-            :-on-change="handleChangeColor1"
+            :-on-change="handleChangeColor"
             :item="{
               label: 'Thuộc tính',
               value: 'color',
@@ -182,7 +183,7 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import { createProduct, GenerateSKU } from "@/api/product";
+import { createProduct, GenerateListSKU, GenerateSKU } from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
@@ -288,7 +289,7 @@ const array = [];
 const selectedRowKeys = ref(array);
 const editableData = reactive({});
 const columnValue = ref("");
-
+const dataValues = ref([]);
 onMounted(() => {
   Init();
 });
@@ -366,19 +367,32 @@ const onFinishFailed = (errorInfo) => {};
 
 const handlePressEnterName = async (e) => {
   if (formState.name) {
-    formState.codeSKU = await hanldeGetCode(
-      getInitials(e.target.value),
-      "",
-      true
-    );
+    formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
   } else {
     formState.codeSKU = "";
   }
 };
 
-const hanldeGetCode = async (name, color, isParent) => {
+const handlePressEnterCodeSKU = async (e) => {
+  e.preventDefault();
+  if (formState.codeSKU) {
+    const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
+    if (res.data.success) {
+      const dataCP = [...optionAtributes.value].map((item, index) => {
+        return {
+          ...item,
+          codeSKU: res.data.data[index],
+        };
+      });
+      optionAtributes.value = dataCP;
+    }
+  } else {
+  }
+};
+
+const hanldeGetCode = async (name) => {
   if (name) {
-    const res = await GenerateSKU(name, color, isParent);
+    const res = await GenerateSKU(name);
     if (res.data.success) {
       return res.data.data;
     }
@@ -396,64 +410,25 @@ const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
-const hanldeGetCodeColor = (color, arrayCode) => {
-  if (color.replace) {
-  }
-};
+const handleGetListCode = async () => {
+  const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
 
-const indexColor = ref(0);
-
-const handleChangeColor1 = async (values) => {
-  selectedRowKeys.value = values;
-  const optionCp = [...optionAtributes.value];
-
-  if (optionCp.length > values.length) {
-
-  } else {  
-    const codeSkuChild =
-      formState.codeSKU +
-      "-" +
-      getInitials(values[indexColor.value]) +
-      (indexColor.value + 1);
-    // const res = await GenerateSKU(codeSkuChild, values[indexColor.value], false);
-    optionCp.push({
-      ...formState,
-      isParent: 0,
-      isHide: "Không",
-      color: values[indexColor.value],
-      codeSKU: codeSkuChild,
-      name: formState.name + `(${values[indexColor.value]})`,
-      price: formState.price ? formState.price : "0",
-      sell: formState.sell ? formState.sell : "0",
-    });
-    optionAtributes.value = optionCp;
-    indexColor.value++;
-  }
-};
-
-const handleChangeColor = async (values) => {
-  selectedRowKeys.value = values;
-  if (values && values.length > 0) {
-    // const res = await GenerateSKU(formState.codeSKU, values[indexColor.value]);
-
-    // if (res.data.success) {
-    //   console.log(res.data.data.maxId + indexColor.value + 1);
-    //   indexColor.value++;
-    // }
-    const items = values.map((item, index) => {
-      return {
-        ...formState,
-        isParent: 0,
-        isHide: "Không",
-        color: item,
-        name: formState.name + `(${item})`,
-        codeSKU:
-          formState.codeSKU + "-" + getInitials(item) + (indexColor.value + 1),
-        price: formState.price ? formState.price : "0",
-        sell: formState.sell ? formState.sell : "0",
-      };
-    });
-    console.log(1);
+  if (res.data.success) {
+    const items =
+      res.data.data &&
+      res.data.data.length > 0 &&
+      res.data.data.map((item, index) => {
+        return {
+          ...formState,
+          isParent: 0,
+          isHide: "Không",
+          color: dataValues.value[index],
+          name: formState.name + `(${dataValues.value[index]})`,
+          codeSKU: item,
+          price: formState.price ? formState.price : "0",
+          sell: formState.sell ? formState.sell : "0",
+        };
+      });
     const dt = [...optionAtributes.value];
     if (dt.length > items.length) {
       const dataUpdate = dt.filter((item) =>
@@ -463,11 +438,26 @@ const handleChangeColor = async (values) => {
 
       optionAtributes.value = dataUpdate;
     } else {
-      const index = optionAtributes.value.length === 0 ? 0 : values.length - 1;
+      const index =
+        optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
       dt.push(items[index]);
       optionAtributes.value = dt;
       console.log(3);
     }
+  }
+};
+
+const handleChangeColor = async (values) => {
+  selectedRowKeys.value = values;
+  if (values && values.length > 0) {
+    dataValues.value = values;
+    handleGetListCode();
+    // const res = await GenerateSKU(formState.codeSKU, values[indexColor.value]);
+
+    // if (res.data.success) {
+    //   console.log(res.data.data.maxId + indexColor.value + 1);
+    //   indexColor.value++;
+    // }
   } else {
     console.log(4);
     optionAtributes.value = [];

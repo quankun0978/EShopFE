@@ -180,7 +180,11 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRoute, useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import { GetProductByCodeSKU, updateProduct } from "@/api/product";
+import {
+  GenerateListUpdateSKU,
+  GetProductByCodeSKU,
+  updateProduct,
+} from "@/api/product";
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
@@ -454,38 +458,45 @@ const handleChangeColor = async (values) => {
         label: item,
       };
     });
-    const items = values.map((item) => {
-      return {
-        ...formState,
-        isParent: 0,
-        isHide: "Không",
-        color: item,
-        name: formState.name + `(${item})`,
-        codeSKU: formState.codeSKU + "-" + getInitials(item),
-        price: formState.price ? formState.price : "0",
-        sell: formState.sell ? formState.sell : "0",
-      };
-    });
-    console.log(1);
-    const dt = [...optionAtributes.value];
-    if (dt.length > items.length) {
-      const codeSKU = dt.find((item) =>
-        items.some((k) => k.codeSKU !== item.codeSKU)
-      );
-      const datas = [...listDelete.value];
-      datas.push(codeSKU.codeSKU);
-      listDelete.value = datas;
-      console.log(listDelete.value);
-      const dataUpdate = items.filter((item) => objectExists(item, dt));
-      console.log(dataUpdate);
+    const res = await GenerateListUpdateSKU(formState.codeSKU, values);
+    if (res.data.success) {
+      const items =
+        res.data.data &&
+        res.data.data.length > 0 &&
+        res.data.data.map((item, index) => {
+          return {
+            ...formState,
+            isParent: 0,
+            isHide: "Không",
+            color: values[index],
+            name: formState.name + `(${values[index]})`,
+            codeSKU: item,
+            price: formState.price ? formState.price : "0",
+            sell: formState.sell ? formState.sell : "0",
+          };
+        });
+      console.log(1);
+      const dt = [...optionAtributes.value];
+      if (dt.length > items.length) {
+        const codeSKU = dt.find((item) =>
+          items.some((k) => k.codeSKU !== item.codeSKU)
+        );
+        const datas = [...listDelete.value];
+        datas.push(codeSKU.codeSKU);
+        listDelete.value = datas;
+        console.log(listDelete.value);
+        const dataUpdate = items.filter((item) => objectExists(item, dt));
+        console.log(dataUpdate);
 
-      optionAtributes.value = dataUpdate;
-      console.log(2);
-    } else {
-      const index = optionAtributes.value.length === 0 ? 0 : values.length - 1;
-      dt.push(items[index]);
-      optionAtributes.value = dt;
-      console.log(3);
+        optionAtributes.value = dataUpdate;
+        console.log(2);
+      } else {
+        const index =
+          optionAtributes.value.length === 0 ? 0 : values.length - 1;
+        dt.push(items[index]);
+        optionAtributes.value = dt;
+        console.log(3);
+      }
     }
   } else {
     isDisable.value = false;

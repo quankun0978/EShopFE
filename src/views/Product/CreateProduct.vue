@@ -275,7 +275,6 @@ const formState = reactive({
   color: "",
   description: "",
   barcode: "",
-  size: 30,
   isParent: 1,
   imageUrl: "",
 });

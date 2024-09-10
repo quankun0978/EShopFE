@@ -1,28 +1,28 @@
 import axios from "./axios";
 import { source } from "./axios";
 export const GetAllProduct = async (data) => {
-  return await axios.post("/product/list", data);
+  return await axios.post("/stock/list", data);
 };
 
 export const GetProductByCodeSKU = async (codeSKU) => {
-  return await axios.get(`/product/detail?codeSKU=${codeSKU}`);
+  return await axios.get(`/stock/detail?codeSKU=${codeSKU}`);
 };
 
 export const createProduct = async (data) => {
-  return await axios.post("/product/add", data);
+  return await axios.post("/stock/add", data);
 };
 
 export const updateProduct = async (data) => {
-  return await axios.post("/product/update", data);
+  return await axios.post("/stock/update", data);
 };
 
 export const deleteProduct = async (data) => {
-  return await axios.post("/product/delete", data);
+  return await axios.post("/stock/delete", data);
 };
 
 export const GenerateSKU = async (productName) => {
   return await axios.post(
-    "/product/generateSKU",
+    "/stock/generate_SKU",
     { productName },
     {
       cancelToken: source.token,
@@ -31,14 +31,14 @@ export const GenerateSKU = async (productName) => {
 };
 
 export const GenerateListSKU = async (codeSKUParent, colors) => {
-  return await axios.post("/product/ListgenerateSKU", {
+  return await axios.post("/stock/list_generate_SKU", {
     codeSKUParent,
     colors,
   });
 };
 
 export const GenerateListUpdateSKU = async (codeSKUParent, colors) => {
-  return await axios.post("/product/ListgenerateSKUUpdate", {
+  return await axios.post("/stock/ListgenerateSKUUpdate", {
     codeSKUParent,
     colors,
   });

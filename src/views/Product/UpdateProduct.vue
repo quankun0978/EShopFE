@@ -34,9 +34,9 @@
             label: 'Tên hàng hóa',
             value: 'name',
           }"
+          @press-enter="handlePressEnterName"
           v-bind:model-value="formState.name"
           :form-sate="formState"
-          :on-input="handleChangeName"
           :is-disable="isDisable"
         />
         <!-- <a-form-item
@@ -62,9 +62,10 @@
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
+          @press-enter="handlePressEnterCodeSKU"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="isDisable"
+          :is-disable="false"
         />
         <InputForm
           :item="{
@@ -74,7 +75,7 @@
           :model-value="formState.price"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="true"
+          :is-disable="formState.isParent === 1"
         />
         <InputForm
           :item="{
@@ -84,7 +85,7 @@
           :model-value="formState.sell"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="true"
+          :is-disable="formState.isParent === 1"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
@@ -121,7 +122,7 @@
           :value="formState.color"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disabled-atribute="isDisabledAtribute"
+          :is-disabled-atribute="formState.isParent !== 1"
         />
         <TableForm
           :is-action="true"
@@ -181,7 +182,9 @@ import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRoute, useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
 import {
+  GenerateListSKU,
   GenerateListUpdateSKU,
+  GenerateSKU,
   GetProductByCodeSKU,
   updateProduct,
 } from "@/api/product";
@@ -279,14 +282,17 @@ const formState = reactive({
   size: 30,
   isParent: 1,
   imageUrl: "",
+  id: null,
 });
 const optionAtributes = ref([]);
+const dataValues = ref([]);
 const isDisable = ref(false);
 const isDisabledAtribute = ref(false);
 const router = useRouter();
 const form = Form.useForm(formState);
 const selectedRowKeys = ref([]);
 const listDelete = ref([]);
+const codeSKUOld = ref("");
 const editableData = reactive({});
 const columnValue = ref("");
 const route = useRoute();
@@ -304,18 +310,18 @@ onMounted(() => {
 
 const Init = () => {
   useMenuStore().updateHeader({
-    namePath: "Hàng hóa / Sua",
+    namePath: "Hàng hóa / Sửa",
   });
   handleGetData();
 };
 
-watchEffect(() => {
-  if (optionAtributes.value.length === 0) {
-    isDisabledAtribute.value = true;
-  } else {
-    isDisabledAtribute.value = false;
-  }
-});
+// watchEffect(() => {
+//   if (optionAtributes.value.length === 0) {
+//     isDisabledAtribute.value = true;
+//   } else {
+//     isDisabledAtribute.value = false;
+//   }
+// });
 
 // watchEffect(() => {
 //   if (formState.name) {
@@ -367,6 +373,7 @@ const handleGetData = async () => {
             label: item.color,
           };
         });
+        dataValues.value = dataColor.map((item) => item.value);
         console.log(dataColor);
         selectedRowKeys.value = dataColor;
       }
@@ -375,6 +382,49 @@ const handleGetData = async () => {
   } catch (e) {
     console.error(e);
   }
+};
+
+const handlePressEnterName = async (e) => {
+  e.preventDefault();
+  if (formState.name) {
+    formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
+    handleGetListCode();
+  } else {
+    formState.codeSKU = "";
+  }
+};
+
+const handleGetListCode = async () => {
+  if (formState.codeSKU) {
+    const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
+    if (res.data.success) {
+      const dataCP = [...optionAtributes.value].map((item, index) => {
+        return {
+          ...item,
+          codeSKU: res.data.data[index],
+          name: formState.name + `(${dataValues.value[index]})`,
+        };
+      });
+      optionAtributes.value = dataCP;
+    }
+  } else {
+  }
+};
+
+const handlePressEnterCodeSKU = async (e) => {
+  e.preventDefault();
+  handleGetListCode();
+};
+
+const hanldeGetCode = async (name) => {
+  if (name) {
+    const res = await GenerateSKU(name);
+    if (res.data.success) {
+      return res.data.data;
+    }
+    return name;
+  }
+  return name;
 };
 
 const onClickExit = () => {
@@ -401,36 +451,35 @@ const onFinish = async () => {
       },
       listSKUsDelele: listDelete.value,
     });
-    // const res = await updateProduct({
-    //   listSKUsUpdate: {
-    //     ...formState,
-    //     products: payload,
-    //     color: "null",
-    //     isHide: "Có",
-    //   },
-    //   listSKUsDelele: listDelete.value,
-    // });
-    // console.log(res);
-    // if (res && res.data && res.data.success) {
-    //   Notification.success("Cập nhật thành công");
-    //   router.push({
-    //     name: "list_product",
-    //   });
-    // } else {
-    //   Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
-    // }
+    const res = await updateProduct({
+      listSKUsUpdate: {
+        ...formState,
+        stocks: payload,
+        isHide: "Có",
+      },
+      listSKUsDelele: listDelete.value,
+    });
+    console.log(res);
+    if (res && res.data && res.data.success) {
+      Notification.success("Cập nhật thành công");
+      router.push({
+        name: "list_product",
+      });
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    }
   } catch (error) {
     Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
 };
 
-const handleChangeName = (e) => {
-  if (formState.name) {
-    formState.codeSKU = getInitials(e.target.value);
-  } else {
-    formState.codeSKU = "";
-  }
-};
+// const handleChangeName = (e) => {
+//   if (formState.name) {
+//     formState.codeSKU = getInitials(e.target.value);
+//   } else {
+//     formState.codeSKU = "";
+//   }
+// };
 
 const handleChangeIsHide = (values) => {
   formState.isHide = values;
@@ -444,13 +493,10 @@ const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
-const objectExists = (obj, array) => {
-  return array.some((item) => item.id === obj.id);
-};
-
 const handleChangeColor = async (values) => {
   console.log(values);
   if (values && values.length > 0) {
+    dataValues.value = values;
     // isDisable.value = true;
     selectedRowKeys.value = values.map((item) => {
       return {
@@ -458,7 +504,11 @@ const handleChangeColor = async (values) => {
         label: item,
       };
     });
-    const res = await GenerateListUpdateSKU(formState.codeSKU, values);
+    const res = await GenerateListUpdateSKU(
+      formState.codeSKU,
+      values,
+      formState.id
+    );
     if (res.data.success) {
       const items =
         res.data.data &&
@@ -475,17 +525,24 @@ const handleChangeColor = async (values) => {
             sell: formState.sell ? formState.sell : "0",
           };
         });
+      const listSkus = items.map((item) => item.codeSKU);
       console.log(1);
       const dt = [...optionAtributes.value];
       if (dt.length > items.length) {
-        const codeSKU = dt.find((item) =>
-          items.some((k) => k.codeSKU !== item.codeSKU)
-        );
+        const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));
         const datas = [...listDelete.value];
         datas.push(codeSKU.codeSKU);
         listDelete.value = datas;
-        console.log(listDelete.value);
-        const dataUpdate = items.filter((item) => objectExists(item, dt));
+        console.log(items);
+        const dataUpdate = dt
+          .filter((item) => items.some((k) => k.color === item.color))
+          .map((item) => {
+            const value = items.find((i) => i.color === item.color);
+            return {
+              ...item,
+              codeSKU: value.codeSKU,
+            };
+          });
         console.log(dataUpdate);
 
         optionAtributes.value = dataUpdate;
@@ -493,7 +550,7 @@ const handleChangeColor = async (values) => {
       } else {
         const index =
           optionAtributes.value.length === 0 ? 0 : values.length - 1;
-        dt.push(items[index]);
+        dt.push({ ...items[index], id: null });
         optionAtributes.value = dt;
         console.log(3);
       }

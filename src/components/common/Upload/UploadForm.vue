@@ -9,6 +9,7 @@
         <a-space>
           <a-upload-dragger
             v-model:fileList="val"
+            @change="OnChange"
             name="files"
             action="/upload.do"
           >
@@ -37,6 +38,7 @@ const props = defineProps({
   placeholder: String,
   style: Object,
   defaultValue: String,
+  OnChange: Function,
   dragger: Object,
   item: Object,
 });

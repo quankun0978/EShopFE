@@ -37,9 +37,10 @@ export const GenerateListSKU = async (codeSKUParent, colors) => {
   });
 };
 
-export const GenerateListUpdateSKU = async (codeSKUParent, colors) => {
-  return await axios.post("/stock/ListgenerateSKUUpdate", {
+export const GenerateListUpdateSKU = async (codeSKUParent, colors, id) => {
+  return await axios.post("/stock/list_generate_SKU_update", {
     codeSKUParent,
     colors,
+    id,
   });
 };

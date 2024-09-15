@@ -34,18 +34,18 @@
             label: 'Tên hàng hóa',
             value: 'name',
           }"
+          @press-enter="handlePressEnterName"
           v-bind:model-value="formState.name"
           :form-sate="formState"
-          :on-input="handleChangeName"
           :is-disable="isDisable"
         />
         <!-- <a-form-item
-              label="Name"
-              name="name"
-              :rules="[{ required: true, message: 'Please input your name!' }]"
-            >
-              <a-input v-model:value="formState.name" />
-            </a-form-item> -->
+            label="Name"
+            name="name"
+            :rules="[{ required: true, message: 'Please input your name!' }]"
+          >
+            <a-input v-model:value="formState.name" />
+          </a-form-item> -->
         <SelectForm
           :item="{
             label: 'Nhóm hàng hóa',
@@ -62,9 +62,10 @@
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
+          @press-enter="handlePressEnterCodeSKU"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="isDisable"
+          :is-disable="false"
         />
         <InputForm
           :item="{
@@ -74,7 +75,7 @@
           :model-value="formState.price"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="true"
+          :is-disable="formState.isParent === 1"
         />
         <InputForm
           :item="{
@@ -84,7 +85,7 @@
           :model-value="formState.sell"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="true"
+          :is-disable="formState.isParent === 1"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
@@ -182,6 +183,8 @@ import { useRoute, useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
 import {
   createProduct,
+  GenerateListSKU,
+  GenerateListUpdateSKU,
   GenerateSKU,
   GetProductByCodeSKU,
   updateProduct,
@@ -259,7 +262,9 @@ const columns = [
   },
 ];
 
-const optionsiSHide = [{ label: "Hiển thị lên màn hình bán hàng", value: "0" }];
+const optionsiSHide = [
+  { label: "Hiển thị lên màn hình bán hàng", value: "Có" },
+];
 
 const formState = reactive({
   status: "Đang kinh doanh",
@@ -278,8 +283,10 @@ const formState = reactive({
   size: 30,
   isParent: 1,
   imageUrl: "",
+  id: null,
 });
 const optionAtributes = ref([]);
+const dataValues = ref([]);
 const isDisable = ref(false);
 const isDisabledAtribute = ref(false);
 const router = useRouter();
@@ -293,16 +300,11 @@ onMounted(() => {
   Init();
 });
 
-// watchEffect(async () => {
-//   if (formState.codeSKU) {
-//     const dt = await handleGenerateCode(formState.codeSKU);
-//     formState.codeSKU = dt;
-//     const dataMap = optionAtributes.value.map((item) => {
-//       return {
-//         ...item,
-//       };
-//     });
-//     optionAtributes.value = dataMap;
+// watchEffect(() => {
+//   if (formState.name) {
+//     isDisabledAtribute.value = false;
+//   } else {
+//     isDisabledAtribute.value = true;
 //   }
 // });
 
@@ -312,6 +314,35 @@ const Init = () => {
   });
   handleGetData();
 };
+
+// watchEffect(async () => {
+//   if (formState.name) {
+//     formState.codeSKU = await hanldeGetCode(formState.name, "", true);
+//     handleGetListCode();
+//   } else {
+//   }
+// });
+
+watchEffect(() => {
+  if (formState.name) {
+    isDisabledAtribute.value = false;
+  } else {
+    isDisabledAtribute.value = true;
+  }
+});
+
+watchEffect(() => {
+  if (optionAtributes.value.length > 0) {
+    const price = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.price;
+    }, 0);
+    const sell = optionAtributes.value.reduce((accumulator, currrent) => {
+      return accumulator + +currrent.sell;
+    }, 0);
+    formState.sell = Math.floor(sell / optionAtributes.value.length);
+    formState.price = Math.floor(price / optionAtributes.value.length);
+  }
+});
 
 const handleGetData = async () => {
   try {
@@ -329,17 +360,12 @@ const handleGetData = async () => {
       //     };
       //   });
       const dataAtributes = res.data.data.atributes;
-      console.log(formState.codeSKU);
-      const dataMap = dataAtributes.map((item) => {
-        return {
-          ...item,
-        };
-      });
       const dt = {
         ...res.data.data.data,
+        unit: res.data.data.data.unit === "double" ? "Đôi" : "Đơn",
       };
       if (dataAtributes && dataAtributes.length > 0) {
-        optionAtributes.value = dataMap;
+        optionAtributes.value = dataAtributes;
         console.log(optionAtributes.value);
         const dataColor = dataAtributes.map((item) => {
           return {
@@ -347,14 +373,60 @@ const handleGetData = async () => {
             label: item.color,
           };
         });
+        dataValues.value = dataColor.map((item) => item.value);
         console.log(dataColor);
         selectedRowKeys.value = dataColor;
       }
       Object.assign(formState, dt);
+      formState.codeSKU = await hanldeGetCode(formState.name, "", true);
+      handleGetListCode();
     }
   } catch (e) {
     console.error(e);
   }
+};
+
+const handlePressEnterName = async (e) => {
+  e.preventDefault();
+  if (formState.name) {
+    formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
+    handleGetListCode();
+  } else {
+    formState.codeSKU = "";
+  }
+};
+
+const handleGetListCode = async () => {
+  if (formState.codeSKU) {
+    const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
+    if (res.data.success) {
+      const dataCP = [...optionAtributes.value].map((item, index) => {
+        return {
+          ...item,
+          codeSKU: res.data.data[index],
+          name: formState.name + `(${dataValues.value[index]})`,
+        };
+      });
+      optionAtributes.value = dataCP;
+    }
+  } else {
+  }
+};
+
+const handlePressEnterCodeSKU = async (e) => {
+  e.preventDefault();
+  handleGetListCode();
+};
+
+const hanldeGetCode = async (name) => {
+  if (name) {
+    const res = await GenerateSKU(name);
+    if (res.data.success) {
+      return res.data.data;
+    }
+    return name;
+  }
+  return name;
 };
 
 const onClickExit = () => {
@@ -363,46 +435,49 @@ const onClickExit = () => {
   });
 };
 
-const onFinish = async (values) => {
+const onFinish = async () => {
   try {
-    if (optionAtributes.value && optionAtributes.value.length > 0) {
-      const payload = [...optionAtributes.value, formState].map((item) => {
-        return {
-          ...item,
-          description: formState.description,
-        };
+    const payload = [...optionAtributes.value].map((item) => {
+      return {
+        ...item,
+        description: formState.description,
+        status: formState.status,
+      };
+    });
+    console.log({
+      listSKUsUpdate: {
+        ...formState,
+        products: payload,
+        color: "null",
+        isHide: "Có",
+      },
+      listSKUsDelele: listDelete.value,
+    });
+    const res = await createProduct({
+      ...formState,
+      stocks: payload,
+      isHide: "Có",
+    });
+    if (res && res.data && res.data.success) {
+      Notification.success("Thêm mới thành công");
+      router.push({
+        name: "list_product",
       });
-      const res = await createProduct(payload);
-
-      if (res && res.data && res.data.success) {
-        Notification.success("Thêm mới thành công");
-        router.push({
-          name: "list_product",
-        });
-      } else {
-        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
-      }
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
     }
   } catch (error) {
     Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
 };
 
-const handleChangeName = (e) => {
-  if (formState.name) {
-    formState.codeSKU = handleGenerateCode(e.target.value);
-  } else {
-    formState.codeSKU = "";
-  }
-};
-
-const handleGenerateCode = async (name) => {
-  const res = await GenerateSKU(name);
-  if (res.data.success) {
-    return res.data.data;
-  }
-  return "";
-};
+// const handleChangeName = (e) => {
+//   if (formState.name) {
+//     formState.codeSKU = getInitials(e.target.value);
+//   } else {
+//     formState.codeSKU = "";
+//   }
+// };
 
 const handleChangeIsHide = (values) => {
   formState.isHide = values;
@@ -417,47 +492,66 @@ const handleChangeUnit = (value) => {
 };
 
 const handleChangeColor = async (values) => {
+  console.log(values);
   if (values && values.length > 0) {
-    isDisable.value = true;
+    dataValues.value = values;
+    // isDisable.value = true;
     selectedRowKeys.value = values.map((item) => {
       return {
         value: item,
         label: item,
       };
     });
-    const items = values.map((item) => {
-      return {
-        ...formState,
-        isParent: 0,
-        isHide: "Không",
-        color: item,
-        name: formState.name + `(${item})`,
-        codeSKU: formState.codeSKU + "-" + getInitials(item),
-        price: formState.price ? formState.price : "0",
-        sell: formState.sell ? formState.sell : "0",
-      };
-    });
-    console.log(1);
-    const dt = [...optionAtributes.value];
-    if (dt.length > items.length) {
-      const codeSKU = dt.find((item) =>
-        items.some((k) => k.codeSKU !== item.codeSKU)
-      );
-      const datas = [...listDelete.value];
-      datas.push(codeSKU.codeSKU);
-      listDelete.value = datas;
-      console.log(listDelete.value);
-      const dataUpdate = dt.filter((item) =>
-        items.some((k) => k.codeSKU === item.codeSKU)
-      );
+    const res = await GenerateListSKU(
+      formState.codeSKU,
+      values,
+      formState.id
+    );
+    if (res.data.success) {
+      const items =
+        res.data.data &&
+        res.data.data.length > 0 &&
+        res.data.data.map((item, index) => {
+          return {
+            ...formState,
+            isParent: 0,
+            isHide: "Không",
+            color: values[index],
+            name: formState.name + `(${values[index]})`,
+            codeSKU: item,
+            price: formState.price ? formState.price : "0",
+            sell: formState.sell ? formState.sell : "0",
+          };
+        });
+      const listSkus = items.map((item) => item.codeSKU);
+      console.log(1);
+      const dt = [...optionAtributes.value];
+      if (dt.length > items.length) {
+        const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));
+        const datas = [...listDelete.value];
+        datas.push(codeSKU.codeSKU);
+        listDelete.value = datas;
+        console.log(items);
+        const dataUpdate = dt
+          .filter((item) => items.some((k) => k.color === item.color))
+          .map((item) => {
+            const value = items.find((i) => i.color === item.color);
+            return {
+              ...item,
+              codeSKU: value.codeSKU,
+            };
+          });
+        console.log(dataUpdate);
 
-      optionAtributes.value = dataUpdate;
-      console.log(2);
-    } else {
-      const index = optionAtributes.value.length === 0 ? 0 : values.length - 1;
-      dt.push(items[index]);
-      optionAtributes.value = dt;
-      console.log(3);
+        optionAtributes.value = dataUpdate;
+        console.log(2);
+      } else {
+        const index =
+          optionAtributes.value.length === 0 ? 0 : values.length - 1;
+        dt.push({ ...items[index], id: null });
+        optionAtributes.value = dt;
+        console.log(3);
+      }
     }
   } else {
     isDisable.value = false;
@@ -468,10 +562,11 @@ const handleChangeColor = async (values) => {
 };
 
 const handleDeleteRow = (codeSKU) => {
+  console.log(codeSKU);
   if (optionAtributes.value && optionAtributes.value.length > 0) {
-    if (optionAtributes.value.length === 1) {
-      isDisable.value = false;
-    }
+    // if (optionAtributes.value.length === 1) {
+    //   isDisable.value = false;
+    // }
     const dtDelete = optionAtributes.value.find(
       (item) => item.codeSKU === codeSKU
     );

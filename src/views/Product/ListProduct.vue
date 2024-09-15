@@ -254,7 +254,7 @@ const handleDeleteData = async (data) => {
   try {
     const res = await deleteProduct(data);
     if (res && res.data && res.data.success) {
-      Notification.success("Xoa thanh cong");
+      Notification.success("Xóa thành công");
       handleGetData();
     } else {
       Notification.error("Đã có lỗi xảy ra vui lòng thử lại");

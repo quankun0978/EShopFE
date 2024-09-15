@@ -2,6 +2,7 @@
   <div>
     <a-form
       :model="formState"
+      ref="form_create_data"
       name="basic"
       :form="form"
       autocomplete="off"
@@ -37,7 +38,7 @@
             }"
             v-bind:model-value="formState.name"
             :form-sate="formState"
-            @press-enter="handlePressEnterName"
+            @press-enter.prevent="handlePressEnterName"
             :is-disable="isDisable"
           />
           <!-- <a-form-item
@@ -158,12 +159,60 @@
             :form-sate="formState"
             :style="{ width: 200, height: '150px' }"
           />
-          <UploadForm
+          <!-- <UploadForm
+            :-on-change="handleChangeImage"
             :item="{
               label: 'Anh hàng hóa',
               value: 'image',
             }"
-          />
+          /> -->
+          <div class="flex justify-center items-center">
+            <label
+              for="image-upload"
+              class="flex justify-center items-center gap-1 p-2"
+              style="
+                border: 1px solid #d9d9d9;
+                border-radius: 8px;
+                box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+                background-color: #ffffff;
+                cursor: pointer;
+              "
+            >
+              <!-- <a-button class="flex items-center">
+                  <PlusOutlined />
+                  <span style="margin-left: 4px">Chọn ảnh</span>
+                </a-button> -->
+              chọn ảnh
+            </label>
+            <input
+              hidden
+              type="file"
+              name="image"
+              id="image-upload"
+              @change="handleImageSelected"
+            />
+            <a-avatar shape="square" style="width: 100%; height: 200px">
+              <template #icon>
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  v-show="imageUrl"
+                  alt="Avatar"
+                />
+              </template>
+            </a-avatar>
+            <a-upload
+              v-model:file-list="fileList"
+              name="file"
+              action="http://localhost:5277/api/upload?path=stock"
+              @change="handleChange"
+            >
+              <a-button>
+                <upload-outlined></upload-outlined>
+                Click to Upload
+              </a-button>
+            </a-upload>
+          </div>
         </div>
       </div>
 
@@ -184,9 +233,13 @@ import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
 import { createProduct, GenerateListSKU, GenerateSKU } from "@/api/product";
-import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
+import { useImageUpload } from "@/hooks/useImagrUpload";
+
+const handleChange = (info) => {
+  console.log(info);
+};
 
 const optionsStatus = [
   {
@@ -288,6 +341,7 @@ const array = [];
 const selectedRowKeys = ref(array);
 const editableData = reactive({});
 const columnValue = ref("");
+let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
 const dataValues = ref([]);
 onMounted(() => {
   Init();
@@ -328,8 +382,9 @@ const onClickExit = () => {
 
 const onFinish = async () => {
   try {
+    let payload = [];
     if (optionAtributes.value && optionAtributes.value.length > 0) {
-      const payload = [...optionAtributes.value].map((item) => {
+      payload = [...optionAtributes.value].map((item) => {
         if (item.isParent !== 1) {
           return {
             ...item,
@@ -343,20 +398,39 @@ const onFinish = async () => {
           description: formState.description,
         };
       });
-      const res = await createProduct({
-        ...formState,
-        products: payload,
-        color: "null",
-        isHide: "Có",
-      });
-      if (res && res.data && res.data.success) {
-        Notification.success("Thêm mới thành công");
-        router.push({
-          name: "list_product",
-        });
-      } else {
-        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
-      }
+      const formData = new FormData();
+      formData.append("image", imageFile.value);
+      console.log(formData);
+      console.log;
+      // const res = await createProduct({
+      //   ...formState,
+      //   stocks: payload,
+      //   image: imageFile.value,
+      //   color: "null",
+      //   isHide: "Có",
+      // });
+      // if (res && res.data && res.data.success) {
+      //   Notification.success("Thêm mới thành công");
+      //   router.push({
+      //     name: "list_product",
+      //   });
+      // } else {
+      //   Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      // }
+      // const formData = new FormData();
+      // formData.append("image", imageFile.value);
+      // formData.append("status", formState.status);
+      // formData.append("color", formState.color);
+      // formData.append("description", formState.description);
+      // formData.append("isHide", formState.isHide);
+      // formData.append("isParent", formState.isParent);
+      // formData.append("managerBy", formState.managerBy);
+      // formData.append("group", formState.group);
+      // formData.append("name", formState.name);
+      // formData.append("unit", formState.unit);
+      // formData.append("price", formState.price);
+      // formData.append("sell", formState.sell);
+      // formData.append("stokcs", payload);
     }
   } catch (error) {
     Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
@@ -365,8 +439,11 @@ const onFinish = async () => {
 const onFinishFailed = (errorInfo) => {};
 
 const handlePressEnterName = async (e) => {
+  e.preventDefault();
   if (formState.name) {
     formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
+    // handleGetListCode();
+    handleGetListCodeChild();
   } else {
     formState.codeSKU = "";
   }
@@ -380,6 +457,23 @@ const handlePressEnterCodeSKU = async (e) => {
       const dataCP = [...optionAtributes.value].map((item, index) => {
         return {
           ...item,
+          codeSKU: res.data.data[index],
+        };
+      });
+      optionAtributes.value = dataCP;
+    }
+  } else {
+  }
+};
+
+const handleGetListCodeChild = async () => {
+  if (formState.codeSKU) {
+    const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
+    if (res.data.success) {
+      const dataCP = [...optionAtributes.value].map((item, index) => {
+        return {
+          ...item,
+          name: formState.name + `(${dataValues.value[index]})`,
           codeSKU: res.data.data[index],
         };
       });
@@ -409,6 +503,10 @@ const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
+const handleChangeImage = (value) => {
+  console.log(value);
+};
+
 const handleGetListCode = async () => {
   const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
 
@@ -429,10 +527,17 @@ const handleGetListCode = async () => {
         };
       });
     const dt = [...optionAtributes.value];
+    console.log(dt);
     if (dt.length > items.length) {
-      const dataUpdate = dt.filter((item) =>
-        items.some((k) => k.codeSKU === item.codeSKU)
-      );
+      const dataUpdate = dt
+        .filter((item) => items.some((k) => k.color === item.color))
+        .map((item) => {
+          const value = items.find((i) => i.color === item.color);
+          return {
+            ...item,
+            codeSKU: value.codeSKU,
+          };
+        });
       console.log(2);
 
       optionAtributes.value = dataUpdate;

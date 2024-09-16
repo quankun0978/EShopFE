@@ -55,10 +55,6 @@ const items = ref(props.options);
 watchEffect(() => {
   if (props.options) {
     items.value = props.options;
-    console.log(items.value);
-    console.log(props.options);
   }
 });
-
-console.log(items.value);
 </script>

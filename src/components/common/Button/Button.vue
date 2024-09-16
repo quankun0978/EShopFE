@@ -41,21 +41,5 @@ const props = defineProps({
   isExit: Boolean,
   handleClick: Function,
 });
-
-// const addItem = (e) => {
-//   e.preventDefault();
-//   console.log("addItem");
-//   items.value.push(name.value || `New item ${(index += 1)}`);
-//   name.value = "";
-//   setTimeout(() => {
-//     inputRef.value?.focus();
-//   }, 0);
-// };
 </script>
-<style>
-/* .ant-btn-default {
-  background-color: rgb(0, 87, 123);
-  color: #fff;
-  height: 35px;
-} */
-</style>
+<style></style>

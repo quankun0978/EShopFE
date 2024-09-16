@@ -5,7 +5,6 @@ export function useImageUpload() {
   let imageUrl = ref("");
 
   function handleImageSelected(event) {
-    console.log(event);
     if (event.target.files.length === 0) {
       imageFile.value = "";
       imageUrl.value = "";

@@ -37,6 +37,13 @@ export const GenerateListSKU = async (codeSKUParent, colors) => {
   });
 };
 
+export const UploadImage = async (file) => {
+  return await axios.post("/upload/image", {
+    fileName: file.fileName,
+    fileData: file.fileData,
+  });
+};
+
 export const GenerateListUpdateSKU = async (codeSKUParent, colors, id) => {
   return await axios.post("/stock/list_generate_SKU_update", {
     codeSKUParent,

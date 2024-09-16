@@ -12,9 +12,8 @@
     }"
     :wrapper-col="{ span: 12, xxl: 6 }"
     @finish="onFinish"
-    @finishFailed="onFinishFailed"
   >
-    <Action :handle-exit="onClickExit" :handle-save="onClickSave" />
+    <Action :handle-exit="onClickExit" />
     <div style="padding: 8px; height: 76vh; overflow-y: scroll">
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
@@ -100,7 +99,7 @@
         />
         <CheckboxForm
           :item="{
-            value: 'isHide',
+            value: 'có',
           }"
           :options="optionsiSHide"
           :form-sate="formState"
@@ -162,6 +161,8 @@
             label: 'Anh hàng hóa',
             value: 'image',
           }"
+          :handle-image-selected="handleImageSelected"
+          :image-url="imageUrl"
         />
       </div>
     </div>
@@ -191,6 +192,7 @@ import {
 import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
+import { useImageUpload } from "@/hooks/useImagrUpload";
 
 const optionsStatus = [
   {
@@ -292,9 +294,9 @@ const router = useRouter();
 const form = Form.useForm(formState);
 const selectedRowKeys = ref([]);
 const listDelete = ref([]);
-const codeSKUOld = ref("");
 const editableData = reactive({});
 const columnValue = ref("");
+let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
 const route = useRoute();
 onMounted(() => {
   Init();
@@ -339,8 +341,8 @@ watchEffect(() => {
     const sell = optionAtributes.value.reduce((accumulator, currrent) => {
       return accumulator + +currrent.sell;
     }, 0);
-    formState.sell = Math.floor(sell / optionAtributes.value.length);
-    formState.price = Math.floor(price / optionAtributes.value.length);
+    formState.sell = `${Math.floor(+sell / optionAtributes.value.length)}`;
+    formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
   }
 });
 
@@ -362,11 +364,12 @@ const handleGetData = async () => {
       const dataAtributes = res.data.data.atributes;
       const dt = {
         ...res.data.data.data,
+        sell: `${res.data.data.data.sell}`,
+        price: `${res.data.data.data.price}`,
         unit: res.data.data.data.unit === "double" ? "Đôi" : "Đơn",
       };
       if (dataAtributes && dataAtributes.length > 0) {
         optionAtributes.value = dataAtributes;
-        console.log(optionAtributes.value);
         const dataColor = dataAtributes.map((item) => {
           return {
             value: item.color,
@@ -374,10 +377,10 @@ const handleGetData = async () => {
           };
         });
         dataValues.value = dataColor.map((item) => item.value);
-        console.log(dataColor);
         selectedRowKeys.value = dataColor;
       }
       Object.assign(formState, dt);
+      imageUrl.value = formState.imageUrl;
     }
   } catch (e) {
     console.error(e);
@@ -442,24 +445,19 @@ const onFinish = async () => {
         status: formState.status,
       };
     });
-    console.log({
-      listSKUsUpdate: {
-        ...formState,
-        products: payload,
-        color: "null",
-        isHide: "Có",
-      },
-      listSKUsDelele: listDelete.value,
-    });
+
     const res = await updateProduct({
       listSKUsUpdate: {
         ...formState,
         stocks: payload,
         isHide: "Có",
+        image: {
+          fileName: imageFile.value.name,
+          fileData: imageUrl.value.split(",")[1],
+        },
       },
       listSKUsDelele: listDelete.value,
     });
-    console.log(res);
     if (res && res.data && res.data.success) {
       Notification.success("Cập nhật thành công");
       router.push({
@@ -494,7 +492,6 @@ const handleChangeUnit = (value) => {
 };
 
 const handleChangeColor = async (values) => {
-  console.log(values);
   if (values && values.length > 0) {
     dataValues.value = values;
     // isDisable.value = true;
@@ -526,14 +523,12 @@ const handleChangeColor = async (values) => {
           };
         });
       const listSkus = items.map((item) => item.codeSKU);
-      console.log(1);
       const dt = [...optionAtributes.value];
       if (dt.length > items.length) {
         const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));
         const datas = [...listDelete.value];
         datas.push(codeSKU.codeSKU);
         listDelete.value = datas;
-        console.log(items);
         const dataUpdate = dt
           .filter((item) => items.some((k) => k.color === item.color))
           .map((item) => {
@@ -543,28 +538,23 @@ const handleChangeColor = async (values) => {
               codeSKU: value.codeSKU,
             };
           });
-        console.log(dataUpdate);
 
         optionAtributes.value = dataUpdate;
-        console.log(2);
       } else {
         const index =
           optionAtributes.value.length === 0 ? 0 : values.length - 1;
         dt.push({ ...items[index], id: null });
         optionAtributes.value = dt;
-        console.log(3);
       }
     }
   } else {
     isDisable.value = false;
     selectedRowKeys.value = [];
     optionAtributes.value = [];
-    console.log(4);
   }
 };
 
 const handleDeleteRow = (codeSKU) => {
-  console.log(codeSKU);
   if (optionAtributes.value && optionAtributes.value.length > 0) {
     // if (optionAtributes.value.length === 1) {
     //   isDisable.value = false;
@@ -579,7 +569,6 @@ const handleDeleteRow = (codeSKU) => {
     const selectedDelete = selectedRowKeys.value.filter(
       (item) => item.value != dtDelete.color
     );
-    console.log(dtDelete.color);
     optionAtributes.value = dt;
     selectedRowKeys.value = selectedDelete;
   } else {

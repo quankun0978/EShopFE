@@ -15,7 +15,7 @@ const props = defineProps({
   placeholder: String,
   style: Object,
   defaultValue: String,
-  isFirst: String,
+  isFirst: Boolean,
   handleSave: Function,
   handleExit: Function,
 });

@@ -43,14 +43,5 @@ const props = defineProps({
 });
 const items = ref(props.options);
 const value = ref([props.defaultValue]);
-// const addItem = (e) => {
-//   e.preventDefault();
-//   console.log("addItem");
-//   items.value.push(name.value || `New item ${(index += 1)}`);
-//   name.value = "";
-//   setTimeout(() => {
-//     inputRef.value?.focus();
-//   }, 0);
-// };
 </script>
 <style></style>

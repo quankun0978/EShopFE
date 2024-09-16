@@ -48,21 +48,6 @@ const onSelectChange = (selectedRowKeys) => {
   state.selectedRowKeys = selectedRowKeys;
 };
 
-// const pagination = computed(() => ({
-//   position: ["bottomLeft"],
-//   pageSize: 50,
-
-//   // itemRender: (_, type, originalElement) => {
-//   //   if (type === "prev") {
-//   //     console.log("ahihi");
-//   //     return () => h(PlusOutlined);
-//   //   }
-//   //   if (type === "next") {
-//   //     return () => h(PlusOutlined);
-//   //   }
-//   //   return originalElement;
-//   // },
-// }));
 const handleColumnInputChange = (event, dataIndex) => {
   props.objectQuery[dataIndex] = event.target.value;
 };

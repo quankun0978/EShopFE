@@ -183,7 +183,6 @@ const columns = [
 ];
 
 const data = ref();
-
 onMounted(() => {
   Init();
 });

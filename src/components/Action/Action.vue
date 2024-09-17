@@ -2,8 +2,18 @@
   <div :style="style">
     <a-divider v-if="isFirst" />
     <a-space style="padding: 8px">
-      <Button :is-save="true" :text="'Lưu'" :handle-click="handleSave" />
-      <Button :text="'Hủy'" :is-exit="true" :handle-click="handleExit" />
+      <Button
+        :tab-index="tabIndexSave"
+        :is-save="true"
+        :text="'Lưu'"
+        :handle-click="handleSave"
+      />
+      <Button
+        :tab-index="tabIndexExit"
+        :text="'Hủy'"
+        :is-exit="true"
+        :handle-click="handleExit"
+      />
     </a-space>
     <a-divider style="margin: 0" />
   </div>
@@ -16,6 +26,8 @@ const props = defineProps({
   style: Object,
   defaultValue: String,
   isFirst: Boolean,
+  tabIndexSave: String,
+  tabIndexExit: String,
   handleSave: Function,
   handleExit: Function,
 });

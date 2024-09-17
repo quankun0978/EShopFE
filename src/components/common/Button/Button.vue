@@ -15,15 +15,21 @@
       v-if="isSave"
       type="primary"
       html-type="submit"
+      :tabindex="tabIndex"
     >
       <FontAwesomeIcon :icon="faFloppyDisk" style="margin-right: 4px" />
       {{ text }}
     </a-button>
-    <a-button @click="handleClick" style="height: 35px" v-else-if="isExit">
+    <a-button
+      :tabindex="tabIndex"
+      @click="handleClick"
+      style="height: 35px"
+      v-else-if="isExit"
+    >
       <CloseOutlined />
       {{ text }}
     </a-button>
-    <a-button @click="handleClick" v-else>
+    <a-button :tabindex="tabIndex" @click="handleClick" v-else>
       {{ text }}
     </a-button>
   </a-config-provider>
@@ -40,6 +46,7 @@ const props = defineProps({
   isSave: Boolean,
   isExit: Boolean,
   handleClick: Function,
+  tabIndex: String,
 });
 </script>
 <style></style>

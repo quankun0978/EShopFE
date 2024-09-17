@@ -16,7 +16,11 @@
       @finish="onFinish"
       @finishFailed="onFinishFailed"
     >
-      <Action :handle-exit="onClickExit" />
+      <Action
+        :handle-exit="onClickExit"
+        :tab-index-save="'1'"
+        :tab-index-exit="'2'"
+      />
       <div style="padding: 8px; height: 76vh; overflow-y: scroll">
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
@@ -36,6 +40,7 @@
               label: 'Tên hàng hóa',
               value: 'name',
             }"
+            :input-ref="inputName"
             v-bind:model-value="formState.name"
             :form-sate="formState"
             @press-enter.prevent="handlePressEnterName"
@@ -226,6 +231,7 @@ import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
+const inputName = ref(null);
 
 const optionsStatus = [
   {

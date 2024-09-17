@@ -218,6 +218,7 @@ const handlePreventDefault = (e, route) => {
             />
             <Button :handle-click="handleSearch" :text="'*'" v-else />
             <Input
+              :handle-press-enter="handleSearch"
               :value="objectQuery[column.dataIndex]"
               :-on-change="(e) => handleColumnInputChange(e, column.dataIndex)"
             />

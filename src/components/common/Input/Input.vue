@@ -22,6 +22,7 @@
       :placeholder="placeholder"
       :style="style"
       @change="OnChange"
+      @pressEnter="handlePressEnter"
     />
   </a-config-provider>
 </template>
@@ -35,6 +36,7 @@ const props = defineProps({
   isTextarea: Boolean,
   rows: Number,
   maxLength: Number,
+  handlePressEnter: Function,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const val = ref(props.value);

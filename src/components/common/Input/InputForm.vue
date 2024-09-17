@@ -26,11 +26,14 @@
         @input="onInput"
         @pressEnter="onPressEnter"
         :disabled="isDisable"
+        ref="inputRef"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
+import { onMounted, ref, watchEffect } from "vue";
+
 const props = defineProps({
   value: String,
   modelValue: String,
@@ -45,6 +48,14 @@ const props = defineProps({
   onInput: Function,
   onPressEnter: Function,
   isDisable: Boolean,
+  inputRef: String,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
+
+// const nameRef = ref(null);
+// watchEffect(() => {
+//   if (props.item.value === "name") {
+//     nameRef.value.focus();
+//   }
+// });
 </script>

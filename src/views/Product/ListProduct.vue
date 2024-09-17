@@ -183,8 +183,17 @@ const columns = [
 ];
 
 const data = ref();
+
+let { data: dt, fetchData } = useFetch("/stock/list");
+console.log(dt);
 onMounted(() => {
   Init();
+  fetchData({
+    ...objectQuery,
+    price: +parseFormattedNumber(objectQuery.price),
+    pageNumber: +objectQuery.pageNumber,
+    pageSize: +objectQuery.pageSize,
+  });
 });
 
 const Init = () => {
@@ -207,14 +216,6 @@ const handleRefreshQuery = () => {
   objectQuery.status = "";
 };
 
-// const isNull = () => {
-//   for (let item in objectQuery) {
-//     if (!objectQuery[item]) {
-//       return false;
-//     }
-//   }
-//   return true;
-// };
 const handleGetData = async () => {
   try {
     if (objectQuery.price) {
@@ -232,15 +233,15 @@ const handleGetData = async () => {
         };
         Object.assign(pagination, copy);
         const dt =
-          res.data.data.data &&
-          res.data.data.data.length > 0 &&
-          res.data.data.data.map((item) => {
-            return {
-              ...item,
-              price: convertNumber(item.price),
-              key: item.codeSKU,
-            };
-          });
+          res.data.data.data && res.data.data.data.length > 0
+            ? res.data.data.data.map((item) => {
+                return {
+                  ...item,
+                  price: convertNumber(item.price),
+                  key: item.codeSKU,
+                };
+              })
+            : [];
         data.value = dt;
       }
     }

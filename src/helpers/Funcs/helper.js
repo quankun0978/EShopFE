@@ -1,3 +1,5 @@
+import { createProduct } from "@/api/product";
+
 export const getInitials = (productName) => {
   return productName
     .split(" ") // Split the string by spaces
@@ -11,4 +13,19 @@ export const convertNumber = (number) => {
 
 export const parseFormattedNumber = (formattedNumber) => {
   return parseInt(formattedNumber.replace(/\./g, ""), 10);
+};
+
+export const validateCodeSKU = async (rule, value) => {
+  if (!value) {
+    return Promise.reject(new Error("Trường này là bắt buộc!"));
+  }
+
+  // Gọi API để kiểm tra tên người dùng
+  const response = await createProduct(value);
+
+  if (response.status === 400) {
+    return Promise.reject(new Error("Mã SKU đã tồn tại!"));
+  }
+
+  return Promise.resolve();
 };

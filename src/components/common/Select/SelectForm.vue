@@ -18,7 +18,13 @@
         :style="style"
         :disabled="isDisabledAtribute"
         mode="tags"
-        @change="OnChange"
+        ref="selectRef"
+        :tabindex="tabIndex"
+        :open="dropdownOpen"
+        @blur="closeDropdown"
+        @change="(e)=>handleChange(e)"
+        @keydown.enter.prevent="showDropdown"
+        @click="showDropdown"
       />
       <a-select
         v-else
@@ -27,12 +33,19 @@
         :style="style"
         :options="options"
         :disabled="isDisable"
+        :tabindex="tabIndex"
+        ref="selectRef"
+        :open="dropdownOpen"
+        @keydown.enter.prevent="showDropdown"
+        @click="showDropdown"
+        @blur="closeDropdown"
+        @change="(e)=>handleChange(e)"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { onMounted, ref, watch, watchEffect } from "vue";
+import { nextTick, onMounted, ref, watch, watchEffect } from "vue";
 
 const props = defineProps({
   value: String,
@@ -47,14 +60,31 @@ const props = defineProps({
   OnChange: Function,
   isDisable: Boolean,
   isDisabledAtribute: Boolean,
+  tabIndex: Number, // Thêm tabIndex vào props
 
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const items = ref(props.options);
+const selectRef = ref(null);
+const dropdownOpen = ref(false);
 
 watchEffect(() => {
   if (props.options) {
     items.value = props.options;
   }
 });
+const showDropdown = () => {
+  dropdownOpen.value = !dropdownOpen.value; // Chuyển đổi trạng thái mở dropdown
+};
+const closeDropdown = () => {
+  dropdownOpen.value = false; // Chuyển đổi trạng thái mở dropdown
+};
+
+const handleChange = (e) => {
+  dropdownOpen.value = false;
+  if (props.OnChange) {
+    // Kiểm tra xem onChange có phải là hàm không
+    props.OnChange(e); // Gọi hàm onChange với giá trị đã chọn
+  }
+};
 </script>

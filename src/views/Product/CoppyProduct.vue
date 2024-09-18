@@ -465,7 +465,11 @@ const onFinish = async () => {
       Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
     }
   } catch (error) {
-    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    if (error.status === 400) {
+      Notification.error("Mã SKU đã tồn tại");
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    }
   }
 };
 

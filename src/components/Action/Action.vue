@@ -26,8 +26,8 @@ const props = defineProps({
   style: Object,
   defaultValue: String,
   isFirst: Boolean,
-  tabIndexSave: String,
-  tabIndexExit: String,
+  tabIndexSave: Number,
+  tabIndexExit: Number,
   handleSave: Function,
   handleExit: Function,
 });

@@ -17,10 +17,15 @@
         v-model:value="val"
         @change="onChange"
         :placeholder="placeholder"
+        :tabindex="tabIndex"
       >
-        <a-radio :value="option.value" v-for="option in options">{{
-          option.label
-        }}</a-radio>
+        <a-radio
+          :tabindex="option.index"
+          @keydown.enter.prevent="() => handleChange(option.value)"
+          :value="option.value"
+          v-for="option in options"
+          >{{ option.label }}</a-radio
+        >
       </a-radio-group>
     </a-form-item>
   </a-config-provider>
@@ -38,8 +43,17 @@ const props = defineProps({
   formState: Object,
   isDisable: Boolean,
   onChange: Function,
+  tabIndex: Number, // Thêm tabIndex vào props
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 
 const val = ref(props.formState[props.item.value]);
+
+const handleChange = (e) => {
+  if (props.onChange) {
+    // Kiểm tra xem onChange có phải là hàm không
+    console.log(e)
+    props.onChange(e); // Gọi hàm onChange với giá trị đã chọn
+  }
+};
 </script>

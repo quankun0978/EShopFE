@@ -46,7 +46,7 @@ const props = defineProps({
   isSave: Boolean,
   isExit: Boolean,
   handleClick: Function,
-  tabIndex: String,
+  tabIndex: Number,
 });
 </script>
 <style></style>

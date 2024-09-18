@@ -18,8 +18,8 @@
     >
       <Action
         :handle-exit="onClickExit"
-        :tab-index-save="'1'"
-        :tab-index-exit="'2'"
+        :tab-index-save="13"
+        :tab-index-exit="14"
       />
       <div style="padding: 8px; height: 76vh; overflow-y: scroll">
         <div>
@@ -27,6 +27,7 @@
           <RadioForm
             :options="optionsStatus"
             :form-state="formState"
+            :tab-index="1"
             :item="{
               label: 'Trạng thái kinh doanh',
               value: 'status',
@@ -34,7 +35,10 @@
           />
           <InputForm
             :rules="[
-              { required: true, message: 'Vui long khong bo trong ten!' },
+              { required: true, message: 'Vui long không bỏ trống tên!' },
+              // {
+              //   validator: validateCodeSKU,
+              // },
             ]"
             :item="{
               label: 'Tên hàng hóa',
@@ -45,6 +49,7 @@
             :form-sate="formState"
             @press-enter.prevent="handlePressEnterName"
             :is-disable="isDisable"
+            :tab-index="2"
           />
           <!-- <a-form-item
             label="Name"
@@ -62,6 +67,7 @@
             :form-sate="formState"
             :options="optionsGroup"
             :is-disable="isDisable"
+            :tab-index="3"
           />
           <InputForm
             :item="{
@@ -73,6 +79,7 @@
             :style="{ width: 200 }"
             :form-sate="formState"
             :is-disable="isDisable"
+            :tab-index="4"
           />
           <InputForm
             :item="{
@@ -83,6 +90,7 @@
             :style="{ width: 200 }"
             :form-sate="formState"
             :is-disable="true"
+            :tab-index="5"
           />
           <InputForm
             :item="{
@@ -93,6 +101,7 @@
             :style="{ width: 200 }"
             :form-sate="formState"
             :is-disable="true"
+            :tab-index="6"
           />
           <SelectForm
             :-on-change="handleChangeUnit"
@@ -104,6 +113,7 @@
             :options="optionsUnit"
             :form-sate="formState"
             :is-disable="isDisable"
+            :tab-index="7"
           />
           <CheckboxForm
             :item="{
@@ -112,6 +122,7 @@
             :options="optionsiSHide"
             v-on:change="handleChangeIsHide"
             :form-sate="formState"
+            :tab-index="8"
           />
         </div>
         <div>
@@ -129,6 +140,7 @@
             :value="formState.color"
             :style="{ width: 200 }"
             :form-sate="formState"
+            :tab-index="9"
             :is-disabled-atribute="isDisabledAtribute"
           />
           <TableForm
@@ -163,6 +175,7 @@
             :model-value="formState.description"
             :form-sate="formState"
             :style="{ width: 200, height: '150px' }"
+            :tab-index="10"
           />
           <UploadForm
             :item="{
@@ -171,6 +184,7 @@
             }"
             :handle-image-selected="handleImageSelected"
             :image-url="imageUrl"
+            :tab-index="10"
           />
           <!-- <div class="flex justify-center items-center">
             <label
@@ -211,7 +225,12 @@
         </div>
       </div>
 
-      <Action :is-first="true" :handle-exit="onClickExit" />
+      <Action
+        :is-first="true"
+        :handle-exit="onClickExit"
+        :tab-index-save="11"
+        :tab-index-exit="12"
+      />
     </a-form>
   </div>
 </template>
@@ -231,16 +250,19 @@ import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
+import { validateCodeSKU } from "@/helpers/Funcs/helper";
 const inputName = ref(null);
 
 const optionsStatus = [
   {
     label: "Đang kinh doanh",
     value: "Đang kinh doanh",
+    index: 14,
   },
   {
     label: "Ngừng kinh doanh",
     value: "Ngừng kinh doanh",
+    index: 15,
   },
 ];
 
@@ -312,8 +334,8 @@ const formState = reactive({
   group: "Bet xuong",
   name: "",
   unit: "Đôi",
-  price: "",
-  sell: "",
+  price: "0",
+  sell: "0",
   isHide: [],
   type: "Hàng hóa",
   managerBy: "khác",
@@ -389,28 +411,31 @@ const onFinish = async () => {
           description: formState.description,
         };
       });
-
-      const res = await createProduct({
-        ...formState,
-        stocks: payload,
-        image: {
-          fileName: imageFile.value.name,
-          fileData: imageUrl.value.split(",")[1],
-        },
-        color: "null",
-        isHide: "Có",
+    }
+    const res = await createProduct({
+      ...formState,
+      stocks: payload,
+      image: {
+        fileName: imageFile.value.name,
+        fileData: imageUrl.value.split(",")[1],
+      },
+      color: "null",
+      isHide: "Có",
+    });
+    if (res && res.data && res.data.success) {
+      Notification.success("Thêm mới thành công");
+      router.push({
+        name: "list_product",
       });
-      if (res && res.data && res.data.success) {
-        Notification.success("Thêm mới thành công");
-        router.push({
-          name: "list_product",
-        });
-      } else {
-        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
-      }
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
     }
   } catch (error) {
-    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    if (error.status === 400) {
+      Notification.error("Mã SKU đã tồn tại");
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    }
   }
 };
 const onFinishFailed = (errorInfo) => {};

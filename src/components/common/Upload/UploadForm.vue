@@ -6,7 +6,7 @@
   >
     <a-form-item :label="item.label && item.label">
       <a-form-item :name="item.name && item.name" no-style>
-        <label for="image-upload" class="upload-custom">
+        <label :tabindex="tabIndex" for="image-upload" class="upload-custom">
           <div
             style="
               display: flex;
@@ -65,6 +65,7 @@ const props = defineProps({
   item: Object,
   handleImageSelected: Function,
   imageUrl: String,
+  tabIndex: Number, // Thêm tabIndex vào props
 });
 const val = ref(props.dragger);
 </script>

@@ -21,7 +21,6 @@ import { showConfirm } from "@/components/common/Modal/Confirm";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
 import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
-import { useFetch } from "@/hooks/useFetch";
 import { useMenuStore } from "@/store/menu";
 import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
@@ -184,16 +183,8 @@ const columns = [
 
 const data = ref();
 
-let { data: dt, fetchData } = useFetch("/stock/list");
-console.log(dt);
 onMounted(() => {
   Init();
-  fetchData({
-    ...objectQuery,
-    price: +parseFormattedNumber(objectQuery.price),
-    pageNumber: +objectQuery.pageNumber,
-    pageSize: +objectQuery.pageSize,
-  });
 });
 
 const Init = () => {

@@ -19,6 +19,8 @@
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :rows="rows"
         :maxlength="maxLength"
+        ref="inputRef"
+        :tabindex="tabIndex"
       />
       <a-input
         v-else
@@ -27,6 +29,7 @@
         @pressEnter="onPressEnter"
         :disabled="isDisable"
         ref="inputRef"
+        :tabindex="tabIndex"
       />
     </a-form-item>
   </a-config-provider>
@@ -49,6 +52,8 @@ const props = defineProps({
   onPressEnter: Function,
   isDisable: Boolean,
   inputRef: String,
+  tabIndex: Number, // Thêm tabIndex vào props
+
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 
@@ -58,4 +63,15 @@ const props = defineProps({
 //     nameRef.value.focus();
 //   }
 // });
+
+// Reference to the input element
+const inputRef = ref(null);
+
+onMounted(() => {
+  // Check if the item is "name"
+  if (props.item && props.item.value === "name") {
+    // Focus the input element
+    inputRef.value?.focus();
+  }
+});
 </script>

@@ -13,7 +13,11 @@
     :wrapper-col="{ span: 12, xxl: 6 }"
     @finish="onFinish"
   >
-    <Action :handle-exit="onClickExit" />
+    <Action
+      :handle-exit="onClickExit"
+      :tab-index-save="13"
+      :tab-index-exit="14"
+    />
     <div style="padding: 8px; height: 76vh; overflow-y: scroll">
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
@@ -33,6 +37,7 @@
             label: 'Tên hàng hóa',
             value: 'name',
           }"
+          :tab-index="2"
           @press-enter="handlePressEnterName"
           v-bind:model-value="formState.name"
           :form-sate="formState"
@@ -50,6 +55,7 @@
             label: 'Nhóm hàng hóa',
             value: 'group',
           }"
+          :tab-index="3"
           :style="{ width: 200 }"
           :form-sate="formState"
           :options="optionsGroup"
@@ -65,6 +71,7 @@
           :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="false"
+          :tab-index="4"
         />
         <InputForm
           :item="{
@@ -75,6 +82,7 @@
           :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="formState.isParent === 1"
+          :tab-index="5"
         />
         <InputForm
           :item="{
@@ -85,6 +93,7 @@
           :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="formState.isParent === 1"
+          :tab-index="6"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
@@ -96,6 +105,7 @@
           :options="optionsUnit"
           :form-sate="formState"
           :is-disable="isDisable"
+          :tab-index="7"
         />
         <CheckboxForm
           :item="{
@@ -104,6 +114,7 @@
           :options="optionsiSHide"
           :form-sate="formState"
           :on-change="handleChangeIsHide"
+          :tab-index="8"
         />
       </div>
       <div>
@@ -117,6 +128,7 @@
             label: 'Thuộc tính',
             value: 'color',
           }"
+          :tab-index="9"
           :options="selectedRowKeys"
           :value="formState.color"
           :style="{ width: 200 }"
@@ -155,6 +167,7 @@
           :model-value="formState.description"
           :form-sate="formState"
           :style="{ width: 200, height: '150px' }"
+          :tab-index="10"
         />
         <UploadForm
           :item="{
@@ -382,8 +395,8 @@ const handleGetData = async () => {
       Object.assign(formState, dt);
       imageUrl.value = formState.imageUrl;
     }
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
   }
 };
 
@@ -467,7 +480,11 @@ const onFinish = async () => {
       Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
     }
   } catch (error) {
-    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    if (error.status === 400) {
+      Notification.error("Mã SKU đã tồn tại");
+    } else {
+      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    }
   }
 };
 

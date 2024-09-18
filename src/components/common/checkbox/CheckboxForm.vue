@@ -12,6 +12,7 @@
       :rules="rules"
     >
       <a-checkbox-group
+        :tabindex="tabIndex"
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :options="options"
         @change="onChange"
@@ -31,6 +32,7 @@ const props = defineProps({
   value: String,
   formSate: Object,
   onChange: Function,
+  tabIndex: Number, // Thêm tabIndex vào props
 });
 
 const val = ref(props.value);

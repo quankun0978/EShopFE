@@ -216,16 +216,16 @@ const handleGetData = async () => {
         pageNumber: +objectQuery.pageNumber,
         pageSize: +objectQuery.pageSize,
       });
-      if (res.data.success) {
+      if (res.success) {
         const copy = {
-          totalPage: res.data.data.totalPage,
-          pageNumber: res.data.data.currentPage,
-          totalRecord: res.data.data.totalRecord,
+          totalPage: res.data.totalPage,
+          pageNumber: res.data.currentPage,
+          totalRecord: res.data.totalRecord,
         };
         Object.assign(pagination, copy);
         const dt =
-          res.data.data.data && res.data.data.data.length > 0
-            ? res.data.data.data.map((item) => {
+          res.data.data && res.data.data.length > 0
+            ? res.data.data.map((item) => {
                 return {
                   ...item,
                   price: convertNumber(item.price),
@@ -244,7 +244,7 @@ const handleGetData = async () => {
 const handleDeleteData = async (data) => {
   try {
     const res = await deleteProduct(data);
-    if (res && res.data && res.data.success) {
+    if (res && res.data && res.success) {
       Notification.success("Xóa thành công");
       handleGetData();
     } else {

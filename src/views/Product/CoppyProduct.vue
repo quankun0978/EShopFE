@@ -14,7 +14,7 @@
     @finish="onFinish"
   >
     <Action :handle-exit="onClickExit" />
-    <div style="padding: 8px; height: 76vh; overflow-y: scroll">
+    <div style="padding: 8px; height: 80vh; overflow-y: scroll">
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
         <RadioForm
@@ -65,6 +65,12 @@
           :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="false"
+          :rules="[
+            { required: true, message: 'Vui long không bỏ trống ma SKU!' },
+            // {
+            //   validator: validateCodeSKU,
+            // },
+          ]"
         />
         <InputForm
           :item="{
@@ -350,11 +356,11 @@ watchEffect(() => {
 const handleGetData = async () => {
   try {
     const res = await GetProductByCodeSKU(route.params.id);
-    if (res.data.success) {
+    if (res.success) {
       // const dt =
-      //   res.data.data.data &&
-      //   res.data.data.data.length > 0 &&
-      //   res.data.data.data.map((item) => {
+      //   res.data &&
+      //   res.data.length > 0 &&
+      //   res.data.map((item) => {
       //     return {
       //       ...item,
       //       isHide: item.isHide === 0 ? "Không" : "Có",
@@ -362,10 +368,10 @@ const handleGetData = async () => {
       //       key: item.codeSKU,
       //     };
       //   });
-      const dataAtributes = res.data.data.atributes;
+      const dataAtributes = res.data.atributes;
       const dt = {
-        ...res.data.data.data,
-        unit: res.data.data.data.unit === "double" ? "Đôi" : "Đơn",
+        ...res.data,
+        unit: res.data.unit === "double" ? "Đôi" : "Đơn",
       };
       if (dataAtributes && dataAtributes.length > 0) {
         optionAtributes.value = dataAtributes;
@@ -392,7 +398,9 @@ const handlePressEnterName = async (e) => {
   e.preventDefault();
   if (formState.name) {
     formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
-    handleGetListCode();
+    if (optionAtributes.value.length > 0) {
+      handleGetListCodeChild();
+    }
   } else {
     formState.codeSKU = "";
   }
@@ -401,11 +409,11 @@ const handlePressEnterName = async (e) => {
 const handleGetListCode = async () => {
   if (formState.codeSKU) {
     const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
-    if (res.data.success) {
+    if (res.success) {
       const dataCP = [...optionAtributes.value].map((item, index) => {
         return {
           ...item,
-          codeSKU: res.data.data[index],
+          codeSKU: res.data[index],
           name: formState.name + `(${dataValues.value[index]})`,
         };
       });
@@ -423,8 +431,8 @@ const handlePressEnterCodeSKU = async (e) => {
 const hanldeGetCode = async (name) => {
   if (name) {
     const res = await GenerateSKU(name);
-    if (res.data.success) {
-      return res.data.data;
+    if (res.success) {
+      return res.data;
     }
     return name;
   }
@@ -456,7 +464,7 @@ const onFinish = async () => {
         fileData: imageUrl.value.split(",")[1],
       },
     });
-    if (res && res.data && res.data.success) {
+    if (res && res.data && res.success) {
       Notification.success("Thêm mới thành công");
       router.push({
         name: "list_product",
@@ -504,11 +512,11 @@ const handleChangeColor = async (values) => {
       };
     });
     const res = await GenerateListSKU(formState.codeSKU, values, formState.id);
-    if (res.data.success) {
+    if (res.success) {
       const items =
-        res.data.data &&
-        res.data.data.length > 0 &&
-        res.data.data.map((item, index) => {
+        res.data &&
+        res.data.length > 0 &&
+        res.data.map((item, index) => {
           return {
             ...formState,
             isParent: 0,

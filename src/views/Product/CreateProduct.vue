@@ -21,7 +21,7 @@
         :tab-index-save="13"
         :tab-index-exit="14"
       />
-      <div style="padding: 8px; height: 76vh; overflow-y: scroll">
+      <div style="padding: 8px; height: 80vh; overflow-y: scroll">
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
           <RadioForm
@@ -80,6 +80,12 @@
             :form-sate="formState"
             :is-disable="isDisable"
             :tab-index="4"
+            :rules="[
+              { required: true, message: 'Vui long không bỏ trống ma SKU!' },
+              // {
+              //   validator: validateCodeSKU,
+              // },
+            ]"
           />
           <InputForm
             :item="{
@@ -250,7 +256,6 @@ import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
-import { validateCodeSKU } from "@/helpers/Funcs/helper";
 const inputName = ref(null);
 
 const optionsStatus = [
@@ -422,7 +427,7 @@ const onFinish = async () => {
       color: "null",
       isHide: "Có",
     });
-    if (res && res.data && res.data.success) {
+    if (res && res.data && res.success) {
       Notification.success("Thêm mới thành công");
       router.push({
         name: "list_product",
@@ -445,7 +450,9 @@ const handlePressEnterName = async (e) => {
   if (formState.name) {
     formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
     // handleGetListCode();
-    handleGetListCodeChild();
+    if (optionAtributes.value.length > 0) {
+      handleGetListCodeChild();
+    }
   } else {
     formState.codeSKU = "";
   }
@@ -455,11 +462,11 @@ const handlePressEnterCodeSKU = async (e) => {
   e.preventDefault();
   if (formState.codeSKU) {
     const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
-    if (res.data.success) {
+    if (res.success) {
       const dataCP = [...optionAtributes.value].map((item, index) => {
         return {
           ...item,
-          codeSKU: res.data.data[index],
+          codeSKU: res.data[index],
         };
       });
       optionAtributes.value = dataCP;
@@ -471,12 +478,12 @@ const handlePressEnterCodeSKU = async (e) => {
 const handleGetListCodeChild = async () => {
   if (formState.codeSKU) {
     const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
-    if (res.data.success) {
+    if (res.success) {
       const dataCP = [...optionAtributes.value].map((item, index) => {
         return {
           ...item,
           name: formState.name + `(${dataValues.value[index]})`,
-          codeSKU: res.data.data[index],
+          codeSKU: res.data[index],
         };
       });
       optionAtributes.value = dataCP;
@@ -488,8 +495,8 @@ const handleGetListCodeChild = async () => {
 const hanldeGetCode = async (name) => {
   if (name) {
     const res = await GenerateSKU(name);
-    if (res.data.success) {
-      return res.data.data;
+    if (res.success) {
+      return res.data;
     }
     return name;
   }
@@ -506,11 +513,11 @@ const handleChangeUnit = (value) => {
 const handleGetListCode = async () => {
   const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
 
-  if (res.data.success) {
+  if (res.success) {
     const items =
-      res.data.data &&
-      res.data.data.length > 0 &&
-      res.data.data.map((item, index) => {
+      res.data &&
+      res.data.length > 0 &&
+      res.data.map((item, index) => {
         return {
           ...formState,
           isParent: 0,
@@ -531,6 +538,7 @@ const handleGetListCode = async () => {
           return {
             ...item,
             codeSKU: value.codeSKU,
+            price: `${item.price}`,
           };
         });
 

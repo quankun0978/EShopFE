@@ -1,6 +1,6 @@
 // useFetch.js
 import instance from "@/api/axios";
-import { GetAllProduct } from "@/api/product";
+import { getAllProduct } from "@/api/product";
 import { onMounted, ref } from "vue";
 
 export const useFetch = (url, payload) => {
@@ -11,7 +11,7 @@ export const useFetch = (url, payload) => {
   const fetchData = async () => {
     try {
       loading.value = true;
-      const response = await GetAllProduct(payload);
+      const response = await getAllProduct(payload);
       data.value = response.data; // Assign response data to the data ref
     } catch (err) {
       error.value = err.message;

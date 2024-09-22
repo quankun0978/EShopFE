@@ -42,7 +42,6 @@
     </a-form-item>
     <input
       hidden
-      :hidden="true"
       type="file"
       name="image"
       id="image-upload"
@@ -52,7 +51,6 @@
 </template>
 <script setup>
 import selectTheme from "@/config/select";
-import { ref } from "vue";
 import IconOpenDocument from "@/components/icons/IconOpenDocument.vue";
 import IconPencil from "@/components/icons/IconPencil.vue";
 const props = defineProps({
@@ -67,7 +65,6 @@ const props = defineProps({
   imageUrl: String,
   tabIndex: Number, // Thêm tabIndex vào props
 });
-const val = ref(props.dragger);
 </script>
 <style scoped>
 .upload-custom {

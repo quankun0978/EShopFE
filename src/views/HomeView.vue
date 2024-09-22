@@ -15,4 +15,3 @@
 import Sider from "@/components/layout/Sider.vue";
 import Header from "@/components/layout/Header.vue";
 </script>
-<style scoped></style>

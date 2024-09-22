@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+// khai báo các route của ứng dụng
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

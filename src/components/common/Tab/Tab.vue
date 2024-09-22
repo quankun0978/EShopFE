@@ -29,7 +29,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { AppleOutlined, AndroidOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";
 const props = defineProps({
   activeKey: String,

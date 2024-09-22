@@ -3,14 +3,13 @@ import { ref, watch } from "vue";
 export function useImageUpload() {
   let imageFile = ref("");
   let imageUrl = ref("");
-
+  // xử lý khi chọn ảnh
   function handleImageSelected(event) {
     if (event.target.files.length === 0) {
       imageFile.value = "";
       imageUrl.value = "";
       return;
     }
-
     imageFile.value = event.target.files[0];
   }
 

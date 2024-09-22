@@ -22,7 +22,9 @@
             style="display: flex; align-items: center"
           >
             <ArrowLeftOutlined />
-            <span class="span">Quay lại trang bắt đầu sử dụng</span>
+            <span class="span">{{
+              getText("shared", langStore.lang, "back_to_start_page")
+            }}</span>
           </a-space>
         </router-link>
         <Select
@@ -53,6 +55,8 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons-vue";
 import { useMenuStore } from "@/store/menu";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
 const options = [
   {
     value: "jack",
@@ -78,35 +82,25 @@ const segments = [
     value: "user1",
     payload: {
       icon: WhatsAppOutlined,
-
-      // src: "https://joeschmoe.io/api/v1/random",
-      style: {
-        // backgroundColor: "#f56a00",
-      },
+      style: {},
     },
   },
   {
     value: "user2",
     payload: {
       icon: BellOutlined,
-
-      // style: {
-      //   backgroundColor: "#f56a00",
-      // },
     },
   },
   {
     value: "user3",
     payload: {
       icon: QuestionCircleOutlined,
-      // style: {
-      //   backgroundColor: "#f56a00",
-      // },
     },
   },
 ];
-
+// store lưu trữ các trạng thái của menu
 const menuStore = useMenuStore();
+const langStore = useLangStore();
 </script>
 <style>
 .ant-space-item {

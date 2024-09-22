@@ -11,23 +11,6 @@
       :options="items"
       @change="OnChange"
     >
-      <!-- <template #dropdownRender="{ menuNode: menu }">
-        <v-nodes :vnodes="menu" />
-        <a-divider style="margin: 4px 0" />
-        <a-space style="padding: 4px 8px">
-          <a-input
-            ref="inputRef"
-            v-model:value="name"
-            placeholder="Please enter item"
-          />
-          <a-button type="text" @click="addItem">
-            <template #icon>
-              <plus-outlined />
-            </template>
-            Add item
-          </a-button>
-        </a-space>
-      </template> -->
     </a-select>
   </a-config-provider>
 </template>
@@ -44,4 +27,3 @@ const props = defineProps({
 const items = ref(props.options);
 const value = ref([props.defaultValue]);
 </script>
-<style></style>

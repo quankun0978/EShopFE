@@ -22,6 +22,7 @@
         :scroll="{ y: 230, scrollToFirstRowOnChange: true, x: 700 }"
       >
         <template v-if="isAction" #bodyCell="{ column, text, record }">
+          {{ console.log(text) }}
           <template v-if="column.key === 'action'">
             <FontAwesomeIcon
               @click="() => handleDeleteRow(record.codeSKU)"
@@ -29,12 +30,6 @@
               style="color: red; cursor: pointer"
             />
           </template>
-          <!-- <template v-else>
-            <div>
-              {{ record[column.dataIndex] }}
-            </div>
-          </template> -->
-
           <template v-else>
             <div class="editable-cell">
               <div
@@ -45,22 +40,14 @@
                   v-model:value="editableData[record.codeSKU][column.key]"
                   @pressEnter="handleSave(record.codeSKU)"
                 />
-                <!-- <check-outlined
-                  class="editable-cell-icon-check"
-                  @click="handleSave(record.key)"
-                /> -->
               </div>
 
               <div
-                @dblclick="handleEdit(record.codeSKU, column.key)"
+                @click="handleEdit(record.codeSKU, column.key)"
                 v-else
                 class="editable-cell-text-wrapper"
               >
                 {{ record[column.dataIndex] }}
-                <!-- <edit-outlined
-                  class="editable-cell-icon"
-                  @click="handleEdit(record.key)"
-                /> -->
               </div>
             </div>
           </template>
@@ -71,7 +58,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 const props = defineProps({
@@ -89,9 +75,4 @@ const props = defineProps({
   editableData: Object,
   columnKey: String,
 });
-
-const val = ref(props.value);
-const handleChange = (event) => {
-  val.value = event.target.value;
-};
 </script>

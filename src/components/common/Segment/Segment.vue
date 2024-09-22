@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import menuTheme from "@/config/themes/menu";
 
 const props = defineProps({
   items: Array,

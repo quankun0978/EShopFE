@@ -1,20 +1,19 @@
 <template>
   <a-config-provider
     :theme="{
-      token: {
-      }, // Sử dụng theme từ file config
+      token: {}, // Sử dụng theme từ file config
     }"
   >
     <a-dropdown :trigger="['click']">
       <a
-        style="color: black; font-weight: bold ; font-size: smaller;"
+        style="color: black; font-weight: bold; font-size: smaller"
         class="ant-dropdown-link h4"
         @click.prevent
       >
         {{ name }}
-        <DownOutlined  />
+        <DownOutlined />
       </a>
-      
+
       <template #overlay>
         <a-menu>
           <a-menu-item v-for="item in items" :key="item.key">
@@ -30,6 +29,5 @@ import { DownOutlined } from "@ant-design/icons-vue";
 const props = defineProps({
   items: Array,
   name: String,
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 </script>

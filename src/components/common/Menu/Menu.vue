@@ -1,18 +1,3 @@
-<script setup>
-import { ref } from "vue";
-import menuTheme from "@/config/themes/menu";
-const props = defineProps({
-  items: Array,
-  selectedKeys: Array,
-  class: String,
-  style: Object,
-});
-const keySelect = ref(props.selectedKeys);
-
-const onChange = (key) => {
-  keySelect.value = key.keyPath;
-};
-</script>
 <template>
   <a-config-provider
     :theme="{
@@ -21,7 +6,7 @@ const onChange = (key) => {
   >
     <a-menu
       style="background-color: #00577b"
-      :class="class"
+      :class="className"
       :selectedKeys="keySelect"
       theme="dark"
       mode="inline"
@@ -31,4 +16,18 @@ const onChange = (key) => {
     </a-menu>
   </a-config-provider>
 </template>
-<style></style>
+<script setup>
+import { ref } from "vue";
+import menuTheme from "@/config/themes/menu";
+const props = defineProps({
+  items: Array,
+  selectedKeys: Array,
+  className: String,
+  style: Object,
+});
+const keySelect = ref(props.selectedKeys);
+
+const onChange = (key) => {
+  keySelect.value = key.keyPath;
+};
+</script>

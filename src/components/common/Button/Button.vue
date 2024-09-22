@@ -35,9 +35,7 @@
   </a-config-provider>
 </template>
 <script setup>
-import { ref } from "vue";
-
-import { MessageOutlined, CloseOutlined } from "@ant-design/icons-vue";
+import { CloseOutlined } from "@ant-design/icons-vue";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 const props = defineProps({
@@ -49,4 +47,3 @@ const props = defineProps({
   tabIndex: Number,
 });
 </script>
-<style></style>

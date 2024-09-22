@@ -27,14 +27,14 @@
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
-            label: 'Trạng thái kinh doanh',
+            label: getText('product', langStore.lang, 'business_status'),
             value: 'status',
           }"
         />
         <InputForm
           :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
-            label: 'Tên hàng hóa',
+            label: getText('product', langStore.lang, 'name_product'),
             value: 'name',
           }"
           :tab-index="2"
@@ -43,16 +43,9 @@
           :form-sate="formState"
           :is-disable="isDisable"
         />
-        <!-- <a-form-item
-            label="Name"
-            name="name"
-            :rules="[{ required: true, message: 'Please input your name!' }]"
-          >
-            <a-input v-model:value="formState.name" />
-          </a-form-item> -->
         <SelectForm
           :item="{
-            label: 'Nhóm hàng hóa',
+            label: getText('product', langStore.lang, 'group_product'),
             value: 'group',
           }"
           :tab-index="3"
@@ -63,7 +56,7 @@
         />
         <InputForm
           :item="{
-            label: 'Mã SKU',
+            label: getText('product', langStore.lang, 'codeSku'),
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
@@ -74,14 +67,11 @@
           :tab-index="4"
           :rules="[
             { required: true, message: 'Vui long không bỏ trống ma SKU!' },
-            // {
-            //   validator: validateCodeSKU,
-            // },
           ]"
         />
         <InputForm
           :item="{
-            label: 'Giá mua',
+            label: getText('shared', langStore.lang, 'price'),
             value: 'price',
           }"
           :model-value="formState.price"
@@ -92,7 +82,7 @@
         />
         <InputForm
           :item="{
-            label: 'Giá bán',
+            label: getText('shared', langStore.lang, 'sell'),
             value: 'sell',
           }"
           :model-value="formState.sell"
@@ -104,7 +94,7 @@
         <SelectForm
           :-on-change="handleChangeUnit"
           :item="{
-            label: 'Đơn vị tính',
+            label: getText('shared', langStore.lang, 'unit'),
             value: 'unit',
           }"
           :style="{ width: 200 }"
@@ -115,7 +105,7 @@
         />
         <CheckboxForm
           :item="{
-            value: 'có',
+            value: getText('shared', langStore.lang, 'yes'),
           }"
           :options="optionsiSHide"
           :form-sate="formState"
@@ -125,13 +115,13 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          THÔNG TIN THUỘC TÍNH
+          {{ getText("product", langStore.lang, "info_atributes") }}
         </p>
         <SelectForm
           :is-mode-tag="true"
           :-on-change="handleChangeColor"
           :item="{
-            label: 'Thuộc tính',
+            label: getText('shared', langStore.lang, 'atributes'),
             value: 'color',
           }"
           :tab-index="9"
@@ -154,7 +144,7 @@
           }"
           :columns="columns"
           :item="{
-            label: 'Chi tiết thuộc tính',
+            label: getText('product', langStore.lang, 'detail_atributes'),
             name: 'detail',
           }"
         />
@@ -163,7 +153,7 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: 'Mô tả',
+            label: getText('shared', langStore.lang, 'description'),
             value: 'description',
           }"
           :is-textarea="true"
@@ -177,7 +167,7 @@
         />
         <UploadForm
           :item="{
-            label: 'Anh hàng hóa',
+            label: getText('product', langStore.lang, 'image_product'),
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"
@@ -202,75 +192,77 @@ import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { useRoute, useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
 import {
-  GenerateListSKU,
-  GenerateListUpdateSKU,
-  GenerateSKU,
-  GetProductByCodeSKU,
+  generateListSKU,
+  generateListUpdateSKU,
+  generateSKU,
+  getProductByCodeSku,
   updateProduct,
 } from "@/api/product";
-import { getInitials } from "@/helpers/Funcs/helper";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
+const langStore = useLangStore();
 
 const optionsStatus = [
   {
-    label: "Đang kinh doanh",
-    value: "Đang kinh doanh",
+    label: getText("product", langStore.lang, "in_business"),
+    value: getText("product", langStore.lang, "in_business"),
   },
   {
-    label: "Ngừng kinh doanh",
-    value: "Ngừng kinh doanh",
+    label: getText("product", langStore.lang, "out_business"),
+    value: getText("product", langStore.lang, "out_business"),
   },
 ];
 
 const optionsGroup = [
   {
-    label: "Bet xuong",
-    value: "Bet xuong",
+    label: getText("product", langStore.lang, "boat_platform"),
+    value: getText("product", langStore.lang, "boat_platform"),
   },
   {
-    label: "Do da dung",
-    value: "Do da dung",
+    label: getText("product", langStore.lang, "household_goods"),
+    value: getText("product", langStore.lang, "household_goods"),
   },
 ];
 
 const optionsUnit = [
   {
-    label: "Đơn",
-    value: "Đơn",
+    label: getText("shared", langStore.lang, "single"),
+    value: getText("shared", langStore.lang, "single"),
   },
   {
-    label: "Đôi",
-    value: "Đôi",
+    label: getText("shared", langStore.lang, "pair"),
+    value: getText("shared", langStore.lang, "pair"),
   },
 ];
 
 const columns = [
   {
-    title: "Tên hàng hóa",
+    title: getText("product", langStore.lang, "name_product"),
     dataIndex: "name",
     width: "30%",
     key: "name",
   },
   {
-    title: "Mã SKU",
+    title: getText("product", langStore.lang, "codeSku"),
     dataIndex: "codeSKU",
     key: "codeSKU",
   },
 
   {
-    title: "Mã vạch",
+    title: getText("shared", langStore.lang, "barcode"),
     dataIndex: "barcode",
     key: "barcode",
   },
   {
-    title: "Giá mua",
+    title: getText("shared", langStore.lang, "price"),
     dataIndex: "price",
     key: "price",
   },
   {
-    title: "Giá bán",
+    title: getText("shared", langStore.lang, "sell"),
     dataIndex: "sell",
     key: "sell",
   },
@@ -283,15 +275,18 @@ const columns = [
 ];
 
 const optionsiSHide = [
-  { label: "Hiển thị lên màn hình bán hàng", value: "Có" },
+  {
+    label: getText("product", langStore.lang, "display_on_sales_screen"),
+    value: getText("shared", langStore.lang, "yes"),
+  },
 ];
 
 const formState = reactive({
-  status: "Đang kinh doanh",
+  status: getText("product", langStore.lang, "in_business"),
   codeSKU: "",
-  group: "Bet xuong",
+  group: "",
   name: "",
-  unit: "Đôi",
+  unit: "",
   price: "",
   sell: "",
   isHide: [],
@@ -308,7 +303,6 @@ const formState = reactive({
 const optionAtributes = ref([]);
 const dataValues = ref([]);
 const isDisable = ref(false);
-const isDisabledAtribute = ref(false);
 const router = useRouter();
 const form = Form.useForm(formState);
 const selectedRowKeys = ref([]);
@@ -321,36 +315,20 @@ onMounted(() => {
   Init();
 });
 
-// watchEffect(() => {
-//   if (formState.name) {
-//     isDisabledAtribute.value = false;
-//   } else {
-//     isDisabledAtribute.value = true;
-//   }
-// });
+// hàm lấy ra các giá trị ban đầu
 
 const Init = () => {
   useMenuStore().updateHeader({
-    namePath: "Hàng hóa / Sửa",
+    namePath: `${getText("product", langStore.lang, "product")} / ${getText(
+      "shared",
+      langStore.lang,
+      "update"
+    )}`,
   });
   handleGetData();
 };
 
-// watchEffect(() => {
-//   if (optionAtributes.value.length === 0) {
-//     isDisabledAtribute.value = true;
-//   } else {
-//     isDisabledAtribute.value = false;
-//   }
-// });
-
-// watchEffect(() => {
-//   if (formState.name) {
-//     isDisabledAtribute.value = false;
-//   } else {
-//     isDisabledAtribute.value = true;
-//   }
-// });
+// cập nhật giá mua và giá bán khi có thay đổi
 
 watchEffect(() => {
   if (optionAtributes.value.length > 0) {
@@ -365,27 +343,21 @@ watchEffect(() => {
   }
 });
 
+// xử lý lấy ra dữ liệu hàng hóa
+
 const handleGetData = async () => {
   try {
-    const res = await GetProductByCodeSKU(route.params.id);
+    const res = await getProductByCodeSku(route.params.id);
     if (res.success) {
-      // const dt =
-      //   res.data &&
-      //   res.data.length > 0 &&
-      //   res.data.map((item) => {
-      //     return {
-      //       ...item,
-      //       isHide: item.isHide === 0 ? "Không" : "Có",
-      //       price: convertNumber(item.price),
-      //       key: item.codeSKU,
-      //     };
-      //   });
       const dataAtributes = res.data.atributes;
       const dt = {
-        ...res.data,
+        ...res.data.data,
         sell: `${res.data.sell}`,
         price: `${res.data.price}`,
-        unit: res.data.unit === "double" ? "Đôi" : "Đơn",
+        unit:
+          res.data.data.unit === "double"
+            ? getText("shared", langStore.lang, "pair")
+            : getText("shared", langStore.lang, "single"),
       };
       if (dataAtributes && dataAtributes.length > 0) {
         optionAtributes.value = dataAtributes;
@@ -402,9 +374,13 @@ const handleGetData = async () => {
       imageUrl.value = formState.imageUrl;
     }
   } catch (error) {
-    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    Notification.error(
+      getText("shared", langStore.lang, "error_occurred_please_try_again")
+    );
   }
 };
+
+// xử lý khi người dùng enter ô nhập tên
 
 const handlePressEnterName = async (e) => {
   e.preventDefault();
@@ -418,9 +394,29 @@ const handlePressEnterName = async (e) => {
   }
 };
 
+// xử lý lấy ra danh sách các mã con
+
+const handleGetListCodeChild = async () => {
+  if (formState.codeSKU) {
+    const res = await generateListSKU(formState.codeSKU, dataValues.value);
+    if (res.success) {
+      const dataCP = [...optionAtributes.value].map((item, index) => {
+        return {
+          ...item,
+          name: formState.name + `(${dataValues.value[index]})`,
+          codeSKU: res.data[index],
+        };
+      });
+      optionAtributes.value = dataCP;
+    }
+  }
+};
+
+// xử lý lấy ra danh sách mã sku
+
 const handleGetListCode = async () => {
   if (formState.codeSKU) {
-    const res = await GenerateListSKU(formState.codeSKU, dataValues.value);
+    const res = await generateListSKU(formState.codeSKU, dataValues.value);
     if (res.success) {
       const dataCP = [...optionAtributes.value].map((item, index) => {
         return {
@@ -435,14 +431,18 @@ const handleGetListCode = async () => {
   }
 };
 
+// xử lý khi người dùng enter ô nhập mã sku
+
 const handlePressEnterCodeSKU = async (e) => {
   e.preventDefault();
   handleGetListCode();
 };
 
+// xử lý khi tạo ra mã sku mới dựa vào tên
+
 const hanldeGetCode = async (name) => {
   if (name) {
-    const res = await GenerateSKU(name);
+    const res = await generateSKU(name);
     if (res.success) {
       return res.data;
     }
@@ -451,11 +451,15 @@ const hanldeGetCode = async (name) => {
   return name;
 };
 
+// trở về màn danh sách hàng hóa
+
 const onClickExit = () => {
   router.push({
     name: "list_product",
   });
 };
+
+// xử lý cập nhật hàng hóa
 
 const onFinish = async () => {
   try {
@@ -479,54 +483,57 @@ const onFinish = async () => {
       },
       listSKUsDelele: listDelete.value,
     });
-    if (res && res.data && res.success) {
-      Notification.success("Cập nhật thành công");
+    if (res && res.success) {
+      Notification.success(getText("shared", langStore.lang, "update_success"));
       router.push({
         name: "list_product",
       });
     } else {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      Notification.error(
+        getText("product", langStore.lang, "code_sku_is_exsists")
+      );
     }
   } catch (error) {
     if (error.status === 400) {
       Notification.error("Mã SKU đã tồn tại");
     } else {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      Notification.error(
+        getText("product", langStore.lang, "code_sku_is_exsists")
+      );
     }
   }
 };
 
-// const handleChangeName = (e) => {
-//   if (formState.name) {
-//     formState.codeSKU = getInitials(e.target.value);
-//   } else {
-//     formState.codeSKU = "";
-//   }
-// };
+// xử lý khi có thay đổi checkbox hiển thị
 
 const handleChangeIsHide = (values) => {
   formState.isHide = values;
 };
 
+// xử lý khi có thay đổi trạng thái
+
 const handleChangeStatus = (e) => {
   formState.status = e.target.value;
 };
+
+// xử lý khi có thay đổi đơn vị
 
 const handleChangeUnit = (value) => {
   formState.unit = value;
 };
 
+// xử lý khi có thay đổi màu sắc
+
 const handleChangeColor = async (values) => {
   if (values && values.length > 0) {
     dataValues.value = values;
-    // isDisable.value = true;
     selectedRowKeys.value = values.map((item) => {
       return {
         value: item,
         label: item,
       };
     });
-    const res = await GenerateListUpdateSKU(
+    const res = await generateListUpdateSKU(
       formState.codeSKU,
       values,
       formState.id
@@ -579,11 +586,10 @@ const handleChangeColor = async (values) => {
   }
 };
 
+// xử lý khi có xóa 1 hàng của bảng thuộc tính
+
 const handleDeleteRow = (codeSKU) => {
   if (optionAtributes.value && optionAtributes.value.length > 0) {
-    // if (optionAtributes.value.length === 1) {
-    //   isDisable.value = false;
-    // }
     const dtDelete = optionAtributes.value.find(
       (item) => item.codeSKU === codeSKU
     );
@@ -601,12 +607,16 @@ const handleDeleteRow = (codeSKU) => {
   }
 };
 
+// xử lý khi người dùng ấn vào 1 ô input để chỉnh sửa của bảng thuộc tính
+
 const handleEdit = (key, columnKey) => {
   columnValue.value = columnKey;
   editableData[key] = cloneDeep(
     optionAtributes.value.filter((item) => key === item.codeSKU)[0]
   );
 };
+
+// xử lý khi ấn vào nút lưu
 
 const handleSave = (key) => {
   Object.assign(

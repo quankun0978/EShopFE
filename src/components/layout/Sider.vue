@@ -17,28 +17,26 @@
 import { ref, h } from "vue";
 import Logo from "@/assets/imgs/Logo_Full_White.png";
 import Menu from "@/components/common/Menu/Menu.vue";
-import { InboxOutlined } from "@ant-design/icons-vue";
 import IconBoxesStacked from "../icons/IconBoxesStacked.vue";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
 
+const langStore = useLangStore();
 const items = [
   {
-    label: "Hàng hóa",
+    label: getText("product", langStore.lang, "product"),
     key: "1",
     icon: () => h(IconBoxesStacked),
-    // icon: <font-awesome-icon :i />,
   },
   {
     label: "Navigation two",
     key: "2",
-    // icon: <MailOutlined />,
   },
   {
     label: "Navigation three",
     key: "3",
-    // icon: <MailOutlined />,
   },
 ];
-
 const onCollapse = (collapsed, type) => {};
 const onBreakpoint = (broken) => {};
 const selectedKeys = ref(["1"]);

@@ -21,6 +21,7 @@
       >
         <a-radio
           :tabindex="option.index"
+          :key="option.value"
           @keydown.enter.prevent="() => handleChange(option.value)"
           :value="option.value"
           v-for="option in options"
@@ -52,7 +53,7 @@ const val = ref(props.formState[props.item.value]);
 const handleChange = (e) => {
   if (props.onChange) {
     // Kiểm tra xem onChange có phải là hàm không
-    console.log(e)
+    console.log(e);
     props.onChange(e); // Gọi hàm onChange với giá trị đã chọn
   }
 };

@@ -35,7 +35,7 @@
   </a-config-provider>
 </template>
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
   value: String,
@@ -52,25 +52,13 @@ const props = defineProps({
   onPressEnter: Function,
   isDisable: Boolean,
   inputRef: String,
-  tabIndex: Number, // Thêm tabIndex vào props
-
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
+  tabIndex: Number,
 });
 
-// const nameRef = ref(null);
-// watchEffect(() => {
-//   if (props.item.value === "name") {
-//     nameRef.value.focus();
-//   }
-// });
-
-// Reference to the input element
 const inputRef = ref(null);
 
 onMounted(() => {
-  // Check if the item is "name"
   if (props.item && props.item.value === "name") {
-    // Focus the input element
     inputRef.value?.focus();
   }
 });

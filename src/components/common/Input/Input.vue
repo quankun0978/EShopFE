@@ -27,7 +27,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { ref } from "vue";
 const props = defineProps({
   value: String,
   placeholder: String,
@@ -39,9 +38,4 @@ const props = defineProps({
   handlePressEnter: Function,
   // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
-const val = ref(props.value);
-
-const handleChange = (e) => {
-  val.value = e.target.value;
-};
 </script>

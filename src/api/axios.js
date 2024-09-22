@@ -8,29 +8,24 @@ const instance = axios.create({
 });
 const CancelToken = axios.CancelToken;
 export const source = CancelToken.source();
-
+// xử lý trước khi gửi request
 instance.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
     return config;
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
+// xử lý  khi nhận response
 
-// Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response.data;
   },
   function (error) {
     console.log(error);
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+
     return Promise.reject(error);
   }
 );

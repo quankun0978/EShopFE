@@ -22,7 +22,7 @@
         :tabindex="tabIndex"
         :open="dropdownOpen"
         @blur="closeDropdown"
-        @change="(e)=>handleChange(e)"
+        @change="(e) => handleChange(e)"
         @keydown.enter.prevent="showDropdown"
         @click="showDropdown"
       />
@@ -39,13 +39,13 @@
         @keydown.enter.prevent="showDropdown"
         @click="showDropdown"
         @blur="closeDropdown"
-        @change="(e)=>handleChange(e)"
+        @change="(e) => handleChange(e)"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { nextTick, onMounted, ref, watch, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 
 const props = defineProps({
   value: String,

@@ -21,7 +21,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { ref } from "vue";
 const props = defineProps({
   defaultValue: String,
   placeholder: String,
@@ -34,6 +33,4 @@ const props = defineProps({
   onChange: Function,
   tabIndex: Number, // Thêm tabIndex vào props
 });
-
-const val = ref(props.value);
 </script>

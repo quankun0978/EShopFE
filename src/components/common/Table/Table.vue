@@ -1,110 +1,3 @@
-<script setup>
-import { computed, reactive, ref } from "vue";
-import {
-  PlusOutlined,
-  CopyOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  SyncOutlined,
-} from "@ant-design/icons-vue";
-import Input from "../Input/Input.vue";
-import Select from "../Select/Select.vue";
-import Button from "../Button/Button.vue";
-import Pagination from "../Pagination/Pagination.vue";
-import { convertNumber } from "@/helpers/Funcs/helper";
-import { useRouter } from "vue-router";
-const props = defineProps({
-  items: Array,
-  columns: Array,
-  placeholder: String,
-  objectQuery: Object,
-  style: Object,
-  isAction: Boolean,
-  isInput: Boolean,
-  bordered: Boolean,
-  handleSearch: Function,
-  pagination: Object,
-  handleRefreshQuery: Function,
-  handleDeleteData: Function,
-});
-
-const state = reactive({
-  selectedRowKeys: [],
-  // Check here to configure the default column
-  loading: false,
-});
-const router = useRouter();
-const priceQuery = ref(props.objectQuery.price);
-
-// const start = () => {
-//   state.loading = true;
-//   // ajax request after empty completing
-//   setTimeout(() => {
-//     state.loading = false;
-//     state.selectedRowKeys = [];
-//   }, 1000);
-// };
-const onSelectChange = (selectedRowKeys) => {
-  state.selectedRowKeys = selectedRowKeys;
-};
-
-const handleColumnInputChange = (event, dataIndex) => {
-  props.objectQuery[dataIndex] = event.target.value;
-};
-const handleColumnSelectChange = (value, dataIndex) => {
-  props.objectQuery[dataIndex] = value;
-  props.handleSearch();
-};
-
-const HandleClickNextPage = () => {
-  +props.objectQuery.pageNumber++;
-  props.handleSearch();
-};
-
-const HandleClickPrevPage = () => {
-  +props.objectQuery.pageNumber--;
-  props.handleSearch();
-};
-
-const HandleClickNextFirstPage = () => {
-  props.objectQuery.pageNumber = 1;
-  props.handleSearch();
-};
-
-const HandleClickRefreshPage = () => {
-  props.handleRefreshQuery();
-  props.handleSearch();
-};
-
-const HandleClickNextLastPage = () => {
-  props.objectQuery.pageNumber = props.pagination.totalPage;
-  props.handleSearch();
-};
-const HandleChangePageSize = (value) => {
-  props.objectQuery.pageSize = value;
-  props.handleSearch();
-};
-
-// const handleChangeFormEdit = () => {
-//   if (state.selectedRowKeys.length > 0) {
-//     const id = state.selectedRowKeys[0];
-//     router.push({ name: "update_product", params: { id: id } });
-//   }
-// };
-const handlePreventDefault = (e, route) => {
-  if (state.selectedRowKeys.length > 0) {
-    router.push({
-      name: route,
-      params: {
-        id: state.selectedRowKeys[0],
-      },
-    });
-  } else {
-    e.preventDefault();
-  }
-};
-</script>
-
 <template>
   <a-config-provider
     :theme="{
@@ -129,24 +22,22 @@ const handlePreventDefault = (e, route) => {
         class="item-action"
       >
         <PlusOutlined />
-        Thêm mới
+        {{ getText("shared", useLang.lang, "add") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
-        @click.native.prevent.capture="
-          (e) => handlePreventDefault(e, 'copy_product')
-        "
+        @click.prevent.capture="(e) => handlePreventDefault(e, 'copy_product')"
         :to="{
           name: 'create_product',
         }"
         class="item-action"
       >
         <CopyOutlined />
-        Nhân bản
+        {{ getText("shared", useLang.lang, "coppy") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
-        @click.native.prevent.capture="
+        @click.prevent.capture="
           (e) => handlePreventDefault(e, 'update_product')
         "
         :to="{
@@ -158,18 +49,18 @@ const handlePreventDefault = (e, route) => {
         class="item-action"
       >
         <EditOutlined />
-        Sửa
+        {{ getText("shared", useLang.lang, "edit") }}
       </RouterLink>
       <div
         class="item-action"
         @click="() => handleDeleteData(state.selectedRowKeys)"
       >
         <DeleteOutlined />
-        Xóa
+        {{ getText("shared", useLang.lang, "delete") }}
       </div>
       <div class="item-action">
         <SyncOutlined />
-        Nạp
+        {{ getText("shared", useLang.lang, "load") }}
       </div>
     </div>
 
@@ -245,6 +136,119 @@ const handlePreventDefault = (e, route) => {
     />
   </a-config-provider>
 </template>
+
+<script setup>
+import { reactive } from "vue";
+import Input from "../Input/Input.vue";
+import Select from "../Select/Select.vue";
+import Button from "../Button/Button.vue";
+import Pagination from "../Pagination/Pagination.vue";
+import { useRouter } from "vue-router";
+import {
+  PlusOutlined,
+  CopyOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SyncOutlined,
+} from "@ant-design/icons-vue";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
+const props = defineProps({
+  items: Array,
+  columns: Array,
+  placeholder: String,
+  objectQuery: Object,
+  style: Object,
+  isAction: Boolean,
+  isInput: Boolean,
+  bordered: Boolean,
+  handleSearch: Function,
+  pagination: Object,
+  handleRefreshQuery: Function,
+  handleDeleteData: Function,
+});
+
+const useLang = useLangStore();
+const state = reactive({
+  selectedRowKeys: [],
+  loading: false,
+});
+const router = useRouter();
+// sự kiện khi thay đổi các combo box
+const onSelectChange = (selectedRowKeys) => {
+  state.selectedRowKeys = selectedRowKeys;
+};
+// sự kiện khi thay đổi các select tìm kiếm
+
+const handleColumnInputChange = (event, dataIndex) => {
+  props.objectQuery[dataIndex] = event.target.value;
+};
+
+// sự kiện khi thay đổi các select tìm kiếm
+
+const handleColumnSelectChange = (value, dataIndex) => {
+  props.objectQuery[dataIndex] = value;
+  props.handleSearch();
+};
+
+// sự kiện khi chuyển sang trang kế tiếp
+
+const HandleClickNextPage = () => {
+  +props.objectQuery.pageNumber++;
+  props.handleSearch();
+};
+
+// sự kiện khi chuyển sang trang trước đó
+
+const HandleClickPrevPage = () => {
+  +props.objectQuery.pageNumber--;
+  props.handleSearch();
+};
+
+// sự kiện khi chuyển sang trang đầu
+
+const HandleClickNextFirstPage = () => {
+  props.objectQuery.pageNumber = 1;
+  props.handleSearch();
+};
+
+// sự kiện khi làm mới lại trang
+
+const HandleClickRefreshPage = () => {
+  props.handleRefreshQuery();
+  props.handleSearch();
+};
+
+// sự kiện khi chuyển sang cuối cùng
+
+const HandleClickNextLastPage = () => {
+  props.objectQuery.pageNumber = props.pagination.totalPage;
+  props.handleSearch();
+};
+
+// sự kiện khi thay đổi số phần tử hiển thị
+
+const HandleChangePageSize = (value) => {
+  props.objectQuery.pageSize = value;
+  props.handleSearch();
+};
+
+// sự kiện khi thực hiện 1 hành động (thêm mới hoặc chỉnh sửa)
+
+const handlePreventDefault = (e, route) => {
+  if (state.selectedRowKeys.length > 0) {
+    router.push({
+      name: route,
+      params: {
+        id: state.selectedRowKeys[0],
+      },
+    });
+  } else {
+    e.preventDefault();
+  }
+};
+</script>
+
 <style lang="scss">
 .item-action {
   padding: 8px;

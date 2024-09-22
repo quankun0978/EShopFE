@@ -68,9 +68,9 @@
 import { ref } from "vue";
 import {
   DoubleLeftOutlined,
-  DoubleRightOutlined,
   LeftOutlined,
   RightOutlined,
+  DoubleRightOutlined,
   SyncOutlined,
 } from "@ant-design/icons-vue";
 

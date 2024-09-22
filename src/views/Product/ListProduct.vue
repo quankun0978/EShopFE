@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { deleteProduct, GetAllProduct } from "@/api/product";
+import { deleteProduct, getAllProduct } from "@/api/product";
 import { showConfirm } from "@/components/common/Modal/Confirm";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
@@ -24,6 +24,9 @@ import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
 import { useMenuStore } from "@/store/menu";
 import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
+const langStore = useLangStore();
 
 const objectQuery = reactive({
   codeSKU: "",
@@ -31,10 +34,10 @@ const objectQuery = reactive({
   group: "",
   unit: "",
   price: "10000000",
-  isHide: "Tất cả",
-  type: "Tất cả",
-  managerBy: "Tất cả",
-  status: "Tất cả",
+  isHide: getText("shared", langStore.lang, "all"),
+  type: getText("shared", langStore.lang, "all"),
+  managerBy: getText("shared", langStore.lang, "all"),
+  status: getText("shared", langStore.lang, "all"),
   pageNumber: "1",
   pageSize: "20",
 });
@@ -70,113 +73,113 @@ const pagination = reactive({
 
 const columns = [
   {
-    title: "Mã SKU",
+    title: getText("product", langStore.lang, "codeSku"),
     dataIndex: "codeSKU",
     input: objectQuery.codeSKU,
   },
   {
-    title: "Tên hàng hóa",
+    title: getText("product", langStore.lang, "name_product"),
     dataIndex: "name",
     width: "30%",
     input: objectQuery.name,
   },
   {
-    title: "Nhóm hàng hóa",
+    title: getText("product", langStore.lang, "group_product"),
     dataIndex: "group",
     input: objectQuery.group,
   },
   {
-    title: "Đơn vị tính",
+    title: getText("shared", langStore.lang, "unit"),
     dataIndex: "unit",
     input: objectQuery.unit,
   },
   {
-    title: "Giá bán TB",
+    title: getText("shared", langStore.lang, "price"),
     dataIndex: "price",
     input: objectQuery.price,
   },
   {
-    title: "Hiển thị trên MH bán hàng",
+    title: getText("product", langStore.lang, "display_on_sales_screen"),
     dataIndex: "isHide",
     isSelect: true,
     select: {
       options: [
         {
-          label: "Tất cả",
-          value: "Tất cả",
+          label: getText("shared", langStore.lang, "all"),
+          value: getText("shared", langStore.lang, "all"),
         },
         {
-          label: "Có",
-          value: "Có",
+          label: getText("shared", langStore.lang, "yes"),
+          value: getText("shared", langStore.lang, "yes"),
         },
         {
-          label: "Không",
-          value: "Không",
+          label: getText("shared", langStore.lang, "no"),
+          value: getText("shared", langStore.lang, "no"),
         },
       ],
-      defaultValue: "Tất cả",
+      defaultValue: getText("shared", langStore.lang, "all"),
     },
     input: objectQuery.isHide,
   },
   {
-    title: "Loại hàng hóa",
+    title: getText("product", langStore.lang, "type_product"),
     dataIndex: "type",
     isSelect: true,
     input: objectQuery.type,
     select: {
       options: [
         {
-          label: "Tất cả",
-          value: "Tất cả",
+          label: getText("shared", langStore.lang, "all"),
+          value: getText("shared", langStore.lang, "all"),
         },
         {
-          label: "Hàng hóa",
-          value: "Hàng hóa",
+          label: getText("product", langStore.lang, "product"),
+          value: getText("product", langStore.lang, "product"),
         },
       ],
-      defaultValue: "Tất cả",
+      defaultValue: getText("shared", langStore.lang, "all"),
     },
   },
   {
-    title: "Quản lý theo",
+    title: getText("product", langStore.lang, "manager_by"),
     dataIndex: "managerBy",
     isSelect: true,
     input: objectQuery.managerBy,
     select: {
       options: [
         {
-          label: "Tất cả",
-          value: "Tất cả",
+          label: getText("shared", langStore.lang, "all"),
+          value: getText("shared", langStore.lang, "all"),
         },
         {
-          label: "Khác",
-          value: "Khác",
+          label: getText("shared", langStore.lang, "other"),
+          value: getText("shared", langStore.lang, "other"),
         },
       ],
-      defaultValue: "Tất cả",
+      defaultValue: getText("shared", langStore.lang, "all"),
     },
   },
   {
-    title: "Trạng thái",
+    title: getText("shared", langStore.lang, "status"),
     dataIndex: "status",
     isSelect: true,
     input: objectQuery.status,
     select: {
       options: [
         {
-          label: "Tất cả",
-          value: "Tất cả",
+          label: getText("shared", langStore.lang, "all"),
+          value: getText("shared", langStore.lang, "all"),
         },
         {
-          label: "Đang kinh doanh",
-          value: "Đang kinh doanh",
+          label: getText("product", langStore.lang, "in_business"),
+          value: getText("product", langStore.lang, "in_business"),
         },
         {
-          label: "Ngừng kinh doanh",
-          value: "Ngừng kinh doanh",
+          label: getText("product", langStore.lang, "out_business"),
+          value: getText("product", langStore.lang, "out_business"),
         },
       ],
-      defaultValue: "Tất cả",
+      defaultValue: getText("shared", langStore.lang, "all"),
     },
   },
 ];
@@ -195,22 +198,26 @@ const Init = () => {
   handleGetData();
 };
 
+// xử lý làm mới lại trang
+
 const handleRefreshQuery = () => {
   objectQuery.codeSKU = "";
   objectQuery.group = "";
   objectQuery.name = "";
   objectQuery.unit = "";
   objectQuery.price = "10000000";
-  objectQuery.isHide = "Tất cả";
+  objectQuery.isHide = getText("shared", langStore.lang, "all");
   objectQuery.type = "";
   objectQuery.managerBy = "";
   objectQuery.status = "";
 };
 
+// xử lý lấy ra danh sách các hàng hóa
+
 const handleGetData = async () => {
   try {
     if (objectQuery.price) {
-      const res = await GetAllProduct({
+      const res = await getAllProduct({
         ...objectQuery,
         price: +parseFormattedNumber(objectQuery.price),
         pageNumber: +objectQuery.pageNumber,
@@ -241,32 +248,40 @@ const handleGetData = async () => {
   }
 };
 
+// xử lý xóa hàng hóa
+
 const handleDeleteData = async (data) => {
   try {
     const res = await deleteProduct(data);
-    if (res && res.data && res.success) {
-      Notification.success("Xóa thành công");
+    if (res && res.success) {
+      Notification.success(getText("shared", langStore.lang, "delete_success"));
       handleGetData();
     } else {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      Notification.error(
+        getText("shared", langStore.lang, "error_occurred_please_try_again")
+      );
     }
   } catch (error) {
-    Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+    Notification.error(
+      getText("shared", langStore.lang, "error_occurred_please_try_again")
+    );
   }
 };
+
+// xử lý khi nhấn vào nút xóa
 
 const onClickDelete = (data) => {
   if (data && data.length > 0) {
     showConfirm({
-      title: "Ban muon xoa cac san pham nay khong?",
+      title: "Bạn muốn xóa các sản phẩm này không?",
       icon: ExclamationCircleOutlined,
       content: "",
-      okText: "Xac nhan",
-      cancelText: "Huy",
+      okText: getText("shared", langStore.lang, "confirm"),
+      cancelText: getText("shared", langStore.lang, "cancel"),
       handleOk: () => handleDeleteData(data),
     });
   } else {
-    Notification.warning("Vui long chon it nhat 1 san pham !");
+    Notification.warning("Vui long chọn ít nhất 1 sản phẩm !");
   }
 };
 </script>

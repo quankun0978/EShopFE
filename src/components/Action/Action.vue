@@ -5,12 +5,12 @@
       <Button
         :tab-index="tabIndexSave"
         :is-save="true"
-        :text="'Lưu'"
+        :text="getText('shared', useLang.lang, 'save')"
         :handle-click="handleSave"
       />
       <Button
         :tab-index="tabIndexExit"
-        :text="'Hủy'"
+        :text="getText('shared', useLang.lang, 'cancel')"
         :is-exit="true"
         :handle-click="handleExit"
       />
@@ -19,7 +19,9 @@
   </div>
 </template>
 <script setup>
+import { useLangStore } from "@/store/lang";
 import Button from "../common/Button/Button.vue";
+import { getText } from "@/constants/lang";
 const props = defineProps({
   options: Array,
   placeholder: String,
@@ -31,5 +33,6 @@ const props = defineProps({
   handleSave: Function,
   handleExit: Function,
 });
+
+const useLang = useLangStore();
 </script>
-<style></style>

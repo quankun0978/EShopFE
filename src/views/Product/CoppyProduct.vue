@@ -19,7 +19,7 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
         <RadioForm
           :is-disable="isDisable"
-          :options="optionsStatus"
+          :options="options.optionsStatus"
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
@@ -45,7 +45,7 @@
           }"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :options="optionsGroup"
+          :options="options.optionsGroup"
           :is-disable="isDisable"
         />
         <InputForm
@@ -70,7 +70,13 @@
           :model-value="formState.price"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="formState.isParent === 1"
+          :rules="[
+            {
+              validator: validateNumber,
+              message: 'Vui lòng nhập một số hợp lệ!',
+            },
+          ]"
+          :is-disable="false"
         />
         <InputForm
           :item="{
@@ -80,7 +86,13 @@
           :model-value="formState.sell"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="formState.isParent === 1"
+          :is-disable="false"
+          :rules="[
+            {
+              validator: validateNumber,
+              message: 'Vui lòng nhập một số hợp lệ!',
+            },
+          ]"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
@@ -89,7 +101,7 @@
             value: 'unit',
           }"
           :style="{ width: 200 }"
-          :options="optionsUnit"
+          :options="options.optionsUnit"
           :form-sate="formState"
           :is-disable="isDisable"
         />
@@ -97,7 +109,7 @@
           :item="{
             value: getText('shared', langStore.lang, 'yes'),
           }"
-          :options="optionsiSHide"
+          :options="options.optionsiSHide"
           :form-sate="formState"
           :on-change="handleChangeIsHide"
         />
@@ -191,7 +203,7 @@ import { useLangStore } from "@/store/lang";
 import { getText } from "@/constants/lang";
 const langStore = useLangStore();
 
-const optionsStatus = [
+const options.optionsStatus = [
   {
     label: getText("product", langStore.lang, "in_business"),
     value: getText("product", langStore.lang, "in_business"),
@@ -202,7 +214,7 @@ const optionsStatus = [
   },
 ];
 
-const optionsGroup = [
+const options.optionsGroup = [
   {
     label: getText("product", langStore.lang, "boat_platform"),
     value: getText("product", langStore.lang, "boat_platform"),
@@ -213,7 +225,7 @@ const optionsGroup = [
   },
 ];
 
-const optionsUnit = [
+const options.optionsUnit = [
   {
     label: getText("shared", langStore.lang, "single"),
     value: getText("shared", langStore.lang, "single"),
@@ -260,7 +272,7 @@ const columns = [
   },
 ];
 
-const optionsiSHide = [
+const options.optionsiSHide = [
   {
     label: getText("product", langStore.lang, "display_on_sales_screen"),
     value: getText("shared", langStore.lang, "yes"),

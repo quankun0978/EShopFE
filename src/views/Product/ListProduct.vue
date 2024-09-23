@@ -201,15 +201,15 @@ const Init = () => {
 // xử lý làm mới lại trang
 
 const handleRefreshQuery = () => {
-  objectQuery.codeSKU = "";
-  objectQuery.group = "";
-  objectQuery.name = "";
-  objectQuery.unit = "";
-  objectQuery.price = "10000000";
-  objectQuery.isHide = getText("shared", langStore.lang, "all");
-  objectQuery.type = "";
-  objectQuery.managerBy = "";
-  objectQuery.status = "";
+  // objectQuery.group = "";
+  // objectQuery.name = "";
+  // objectQuery.unit = "";
+  // objectQuery.price = "10000000";
+  // objectQuery.isHide = getText("shared", langStore.lang, "all");
+  // objectQuery.type = "";
+  // objectQuery.managerBy = "";
+  // objectQuery.status = "";
+  handleGetData();
 };
 
 // xử lý lấy ra danh sách các hàng hóa
@@ -285,3 +285,5 @@ const onClickDelete = (data) => {
   }
 };
 </script>
+
+<!-- <script sr></script> -->

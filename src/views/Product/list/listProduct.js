@@ -1,23 +1,31 @@
+import { reactive, ref, onMounted } from "vue";
+// api
 import { deleteProduct, getAllProduct } from "@/api/product";
+// hàm hỗ trợ
 import { showConfirm } from "@/components/common/Modal/Confirm";
+import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
+// store
+import { useMenuStore } from "@/store/menu";
+import { useLangStore } from "@/store/lang";
+import { getText } from "@/constants/lang";
+// component
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
-import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
-import { useMenuStore } from "@/store/menu";
-import { onMounted, reactive, ref, watch, watchEffect } from "vue";
-import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
-export const useListStock = () => {
+export default function ListProduct() {
+  const langStore = useLangStore();
+
   const objectQuery = reactive({
     codeSKU: "",
     name: "",
     group: "",
     unit: "",
     price: "10000000",
-    isHide: "Tất cả",
-    type: "Tất cả",
-    managerBy: "Tất cả",
-    status: "Tất cả",
+    isHide: getText("shared", langStore.lang, "all"),
+    type: getText("shared", langStore.lang, "all"),
+    managerBy: getText("shared", langStore.lang, "all"),
+    status: getText("shared", langStore.lang, "all"),
     pageNumber: "1",
     pageSize: "20",
   });
@@ -28,162 +36,143 @@ export const useListStock = () => {
     totalPage: "5",
     totalRecord: "96",
     optionPageSize: [
-      {
-        label: "5",
-        value: 5,
-      },
-      {
-        label: "10",
-        value: 10,
-      },
-      {
-        label: "15",
-        value: 15,
-      },
-      {
-        label: "20",
-        value: 20,
-      },
-      {
-        label: "50",
-        value: 50,
-      },
+      { label: "5", value: 5 },
+      { label: "10", value: 10 },
+      { label: "15", value: 15 },
+      { label: "20", value: 20 },
+      { label: "50", value: 50 },
     ],
   });
 
   const columns = [
     {
-      title: "Mã SKU",
+      title: getText("product", langStore.lang, "codeSku"),
       dataIndex: "codeSKU",
       input: objectQuery.codeSKU,
     },
     {
-      title: "Tên hàng hóa",
+      title: getText("product", langStore.lang, "name_product"),
       dataIndex: "name",
       width: "30%",
       input: objectQuery.name,
     },
     {
-      title: "Nhóm hàng hóa",
+      title: getText("product", langStore.lang, "group_product"),
       dataIndex: "group",
       input: objectQuery.group,
     },
     {
-      title: "Đơn vị tính",
+      title: getText("shared", langStore.lang, "unit"),
       dataIndex: "unit",
       input: objectQuery.unit,
     },
     {
-      title: "Giá bán TB",
+      title: getText("shared", langStore.lang, "price"),
       dataIndex: "price",
       input: objectQuery.price,
     },
     {
-      title: "Hiển thị trên MH bán hàng",
+      title: getText("product", langStore.lang, "display_on_sales_screen"),
       dataIndex: "isHide",
       isSelect: true,
       select: {
         options: [
           {
-            label: "Tất cả",
-            value: "Tất cả",
+            label: getText("shared", langStore.lang, "all"),
+            value: getText("shared", langStore.lang, "all"),
           },
           {
-            label: "Có",
-            value: "Có",
+            label: getText("shared", langStore.lang, "yes"),
+            value: getText("shared", langStore.lang, "yes"),
           },
           {
-            label: "Không",
-            value: "Không",
+            label: getText("shared", langStore.lang, "no"),
+            value: getText("shared", langStore.lang, "no"),
           },
         ],
-        defaultValue: "Tất cả",
+        defaultValue: getText("shared", langStore.lang, "all"),
       },
       input: objectQuery.isHide,
     },
     {
-      title: "Loại hàng hóa",
+      title: getText("product", langStore.lang, "type_product"),
       dataIndex: "type",
       isSelect: true,
       input: objectQuery.type,
       select: {
         options: [
           {
-            label: "Tất cả",
-            value: "Tất cả",
+            label: getText("shared", langStore.lang, "all"),
+            value: getText("shared", langStore.lang, "all"),
           },
           {
-            label: "Hàng hóa",
-            value: "Hàng hóa",
+            label: getText("product", langStore.lang, "product"),
+            value: getText("product", langStore.lang, "product"),
           },
         ],
-        defaultValue: "Tất cả",
+        defaultValue: getText("shared", langStore.lang, "all"),
       },
     },
     {
-      title: "Quản lý theo",
+      title: getText("product", langStore.lang, "manager_by"),
       dataIndex: "managerBy",
       isSelect: true,
       input: objectQuery.managerBy,
       select: {
         options: [
           {
-            label: "Tất cả",
-            value: "Tất cả",
+            label: getText("shared", langStore.lang, "all"),
+            value: getText("shared", langStore.lang, "all"),
           },
           {
-            label: "Khác",
-            value: "Khác",
+            label: getText("shared", langStore.lang, "other"),
+            value: getText("shared", langStore.lang, "other"),
           },
         ],
-        defaultValue: "Tất cả",
+        defaultValue: getText("shared", langStore.lang, "all"),
       },
     },
     {
-      title: "Trạng thái",
+      title: getText("shared", langStore.lang, "status"),
       dataIndex: "status",
       isSelect: true,
       input: objectQuery.status,
       select: {
         options: [
           {
-            label: "Tất cả",
-            value: "Tất cả",
+            label: getText("shared", langStore.lang, "all"),
+            value: getText("shared", langStore.lang, "all"),
           },
           {
-            label: "Đang kinh doanh",
-            value: "Đang kinh doanh",
+            label: getText("product", langStore.lang, "in_business"),
+            value: getText("product", langStore.lang, "in_business"),
           },
           {
-            label: "Ngừng kinh doanh",
-            value: "Ngừng kinh doanh",
+            label: getText("product", langStore.lang, "out_business"),
+            value: getText("product", langStore.lang, "out_business"),
           },
         ],
-        defaultValue: "Tất cả",
+        defaultValue: getText("shared", langStore.lang, "all"),
       },
     },
   ];
 
-  const data = ref();
+  const data = ref([]);
+
+  onMounted(() => {
+    Init();
+  });
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: "Hàng hóa",
+      namePath: getText("product", langStore.lang, "product"),
       isBack: true,
     });
     handleGetData();
   };
 
   const handleRefreshQuery = () => {
-    objectQuery.codeSKU = "";
-    objectQuery.group = "";
-    objectQuery.name = "";
-    objectQuery.unit = "";
-    objectQuery.price = "10000000";
-    objectQuery.isHide = "Tất cả";
-    objectQuery.type = "";
-    objectQuery.managerBy = "";
-    objectQuery.status = "";
+    handleGetData();
   };
 
   const handleGetData = async () => {
@@ -203,15 +192,11 @@ export const useListStock = () => {
           };
           Object.assign(pagination, copy);
           const dt =
-            res.data.data && res.data.data.length > 0
-              ? res.data.data.map((item) => {
-                  return {
-                    ...item,
-                    price: convertNumber(item.price),
-                    key: item.codeSKU,
-                  };
-                })
-              : [];
+            res.data.data?.map((item) => ({
+              ...item,
+              price: convertNumber(item.price),
+              key: item.codeSKU,
+            })) || [];
           data.value = dt;
         }
       }
@@ -223,40 +208,46 @@ export const useListStock = () => {
   const handleDeleteData = async (data) => {
     try {
       const res = await deleteProduct(data);
-      if (res && res.data && res.success) {
-        Notification.success("Xóa thành công");
+      if (res?.success) {
+        Notification.success(
+          getText("shared", langStore.lang, "delete_success")
+        );
         handleGetData();
       } else {
-        Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+        Notification.error(
+          getText("shared", langStore.lang, "error_occurred_please_try_again")
+        );
       }
     } catch (error) {
-      Notification.error("Đã có lỗi xảy ra vui lòng thử lại");
+      Notification.error(
+        getText("shared", langStore.lang, "error_occurred_please_try_again")
+      );
     }
   };
 
   const onClickDelete = (data) => {
     if (data && data.length > 0) {
       showConfirm({
-        title: "Ban muon xoa cac san pham nay khong?",
+        title: "Bạn muốn xóa các sản phẩm này không?",
         icon: ExclamationCircleOutlined,
         content: "",
-        okText: "Xac nhan",
-        cancelText: "Huy",
+        okText: getText("shared", langStore.lang, "confirm"),
+        cancelText: getText("shared", langStore.lang, "cancel"),
         handleOk: () => handleDeleteData(data),
       });
     } else {
-      Notification.warning("Vui long chon it nhat 1 san pham !");
+      Notification.warning("Vui lòng chọn ít nhất 1 sản phẩm !");
     }
   };
-  Init();
 
   return {
+    data,
+    columns,
     objectQuery,
     pagination,
-    columns,
-    data,
     handleGetData,
     handleRefreshQuery,
     onClickDelete,
+    Table,
   };
-};
+}

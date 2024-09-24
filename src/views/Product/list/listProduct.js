@@ -4,9 +4,10 @@ import { deleteProduct, getAllProduct } from "@/api/product";
 // hàm hỗ trợ
 import { showConfirm } from "@/components/common/Modal/Confirm";
 import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
-// store
+//store
 import { useMenuStore } from "@/store/menu";
 import { useLangStore } from "@/store/lang";
+// hàm bổ trợ
 import { getText } from "@/constants/lang";
 // component
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";

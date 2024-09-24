@@ -26,9 +26,5 @@ const {
   handleGetData,
   handleRefreshQuery,
   onClickDelete,
-} = ListProduct(); // Gọi logic
+} = ListProduct();
 </script>
-
-<style scoped>
-/* Optional: Add custom styles here */
-</style>

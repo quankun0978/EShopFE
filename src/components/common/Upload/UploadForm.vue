@@ -50,9 +50,12 @@
   </a-config-provider>
 </template>
 <script setup>
+// theme
 import selectTheme from "@/config/select";
+//icon
 import IconOpenDocument from "@/components/icons/IconOpenDocument.vue";
 import IconPencil from "@/components/icons/IconPencil.vue";
+// styles
 import "./UploadForm.scss";
 const props = defineProps({
   options: Array,

@@ -18,6 +18,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+// theme
 import menuTheme from "@/config/themes/menu";
 const props = defineProps({
   items: Array,

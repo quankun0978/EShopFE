@@ -21,7 +21,7 @@ import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
 import { useLangStore } from "@/store/lang";
 import { getText } from "@/constants/lang";
-import { validateNumber } from "@/helpers/Funcs/helper";
+import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
 
@@ -69,7 +69,7 @@ const UpdateProduct = () => {
       namePath: `${getText("product", langStore.lang, "product")} / ${getText(
         "shared",
         langStore.lang,
-        "update"
+        "edit"
       )}`,
     });
     handleGetData();
@@ -299,6 +299,7 @@ const UpdateProduct = () => {
               color: values[index],
               name: formState.name + `(${values[index]})`,
               codeSKU: item,
+              barcode: generateRandomId(),
               price: formState.price ? formState.price : "0",
               sell: formState.sell ? formState.sell : "0",
             };

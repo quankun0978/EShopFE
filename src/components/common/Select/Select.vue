@@ -16,6 +16,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+// theme
 import selectTheme from "@/config/select";
 const props = defineProps({
   options: Array,

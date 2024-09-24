@@ -12,6 +12,6 @@
   </a-layout>
 </template>
 <script setup>
-import Sider from "@/components/layout/Sider.vue";
-import Header from "@/components/layout/Header.vue";
+import Sider from "@/components/layout/Sider/Sider.vue";
+import Header from "@/components/layout/Header/Header.vue";
 </script>

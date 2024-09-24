@@ -22,7 +22,6 @@
         :scroll="{ y: 230, scrollToFirstRowOnChange: true, x: 700 }"
       >
         <template v-if="isAction" #bodyCell="{ column, text, record }">
-          {{ console.log(text) }}
           <template v-if="column.key === 'action'">
             <FontAwesomeIcon
               @click="() => handleDeleteRow(record.codeSKU)"

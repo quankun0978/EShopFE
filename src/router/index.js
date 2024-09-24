@@ -33,7 +33,7 @@ const router = createRouter({
             {
               name: "copy_product",
               path: "copy/:id",
-              component: () => import("@/views/Product/CoppyProduct.vue"),
+              component: () => import("@/views/Product/coppy/CoppyProduct.vue"),
             },
           ],
         },

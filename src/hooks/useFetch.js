@@ -3,7 +3,7 @@ import instance from "@/api/axios";
 import { getAllProduct } from "@/api/product";
 import { onMounted, ref } from "vue";
 
-export const useFetch = (url, payload) => {
+const useFetch = (url, payload, type) => {
   const data = ref(null);
   const error = ref(null);
   const loading = ref(true);
@@ -11,8 +11,11 @@ export const useFetch = (url, payload) => {
   const fetchData = async () => {
     try {
       loading.value = true;
-      const response = await getAllProduct(payload);
-      data.value = response.data; // Assign response data to the data ref
+      const response =
+        type === "POST"
+          ? await instance.post(url, payload)
+          : await instance.get(url);
+      data.value = response; // Assign response data to the data ref
     } catch (err) {
       error.value = err.message;
     } finally {
@@ -24,5 +27,7 @@ export const useFetch = (url, payload) => {
     fetchData();
   });
 
-  return { data, error, loading, fetchData };
+  return { data, error, loading };
 };
+
+export default useFetch;

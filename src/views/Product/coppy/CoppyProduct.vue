@@ -142,7 +142,7 @@
           :style="{
             width: '100%',
           }"
-          :columns="columns"
+          :columns="options.columnsAtributes"
           :item="{
             label: getText('product', langStore.lang, 'detail_atributes'),
             name: 'detail',
@@ -208,6 +208,7 @@ const {
   langStore,
   isDisabledAtribute,
   getText,
+  handleChangeStatus,
   form,
   columnValue,
   editableData,

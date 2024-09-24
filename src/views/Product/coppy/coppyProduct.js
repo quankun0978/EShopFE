@@ -21,7 +21,8 @@ import { useImageUpload } from "@/hooks/useImagrUpload";
 import { useLangStore } from "@/store/lang";
 import { getText } from "@/constants/lang";
 import * as options from "@/constants/options";
-
+import { generateRandomId } from "@/helpers/Funcs/helper";
+import { validateNumber } from "@/helpers/Funcs/helper";
 const CoppyProduct = () => {
   const langStore = useLangStore();
 
@@ -304,6 +305,7 @@ const CoppyProduct = () => {
               color: values[index],
               name: formState.name + `(${values[index]})`,
               codeSKU: item,
+              barcode: generateRandomId(),
               price: formState.price ? formState.price : "0",
               sell: formState.sell ? formState.sell : "0",
             };
@@ -401,6 +403,7 @@ const CoppyProduct = () => {
     TableForm,
     SelectForm,
     isDisable,
+    handleChangeStatus,
     RadioForm,
     CheckboxForm,
     UploadForm,
@@ -413,7 +416,6 @@ const CoppyProduct = () => {
     isDisabledAtribute,
     getText,
     form,
-    inputName,
     columnValue,
     editableData,
     options,

@@ -35,9 +35,11 @@
   </a-config-provider>
 </template>
 <script setup>
+// icon
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 const props = defineProps({
   text: String,
   style: Object,

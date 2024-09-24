@@ -1,17 +1,3 @@
-<script setup>
-import { ref } from "vue";
-import "./Segment.scss";
-const props = defineProps({
-  items: Array,
-  selectedKeys: Array,
-  defaultSelectedKey: String,
-  class: String,
-  style: Object,
-});
-const data = ref(props.items);
-const value = ref(props.defaultSelectedKey);
-</script>
-
 <template>
   <a-config-provider
     :theme="{
@@ -46,3 +32,16 @@ const value = ref(props.defaultSelectedKey);
     </a-segmented>
   </a-config-provider>
 </template>
+<script setup>
+import { ref } from "vue";
+import "./Segment.scss";
+const props = defineProps({
+  items: Array,
+  selectedKeys: Array,
+  defaultSelectedKey: String,
+  class: String,
+  style: Object,
+});
+const data = ref(props.items);
+const value = ref(props.defaultSelectedKey);
+</script>

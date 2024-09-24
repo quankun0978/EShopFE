@@ -1,9 +1,11 @@
 import { reactive } from "vue";
+//componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
 import Button from "../Button/Button.vue";
 import Pagination from "../Pagination/Pagination.vue";
 import { useRouter } from "vue-router";
+//icon
 import {
   PlusOutlined,
   CopyOutlined,
@@ -11,7 +13,9 @@ import {
   DeleteOutlined,
   SyncOutlined,
 } from "@ant-design/icons-vue";
+//store
 import { useLangStore } from "@/store/lang";
+// hàm bổ trợ
 import { getText } from "@/constants/lang";
 const Table = (props) => {
   const langStore = useLangStore();

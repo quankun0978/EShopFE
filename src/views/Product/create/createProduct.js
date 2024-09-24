@@ -1,5 +1,5 @@
 import { useMenuStore } from "@/store/menu";
-import { onMounted, reactive, ref, toRaw, watch, watchEffect } from "vue";
+import { onMounted, reactive, ref, watchEffect } from "vue";
 
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
@@ -16,7 +16,7 @@ import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
 import { getText } from "@/constants/lang";
 import { useLangStore } from "@/store/lang";
-import { validateNumber } from "@/helpers/Funcs/helper";
+import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
 const CreateProduct = () => {
   const langStore = useLangStore();
@@ -247,6 +247,7 @@ const CreateProduct = () => {
             isHide: getText("shared", langStore.lang, "no"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
+            barcode: generateRandomId(),
             codeSKU: item,
             price: formState.price ? `${formState.price}` : "0",
             sell: formState.sell ? `${formState.sell}` : "0",

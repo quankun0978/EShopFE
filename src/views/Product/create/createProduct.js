@@ -18,6 +18,7 @@ import { getText } from "@/constants/lang";
 import { useLangStore } from "@/store/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
+import { MESSAGE_ERROR } from "@/api/apiConfig";
 const CreateProduct = () => {
   const langStore = useLangStore();
 
@@ -144,12 +145,9 @@ const CreateProduct = () => {
         );
       }
     } catch (error) {
-      if (error.status === 400) {
-        Notification.error("Mã SKU đã tồn tại");
-      } else {
-        console.log(error);
+      if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("shared", langStore.lang, "error_occurred_please_try_again")
+          getText("product", langStore.lang, "code_sku_is_exsists")
         );
       }
     }

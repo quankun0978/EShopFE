@@ -120,11 +120,7 @@ const UpdateProduct = () => {
         Object.assign(formState, dt);
         imageUrl.value = formState.imageUrl;
       }
-    } catch (error) {
-      Notification.error(
-        getText("shared", langStore.lang, "error_occurred_please_try_again")
-      );
-    }
+    } catch (error) {}
   };
 
   // xử lý khi người dùng enter ô nhập tên
@@ -243,9 +239,7 @@ const UpdateProduct = () => {
         );
       }
     } catch (error) {
-      if (error.status === 400) {
-        Notification.error("Mã SKU đã tồn tại");
-      } else {
+      if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
           getText("product", langStore.lang, "code_sku_is_exsists")
         );

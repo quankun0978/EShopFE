@@ -23,6 +23,7 @@ import { getText } from "@/constants/lang";
 import * as options from "@/constants/options";
 import { generateRandomId } from "@/helpers/Funcs/helper";
 import { validateNumber } from "@/helpers/Funcs/helper";
+import { HTTP_STATUS } from "@/api/apiConfig";
 const CoppyProduct = () => {
   const langStore = useLangStore();
 
@@ -246,13 +247,9 @@ const CoppyProduct = () => {
         );
       }
     } catch (error) {
-      if (error.status === 400) {
+      if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
           getText("product", langStore.lang, "code_sku_is_exsists")
-        );
-      } else {
-        Notification.error(
-          getText("shared", langStore.lang, "error_occurred_please_try_again")
         );
       }
     }

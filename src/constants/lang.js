@@ -26,6 +26,11 @@ export const texts = {
       delete_success: "Delete is successfull",
       confirm: "Confirm",
       error_occurred_please_try_again: "An error occurred please try again",
+      error_occurred_server:
+        "An error occurred on the server, please check the server.",
+      error_bad_request: "There was an error in the request sent.",
+      error_not_found:
+        "The request sent is for a record that does not exist and the server is down.",
     },
     vn: {
       save: "Lưu",
@@ -53,6 +58,10 @@ export const texts = {
       update_success: "Cập nhật thành công",
       confirm: "Xác nhận",
       error_occurred_please_try_again: "Đã có lỗi xảy ra vui lòng thử lại",
+      error_occurred_server: "Đã xảy ra lỗi trên máy chủ, vui lòng kiểm tra máy chủ.",
+      error_bad_request: "Đã có lỗi trong yêu cầu được gửi",
+      error_not_found:
+        "Yêu cầu được gửi là về một bản ghi không tồn tại và máy chủ không hoạt động",
     },
   },
   product: {

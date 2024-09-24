@@ -30,6 +30,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import "./Tab.scss";
 const props = defineProps({
   activeKey: String,
   items: Array,
@@ -37,16 +38,3 @@ const props = defineProps({
 });
 const activeKey = ref(props.activeKey);
 </script>
-<style>
-.ant-tabs-tab {
-  margin: 0 !important;
-  border-radius: 0 !important;
-}
-.ant-tabs-tab {
-  margin: 0 !important;
-}
-.ant-tabs-tab.ant-tabs-tab-active {
-  background-color: #2b3173 !important;
-  color: #fff !important;
-}
-</style>

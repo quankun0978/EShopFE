@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-
+import "./Segment.scss";
 const props = defineProps({
   items: Array,
   selectedKeys: Array,
@@ -46,13 +46,3 @@ const value = ref(props.defaultSelectedKey);
     </a-segmented>
   </a-config-provider>
 </template>
-
-<style>
-.ant-segmented-item-selected {
-  border-radius: 0 !important;
-}
-.ant-segmented-item-selected {
-  background-color: #00577b !important;
-  color: #fff !important;
-}
-</style>

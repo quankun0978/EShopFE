@@ -53,6 +53,7 @@
 import selectTheme from "@/config/select";
 import IconOpenDocument from "@/components/icons/IconOpenDocument.vue";
 import IconPencil from "@/components/icons/IconPencil.vue";
+import "./UploadForm.scss";
 const props = defineProps({
   options: Array,
   placeholder: String,
@@ -66,29 +67,3 @@ const props = defineProps({
   tabIndex: Number, // Thêm tabIndex vào props
 });
 </script>
-<style scoped>
-.upload-custom {
-  width: 200px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 8px;
-  border: 1px dashed #026b97;
-  position: relative;
-}
-
-#image-upload {
-  visibility: hidden;
-}
-
-.image {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  width: inherit;
-  height: 100%;
-}
-</style>

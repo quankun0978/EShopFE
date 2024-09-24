@@ -1,0 +1,26 @@
+/* .item-action {
+  padding: 8px;
+  color: #fff;
+  border-right: 1px solid black;
+}
+:root {
+  --table-height: 100vh;
+}
+.ant-table-thead > tr > .ant-table-cell {
+  padding: 0 !important;
+} */
+
+.item-action {
+  padding: 8px;
+  color: #fff;
+  border-right: 1px solid black;
+  cursor: pointer;
+}
+:root {
+  --table-height: 100vh;
+}
+.table-custom {
+  .ant-table-thead > tr > .ant-table-cell {
+    padding: 0 !important;
+  }
+}

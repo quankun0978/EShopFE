@@ -22,7 +22,7 @@
         class="item-action"
       >
         <PlusOutlined />
-        {{ getText("shared", useLang.lang, "add") }}
+        {{ getText("shared", langStore.lang, "add") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -33,7 +33,7 @@
         class="item-action"
       >
         <CopyOutlined />
-        {{ getText("shared", useLang.lang, "coppy") }}
+        {{ getText("shared", langStore.lang, "coppy") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -49,18 +49,18 @@
         class="item-action"
       >
         <EditOutlined />
-        {{ getText("shared", useLang.lang, "edit") }}
+        {{ getText("shared", langStore.lang, "edit") }}
       </RouterLink>
       <div
         class="item-action"
         @click="() => handleDeleteData(state.selectedRowKeys)"
       >
         <DeleteOutlined />
-        {{ getText("shared", useLang.lang, "delete") }}
+        {{ getText("shared", langStore.lang, "delete") }}
       </div>
       <div class="item-action">
         <SyncOutlined />
-        {{ getText("shared", useLang.lang, "load") }}
+        {{ getText("shared", langStore.lang, "load") }}
       </div>
     </div>
 
@@ -138,21 +138,8 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
-import Input from "../Input/Input.vue";
-import Select from "../Select/Select.vue";
-import Button from "../Button/Button.vue";
-import Pagination from "../Pagination/Pagination.vue";
-import { useRouter } from "vue-router";
-import {
-  PlusOutlined,
-  CopyOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  SyncOutlined,
-} from "@ant-design/icons-vue";
-import { useLangStore } from "@/store/lang";
-import { getText } from "@/constants/lang";
+import "./table.scss";
+import Table from "./Table.js";
 const props = defineProps({
   items: Array,
   columns: Array,
@@ -168,88 +155,33 @@ const props = defineProps({
   handleDeleteData: Function,
 });
 
-const useLang = useLangStore();
-const state = reactive({
-  selectedRowKeys: [],
-  loading: false,
-});
-const router = useRouter();
-// sự kiện khi thay đổi các combo box
-const onSelectChange = (selectedRowKeys) => {
-  state.selectedRowKeys = selectedRowKeys;
-};
-// sự kiện khi thay đổi các select tìm kiếm
-
-const handleColumnInputChange = (event, dataIndex) => {
-  props.objectQuery[dataIndex] = event.target.value;
-};
-
-// sự kiện khi thay đổi các select tìm kiếm
-
-const handleColumnSelectChange = (value, dataIndex) => {
-  props.objectQuery[dataIndex] = value;
-  props.handleSearch();
-};
-
-// sự kiện khi chuyển sang trang kế tiếp
-
-const HandleClickNextPage = () => {
-  +props.objectQuery.pageNumber++;
-  props.handleSearch();
-};
-
-// sự kiện khi chuyển sang trang trước đó
-
-const HandleClickPrevPage = () => {
-  +props.objectQuery.pageNumber--;
-  props.handleSearch();
-};
-
-// sự kiện khi chuyển sang trang đầu
-
-const HandleClickNextFirstPage = () => {
-  props.objectQuery.pageNumber = 1;
-  props.handleSearch();
-};
-
-// sự kiện khi làm mới lại trang
-
-const HandleClickRefreshPage = () => {
-  props.handleRefreshQuery();
-  props.handleSearch();
-};
-
-// sự kiện khi chuyển sang cuối cùng
-
-const HandleClickNextLastPage = () => {
-  props.objectQuery.pageNumber = props.pagination.totalPage;
-  props.handleSearch();
-};
-
-// sự kiện khi thay đổi số phần tử hiển thị
-
-const HandleChangePageSize = (value) => {
-  props.objectQuery.pageSize = value;
-  props.handleSearch();
-};
-
-// sự kiện khi thực hiện 1 hành động (thêm mới hoặc chỉnh sửa)
-
-const handlePreventDefault = (e, route) => {
-  if (state.selectedRowKeys.length > 0) {
-    router.push({
-      name: route,
-      params: {
-        id: state.selectedRowKeys[0],
-      },
-    });
-  } else {
-    e.preventDefault();
-  }
-};
+const {
+  Input,
+  Select,
+  Button,
+  Pagination,
+  PlusOutlined,
+  CopyOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  SyncOutlined,
+  langStore,
+  state,
+  handleColumnInputChange,
+  getText,
+  handleColumnSelectChange,
+  HandleClickNextLastPage,
+  handlePreventDefault,
+  onSelectChange,
+  HandleChangePageSize,
+  HandleClickNextFirstPage,
+  HandleClickNextPage,
+  HandleClickPrevPage,
+  HandleClickRefreshPage,
+} = Table(props);
 </script>
 
-<style lang="scss">
+<!-- <style lang="scss">
 .item-action {
   padding: 8px;
   color: #fff;
@@ -264,4 +196,4 @@ const handlePreventDefault = (e, route) => {
     padding: 0 !important;
   }
 }
-</style>
+</style> -->

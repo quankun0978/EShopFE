@@ -1,4 +1,5 @@
-import { Modal } from "ant-design-vue"; // Import Ant Design Vue notification
+// icon
+import { Modal } from "ant-design-vue";
 import { createVNode } from "vue";
 export const showConfirm = ({
   title,

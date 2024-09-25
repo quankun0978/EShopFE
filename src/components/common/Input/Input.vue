@@ -36,6 +36,5 @@ const props = defineProps({
   rows: Number,
   maxLength: Number,
   handlePressEnter: Function,
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 </script>

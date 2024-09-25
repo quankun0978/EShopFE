@@ -5,12 +5,12 @@
       <Button
         :tab-index="tabIndexSave"
         :is-save="true"
-        :text="getText('shared', langStore.lang, 'save')"
+        :text="getText('shared', langStore.lang, 'SAVE')"
         :handle-click="handleSave"
       />
       <Button
         :tab-index="tabIndexExit"
-        :text="getText('shared', langStore.lang, 'cancel')"
+        :text="getText('shared', langStore.lang, 'CANCEL')"
         :is-exit="true"
         :handle-click="handleExit"
       />

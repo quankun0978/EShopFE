@@ -20,12 +20,14 @@
 import { ref } from "vue";
 // theme
 import menuTheme from "@/config/themes/menu";
+
 const props = defineProps({
   items: Array,
   selectedKeys: Array,
   className: String,
   style: Object,
 });
+
 const keySelect = ref(props.selectedKeys);
 
 const onChange = (key) => {

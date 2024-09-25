@@ -13,7 +13,7 @@ const Sider = () => {
   const langStore = useLangStore();
   const items = [
     {
-      label: getText("product", langStore.lang, "product"),
+      label: getText("product", langStore.lang, "PRODUCT"),
       key: "1",
       icon: () => h(IconBoxesStacked),
     },

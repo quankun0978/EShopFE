@@ -1,4 +1,4 @@
-import { notification } from "ant-design-vue"; // Import Ant Design Vue notification
+import { notification } from "ant-design-vue";
 
 const openNotificationWithIcon = function (
   type,
@@ -24,6 +24,7 @@ const openNotificationWithIcon = function (
 };
 
 export const Notification = {
+  // Thành công
   success(title, description, confirmBtn, onClick) {
     openNotificationWithIcon(
       "success",
@@ -33,9 +34,12 @@ export const Notification = {
       onClick
     );
   },
+  // Chi tiết
   info(title, description, confirmBtn, onClick) {
     openNotificationWithIcon("info", title, description, confirmBtn, onClick);
   },
+
+  // cảnh báo
   warning(title, description, confirmBtn, onClick) {
     openNotificationWithIcon(
       "warning",
@@ -45,6 +49,8 @@ export const Notification = {
       onClick
     );
   },
+
+  // lỗi
   error(title, description, confirmBtn, onClick) {
     openNotificationWithIcon("error", title, description, confirmBtn, onClick);
   },

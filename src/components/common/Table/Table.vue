@@ -22,7 +22,7 @@
         class="item-action"
       >
         <PlusOutlined />
-        {{ getText("shared", langStore.lang, "add") }}
+        {{ getText("shared", langStore.lang, "ADD") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -33,7 +33,7 @@
         class="item-action"
       >
         <CopyOutlined />
-        {{ getText("shared", langStore.lang, "coppy") }}
+        {{ getText("shared", langStore.lang, "COPPY") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -49,18 +49,18 @@
         class="item-action"
       >
         <EditOutlined />
-        {{ getText("shared", langStore.lang, "edit") }}
+        {{ getText("shared", langStore.lang, "EDIT") }}
       </RouterLink>
       <div
         class="item-action"
         @click="() => handleDeleteData(state.selectedRowKeys)"
       >
         <DeleteOutlined />
-        {{ getText("shared", langStore.lang, "delete") }}
+        {{ getText("shared", langStore.lang, "DELETE") }}
       </div>
       <div class="item-action">
         <SyncOutlined />
-        {{ getText("shared", langStore.lang, "load") }}
+        {{ getText("shared", langStore.lang, "LOAD") }}
       </div>
     </div>
 
@@ -180,20 +180,6 @@ const {
   HandleClickRefreshPage,
 } = Table(props);
 </script>
-
-<!-- <style lang="scss">
-.item-action {
-  padding: 8px;
-  color: #fff;
-  border-right: 1px solid black;
-  cursor: pointer;
-}
-:root {
-  --table-height: 100vh;
-}
-.table-custom {
-  .ant-table-thead > tr > .ant-table-cell {
-    padding: 0 !important;
-  }
-}
-</style> -->
+<style lang="scss" scoped>
+@import "./Table.scss";
+</style>

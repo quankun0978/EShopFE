@@ -23,14 +23,14 @@
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
-            label: getText('product', langStore.lang, 'business_status'),
+            label: getText('product', langStore.lang, 'BUSINESS_STATUS'),
             value: 'status',
           }"
         />
         <InputForm
           :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
-            label: getText('product', langStore.lang, 'name_product'),
+            label: getText('product', langStore.lang, 'NAME_PRODUCT'),
             value: 'name',
           }"
           @press-enter="handlePressEnterName"
@@ -40,7 +40,7 @@
         />
         <SelectForm
           :item="{
-            label: getText('product', langStore.lang, 'group_product'),
+            label: getText('product', langStore.lang, 'GROUP_PRODUCT'),
             value: 'group',
           }"
           :style="{ width: 200 }"
@@ -50,7 +50,7 @@
         />
         <InputForm
           :item="{
-            label: getText('product', langStore.lang, 'codeSku'),
+            label: getText('product', langStore.lang, 'CODE_SKU'),
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
@@ -64,7 +64,7 @@
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'price'),
+            label: getText('shared', langStore.lang, 'PRICE'),
             value: 'price',
           }"
           :model-value="formState.price"
@@ -80,7 +80,7 @@
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'sell'),
+            label: getText('shared', langStore.lang, 'SELL'),
             value: 'sell',
           }"
           :model-value="formState.sell"
@@ -97,7 +97,7 @@
         <SelectForm
           :-on-change="handleChangeUnit"
           :item="{
-            label: getText('shared', langStore.lang, 'unit'),
+            label: getText('shared', langStore.lang, 'UNIT'),
             value: 'unit',
           }"
           :style="{ width: 200 }"
@@ -107,7 +107,7 @@
         />
         <CheckboxForm
           :item="{
-            value: getText('shared', langStore.lang, 'yes'),
+            value: getText('shared', langStore.lang, 'YES'),
           }"
           :options="options.optionsiSHide"
           :form-sate="formState"
@@ -116,13 +116,13 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          {{ getText("product", langStore.lang, "info_atributes") }}
+          {{ getText("product", langStore.lang, "INFO_ATRIBUTES") }}
         </p>
         <SelectForm
           :is-mode-tag="true"
           :-on-change="handleChangeColor"
           :item="{
-            label: getText('shared', langStore.lang, 'atributes'),
+            label: getText('shared', langStore.lang, 'ATRIBUTES'),
             value: 'color',
           }"
           :options="selectedRowKeys"
@@ -144,7 +144,7 @@
           }"
           :columns="options.columnsAtributes"
           :item="{
-            label: getText('product', langStore.lang, 'detail_atributes'),
+            label: getText('product', langStore.lang, 'DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
         />
@@ -153,7 +153,7 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'description'),
+            label: getText('shared', langStore.lang, 'DESCRIPTION'),
             value: 'description',
           }"
           :is-textarea="true"
@@ -166,7 +166,7 @@
         />
         <UploadForm
           :item="{
-            label: getText('product', langStore.lang, 'image_product'),
+            label: getText('product', langStore.lang, 'IMAGE_PRODUCT'),
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"

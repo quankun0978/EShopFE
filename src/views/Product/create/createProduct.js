@@ -3,7 +3,7 @@ import { onMounted, reactive, ref, watchEffect } from "vue";
 
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import { createProduct, generateListSKU, generateSKU } from "@/api/product";
+import { createProduct, generateListSKU, generateSKU } from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
@@ -18,12 +18,11 @@ import { getText } from "@/constants/lang";
 import { useLangStore } from "@/store/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
-import { MESSAGE_ERROR } from "@/api/apiConfig";
 const CreateProduct = () => {
   const langStore = useLangStore();
 
   const formState = reactive({
-    status: getText("product", langStore.lang, "in_business"),
+    status: getText("product", langStore.lang, "IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -82,10 +81,10 @@ const CreateProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "product")} / ${getText(
+      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
         "shared",
         langStore.lang,
-        "add"
+        "ADD"
       )}`,
     });
   };
@@ -110,44 +109,44 @@ const CreateProduct = () => {
               ...item,
               isHide:
                 formState.isHide.length > 0
-                  ? getText("shared", langStore.lang, "yes")
-                  : getText("shared", langStore.lang, "no"),
+                  ? getText("shared", langStore.lang, "YES")
+                  : getText("shared", langStore.lang, "NO"),
               description: formState.description,
             };
           }
           return {
             ...item,
-            isHide: getText("shared", langStore.lang, "no"),
+            isHide: getText("shared", langStore.lang, "NO"),
             description: formState.description,
           };
         });
       }
       const res = await createProduct({
         ...formState,
-        stocks: payload,
+        products: payload,
         image: {
           fileName: imageFile.value.name,
           fileData: imageUrl.value.split(",")[1],
         },
         color: "null",
-        isHide: getText("shared", langStore.lang, "yes"),
+        isHide: getText("shared", langStore.lang, "YES"),
       });
       if (res && res.success) {
         Notification.success(
-          getText("shared", langStore.lang, "add_new_success")
+          getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
         );
         router.push({
           name: "list_product",
         });
       } else {
         Notification.error(
-          getText("shared", langStore.lang, "error_occurred_please_try_again")
+          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
         );
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("product", langStore.lang, "code_sku_is_exsists")
+          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
         );
       }
     }
@@ -242,7 +241,7 @@ const CreateProduct = () => {
           return {
             ...formState,
             isParent: 0,
-            isHide: getText("shared", langStore.lang, "no"),
+            isHide: getText("shared", langStore.lang, "NO"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
             barcode: generateRandomId(),

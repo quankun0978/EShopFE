@@ -5,7 +5,7 @@
     }"
   >
     <a-form-item :label="item.label && item.label">
-      <a-form-item :name="item.name && item.name" no-style>
+      <a-form-item :name="item.name && item.name">
         <label :tabindex="tabIndex" for="image-upload" class="upload-custom">
           <div
             style="

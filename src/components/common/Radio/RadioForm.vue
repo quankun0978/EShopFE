@@ -44,8 +44,7 @@ const props = defineProps({
   formState: Object,
   isDisable: Boolean,
   onChange: Function,
-  tabIndex: Number, // Thêm tabIndex vào props
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
+  tabIndex: Number,
 });
 
 const val = ref(props.formState[props.item.value]);
@@ -53,7 +52,6 @@ const val = ref(props.formState[props.item.value]);
 const handleChange = (e) => {
   if (props.onChange) {
     // Kiểm tra xem onChange có phải là hàm không
-    console.log(e);
     props.onChange(e); // Gọi hàm onChange với giá trị đã chọn
   }
 };

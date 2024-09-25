@@ -3,62 +3,62 @@ import { getText } from "./lang";
 const langStore = useLangStore();
 export const optionsStatus = [
   {
-    label: getText("product", langStore.lang, "in_business"),
-    value: getText("product", langStore.lang, "in_business"),
+    label: getText("product", langStore.lang, "IN_BUSINESS"),
+    value: getText("product", langStore.lang, "IN_BUSINESS"),
   },
   {
-    label: getText("product", langStore.lang, "out_business"),
-    value: getText("product", langStore.lang, "out_business"),
+    label: getText("product", langStore.lang, "OUT_BUSINESS"),
+    value: getText("product", langStore.lang, "OUT_BUSINESS"),
   },
 ];
 
 export const optionsGroup = [
   {
-    label: getText("product", langStore.lang, "boat_platform"),
-    value: getText("product", langStore.lang, "boat_platform"),
+    label: getText("product", langStore.lang, "BOAT_PLATFORM"),
+    value: getText("product", langStore.lang, "BOAT_PLATFORM"),
   },
   {
-    label: getText("product", langStore.lang, "household_goods"),
-    value: getText("product", langStore.lang, "household_goods"),
+    label: getText("product", langStore.lang, "HOUSEHOLD_GOODS"),
+    value: getText("product", langStore.lang, "HOUSEHOLD_GOODS"),
   },
 ];
 
 export const optionsUnit = [
   {
-    label: getText("shared", langStore.lang, "single"),
-    value: getText("shared", langStore.lang, "single"),
+    label: getText("shared", langStore.lang, "SINGLE"),
+    value: getText("shared", langStore.lang, "SINGLE"),
   },
   {
-    label: getText("shared", langStore.lang, "pair"),
-    value: getText("shared", langStore.lang, "pair"),
+    label: getText("shared", langStore.lang, "PAIR"),
+    value: getText("shared", langStore.lang, "PAIR"),
   },
 ];
 
 export const columnsAtributes = [
   {
-    title: getText("product", langStore.lang, "name_product"),
+    title: getText("product", langStore.lang, "NAME_PRODUCT"),
     dataIndex: "name",
     width: "30%",
     key: "name",
   },
   {
-    title: getText("product", langStore.lang, "codeSku"),
+    title: getText("product", langStore.lang, "CODE_SKU"),
     dataIndex: "codeSKU",
     key: "codeSKU",
   },
 
   {
-    title: getText("shared", langStore.lang, "barcode"),
+    title: getText("shared", langStore.lang, "BARCODE"),
     dataIndex: "barcode",
     key: "barcode",
   },
   {
-    title: getText("shared", langStore.lang, "price"),
+    title: getText("shared", langStore.lang, "PRICE"),
     dataIndex: "price",
     key: "price",
   },
   {
-    title: getText("shared", langStore.lang, "sell"),
+    title: getText("shared", langStore.lang, "SELL"),
     dataIndex: "sell",
     key: "sell",
   },
@@ -72,7 +72,7 @@ export const columnsAtributes = [
 
 export const optionsiSHide = [
   {
-    label: getText("product", langStore.lang, "display_on_sales_screen"),
-    value: getText("shared", langStore.lang, "yes"),
+    label: getText("product", langStore.lang, "DISPLAY_ON_SALES_SCREEN"),
+    value: getText("shared", langStore.lang, "YES"),
   },
 ];

@@ -31,6 +31,4 @@ instance.interceptors.response.use(
   }
 );
 
-const cancelRequest = () => {};
-
 export default instance;

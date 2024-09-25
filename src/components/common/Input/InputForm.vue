@@ -35,8 +35,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
-
 const props = defineProps({
   value: String,
   modelValue: String,
@@ -53,13 +51,5 @@ const props = defineProps({
   isDisable: Boolean,
   inputRef: String,
   tabIndex: Number,
-});
-
-const inputRef = ref(null);
-
-onMounted(() => {
-  if (props.item && props.item.value === "name") {
-    inputRef.value?.focus();
-  }
 });
 </script>

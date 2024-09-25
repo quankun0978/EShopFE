@@ -17,7 +17,7 @@
           >
             <ArrowLeftOutlined />
             <span class="span">{{
-              getText("shared", langStore.lang, "back_to_start_page")
+              getText("shared", langStore.lang, "BACK_TO_START_PAGE")
             }}</span>
           </a-space>
         </router-link>

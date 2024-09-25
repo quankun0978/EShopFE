@@ -14,7 +14,7 @@ import {
   generateListSKU,
   generateSKU,
   getProductByCodeSku,
-} from "@/api/product";
+} from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
@@ -28,7 +28,7 @@ const CoppyProduct = () => {
   const langStore = useLangStore();
 
   const formState = reactive({
-    status: getText("product", langStore.lang, "in_business"),
+    status: getText("product", langStore.lang, "IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -66,10 +66,10 @@ const CoppyProduct = () => {
   // hàm lấy ra các giá trị ban đầu
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "product")} / ${getText(
+      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
         "shared",
         langStore.lang,
-        "coppy"
+        "COPPY"
       )}`,
     });
     handleGetData();
@@ -110,8 +110,8 @@ const CoppyProduct = () => {
           ...res.data.data,
           unit:
             res.data.data.unit === "double"
-              ? getText("shared", langStore.lang, "pair")
-              : getText("shared", langStore.lang, "single"),
+              ? getText("shared", langStore.lang, "PAIR")
+              : getText("shared", langStore.lang, "SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
           optionAtributes.value = dataAtributes;
@@ -227,8 +227,8 @@ const CoppyProduct = () => {
 
       const res = await createProduct({
         ...formState,
-        stocks: payload,
-        isHide: getText("shared", langStore.lang, "yes"),
+        products: payload,
+        isHide: getText("shared", langStore.lang, "YES"),
         image: {
           fileName: imageFile.value.name,
           fileData: imageUrl.value.split(",")[1],
@@ -236,20 +236,20 @@ const CoppyProduct = () => {
       });
       if (res && res.success) {
         Notification.success(
-          getText("shared", langStore.lang, "add_new_success")
+          getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
         );
         router.push({
           name: "list_product",
         });
       } else {
         Notification.error(
-          getText("shared", langStore.lang, "error_occurred_please_try_again")
+          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
         );
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("product", langStore.lang, "code_sku_is_exsists")
+          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
         );
       }
     }

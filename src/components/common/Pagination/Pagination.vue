@@ -84,8 +84,6 @@ const props = defineProps({
   HandleClickRefreshPage: Function,
   HandleClickNextLastPage: Function,
   HandleClickNextFirstPage: Function,
-
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
 });
 const pagination = props.paginationProp;
 const valPageSize = ref(pagination.pageSize && pagination.pageSize);

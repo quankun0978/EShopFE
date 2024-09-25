@@ -1,6 +1,6 @@
 import { reactive, ref, onMounted } from "vue";
 // api
-import { deleteProduct, getAllProduct } from "@/api/product";
+import { deleteProduct, getAllProduct } from "@/api/apiProduct";
 // hàm hỗ trợ
 import { showConfirm } from "@/components/common/Modal/Confirm";
 import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
@@ -23,10 +23,10 @@ export default function ListProduct() {
     group: "",
     unit: "",
     price: "10000000",
-    isHide: getText("shared", langStore.lang, "all"),
-    type: getText("shared", langStore.lang, "all"),
-    managerBy: getText("shared", langStore.lang, "all"),
-    status: getText("shared", langStore.lang, "all"),
+    isHide: getText("shared", langStore.lang, "ALL"),
+    type: getText("shared", langStore.lang, "ALL"),
+    managerBy: getText("shared", langStore.lang, "ALL"),
+    status: getText("shared", langStore.lang, "ALL"),
     pageNumber: "1",
     pageSize: "20",
   });
@@ -47,113 +47,113 @@ export default function ListProduct() {
 
   const columns = [
     {
-      title: getText("product", langStore.lang, "codeSku"),
+      title: getText("product", langStore.lang, "CODE_SKU"),
       dataIndex: "codeSKU",
       input: objectQuery.codeSKU,
     },
     {
-      title: getText("product", langStore.lang, "name_product"),
+      title: getText("product", langStore.lang, "NAME_PRODUCT"),
       dataIndex: "name",
       width: "30%",
       input: objectQuery.name,
     },
     {
-      title: getText("product", langStore.lang, "group_product"),
+      title: getText("product", langStore.lang, "GROUP_PRODUCT"),
       dataIndex: "group",
       input: objectQuery.group,
     },
     {
-      title: getText("shared", langStore.lang, "unit"),
+      title: getText("shared", langStore.lang, "UNIT"),
       dataIndex: "unit",
       input: objectQuery.unit,
     },
     {
-      title: getText("shared", langStore.lang, "price"),
+      title: getText("shared", langStore.lang, "PRICE"),
       dataIndex: "price",
       input: objectQuery.price,
     },
     {
-      title: getText("product", langStore.lang, "display_on_sales_screen"),
+      title: getText("product", langStore.lang, "DISPLAY_ON_SALES_SCREEN"),
       dataIndex: "isHide",
       isSelect: true,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "all"),
-            value: getText("shared", langStore.lang, "all"),
+            label: getText("shared", langStore.lang, "ALL"),
+            value: getText("shared", langStore.lang, "ALL"),
           },
           {
-            label: getText("shared", langStore.lang, "yes"),
-            value: getText("shared", langStore.lang, "yes"),
+            label: getText("shared", langStore.lang, "YES"),
+            value: getText("shared", langStore.lang, "YES"),
           },
           {
-            label: getText("shared", langStore.lang, "no"),
-            value: getText("shared", langStore.lang, "no"),
+            label: getText("shared", langStore.lang, "NO"),
+            value: getText("shared", langStore.lang, "NO"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "all"),
+        defaultValue: getText("shared", langStore.lang, "ALL"),
       },
       input: objectQuery.isHide,
     },
     {
-      title: getText("product", langStore.lang, "type_product"),
+      title: getText("product", langStore.lang, "TYPE_PRODUCT"),
       dataIndex: "type",
       isSelect: true,
       input: objectQuery.type,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "all"),
-            value: getText("shared", langStore.lang, "all"),
+            label: getText("shared", langStore.lang, "ALL"),
+            value: getText("shared", langStore.lang, "ALL"),
           },
           {
-            label: getText("product", langStore.lang, "product"),
-            value: getText("product", langStore.lang, "product"),
+            label: getText("product", langStore.lang, "PRODUCT"),
+            value: getText("product", langStore.lang, "PRODUCT"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "all"),
+        defaultValue: getText("shared", langStore.lang, "ALL"),
       },
     },
     {
-      title: getText("product", langStore.lang, "manager_by"),
+      title: getText("product", langStore.lang, "MANAGER_BY"),
       dataIndex: "managerBy",
       isSelect: true,
       input: objectQuery.managerBy,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "all"),
-            value: getText("shared", langStore.lang, "all"),
+            label: getText("shared", langStore.lang, "ALL"),
+            value: getText("shared", langStore.lang, "ALL"),
           },
           {
-            label: getText("shared", langStore.lang, "other"),
-            value: getText("shared", langStore.lang, "other"),
+            label: getText("shared", langStore.lang, "OTHER"),
+            value: getText("shared", langStore.lang, "OTHER"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "all"),
+        defaultValue: getText("shared", langStore.lang, "ALL"),
       },
     },
     {
-      title: getText("shared", langStore.lang, "status"),
+      title: getText("shared", langStore.lang, "STATUS"),
       dataIndex: "status",
       isSelect: true,
       input: objectQuery.status,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "all"),
-            value: getText("shared", langStore.lang, "all"),
+            label: getText("shared", langStore.lang, "ALL"),
+            value: getText("shared", langStore.lang, "ALL"),
           },
           {
-            label: getText("product", langStore.lang, "in_business"),
-            value: getText("product", langStore.lang, "in_business"),
+            label: getText("product", langStore.lang, "IN_BUSINESS"),
+            value: getText("product", langStore.lang, "IN_BUSINESS"),
           },
           {
-            label: getText("product", langStore.lang, "out_business"),
-            value: getText("product", langStore.lang, "out_business"),
+            label: getText("product", langStore.lang, "OUT_BUSINESS"),
+            value: getText("product", langStore.lang, "OUT_BUSINESS"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "all"),
+        defaultValue: getText("shared", langStore.lang, "ALL"),
       },
     },
   ];
@@ -166,7 +166,7 @@ export default function ListProduct() {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: getText("product", langStore.lang, "product"),
+      namePath: getText("product", langStore.lang, "PRODUCT"),
       isBack: true,
     });
     handleGetData();
@@ -211,17 +211,17 @@ export default function ListProduct() {
       const res = await deleteProduct(data);
       if (res?.success) {
         Notification.success(
-          getText("shared", langStore.lang, "delete_success")
+          getText("shared", langStore.lang, "DELETE_SUCCESS")
         );
         handleGetData();
       } else {
         Notification.error(
-          getText("shared", langStore.lang, "error_occurred_please_try_again")
+          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
         );
       }
     } catch (error) {
       Notification.error(
-        getText("shared", langStore.lang, "error_occurred_please_try_again")
+        getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
       );
     }
   };
@@ -229,15 +229,13 @@ export default function ListProduct() {
   const onClickDelete = (data) => {
     if (data && data.length > 0) {
       showConfirm({
-        title: "Bạn muốn xóa các sản phẩm này không?",
+        title: `Bạn muốn xóa sản phẩm ${data.join(",")}?`,
         icon: ExclamationCircleOutlined,
         content: "",
-        okText: getText("shared", langStore.lang, "confirm"),
-        cancelText: getText("shared", langStore.lang, "cancel"),
+        okText: getText("shared", langStore.lang, "CONFIRM"),
+        cancelText: getText("shared", langStore.lang, "CANCEL"),
         handleOk: () => handleDeleteData(data),
       });
-    } else {
-      Notification.warning("Vui lòng chọn ít nhất 1 sản phẩm !");
     }
   };
 

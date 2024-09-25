@@ -60,9 +60,7 @@ const props = defineProps({
   OnChange: Function,
   isDisable: Boolean,
   isDisabledAtribute: Boolean,
-  tabIndex: Number, // Thêm tabIndex vào props
-
-  // Hoặc định dạng khác tùy thuộc vào dữ liệu bạn muốn nhận
+  tabIndex: Number,
 });
 const items = ref(props.options);
 const selectRef = ref(null);

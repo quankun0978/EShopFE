@@ -15,7 +15,7 @@ import {
   generateSKU,
   getProductByCodeSku,
   updateProduct,
-} from "@/api/product";
+} from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
@@ -24,12 +24,13 @@ import { getText } from "@/constants/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
+import { HTTP_STATUS } from "@/api/apiConfig";
 
 const UpdateProduct = () => {
   const langStore = useLangStore();
 
   const formState = reactive({
-    status: getText("product", langStore.lang, "in_business"),
+    status: getText("product", langStore.lang, "IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -66,10 +67,10 @@ const UpdateProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "product")} / ${getText(
+      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
         "shared",
         langStore.lang,
-        "edit"
+        "EDIT"
       )}`,
     });
     handleGetData();
@@ -99,12 +100,12 @@ const UpdateProduct = () => {
         const dataAtributes = res.data.atributes;
         const dt = {
           ...res.data.data,
-          sell: `${res.data.sell}`,
-          price: `${res.data.price}`,
+          sell: `${res.data.sell ? res.data.sell : ""}`,
+          price: `${res.data.price ? res.data.price : ""}`,
           unit:
             res.data.data.unit === "double"
-              ? getText("shared", langStore.lang, "pair")
-              : getText("shared", langStore.lang, "single"),
+              ? getText("shared", langStore.lang, "PAIR")
+              : getText("shared", langStore.lang, "SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
           optionAtributes.value = dataAtributes;
@@ -217,7 +218,7 @@ const UpdateProduct = () => {
       const res = await updateProduct({
         listSKUsUpdate: {
           ...formState,
-          stocks: payload,
+          products: payload,
           isHide: "Có",
           image: {
             fileName: imageFile.value.name,
@@ -228,20 +229,20 @@ const UpdateProduct = () => {
       });
       if (res && res.success) {
         Notification.success(
-          getText("shared", langStore.lang, "update_success")
+          getText("shared", langStore.lang, "UPDATE_SUCCESS")
         );
         router.push({
           name: "list_product",
         });
       } else {
         Notification.error(
-          getText("product", langStore.lang, "code_sku_is_exsists")
+          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
         );
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("product", langStore.lang, "code_sku_is_exsists")
+          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
         );
       }
     }

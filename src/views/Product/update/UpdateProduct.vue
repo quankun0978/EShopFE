@@ -27,14 +27,14 @@
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
-            label: getText('product', langStore.lang, 'business_status'),
+            label: getText('product', langStore.lang, 'BUSINESS_STATUS'),
             value: 'status',
           }"
         />
         <InputForm
           :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
-            label: getText('product', langStore.lang, 'name_product'),
+            label: getText('product', langStore.lang, 'NAME_PRODUCT'),
             value: 'name',
           }"
           :tab-index="2"
@@ -45,7 +45,7 @@
         />
         <SelectForm
           :item="{
-            label: getText('product', langStore.lang, 'group_product'),
+            label: getText('product', langStore.lang, 'GROUP_PRODUCT'),
             value: 'group',
           }"
           :tab-index="3"
@@ -56,7 +56,7 @@
         />
         <InputForm
           :item="{
-            label: getText('product', langStore.lang, 'codeSku'),
+            label: getText('product', langStore.lang, 'CODE_SKU'),
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
@@ -66,18 +66,18 @@
           :is-disable="false"
           :tab-index="4"
           :rules="[
-            { required: true, message: 'Vui long không bỏ trống ma SKU!' },
+            { required: true, message: 'Vui long không bỏ trống mã SKU!' },
           ]"
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'price'),
+            label: getText('shared', langStore.lang, 'PRICE'),
             value: 'price',
           }"
           :model-value="formState.price"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="formState.isParent === 1"
+          :is-disable="false"
           :tab-index="5"
           :rules="[
             {
@@ -88,7 +88,7 @@
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'sell'),
+            label: getText('shared', langStore.lang, 'SELL'),
             value: 'sell',
           }"
           :rules="[
@@ -100,13 +100,12 @@
           :model-value="formState.sell"
           :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disable="formState.isParent === 1"
           :tab-index="6"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
           :item="{
-            label: getText('shared', langStore.lang, 'unit'),
+            label: getText('shared', langStore.lang, 'UNIT'),
             value: 'unit',
           }"
           :style="{ width: 200 }"
@@ -117,7 +116,7 @@
         />
         <CheckboxForm
           :item="{
-            value: getText('shared', langStore.lang, 'yes'),
+            value: getText('shared', langStore.lang, 'YES'),
           }"
           :options="options.optionsiSHide"
           :form-sate="formState"
@@ -127,13 +126,13 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          {{ getText("product", langStore.lang, "info_atributes") }}
+          {{ getText("product", langStore.lang, "INFO_ATRIBUTES") }}
         </p>
         <SelectForm
           :is-mode-tag="true"
           :-on-change="handleChangeColor"
           :item="{
-            label: getText('shared', langStore.lang, 'atributes'),
+            label: getText('shared', langStore.lang, 'ATRIBUTES'),
             value: 'color',
           }"
           :tab-index="9"
@@ -156,7 +155,7 @@
           }"
           :columns="options.columnsAtributes"
           :item="{
-            label: getText('product', langStore.lang, 'detail_atributes'),
+            label: getText('product', langStore.lang, 'DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
         />
@@ -165,12 +164,12 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'description'),
+            label: getText('shared', langStore.lang, 'DESCRIPTION'),
             value: 'description',
           }"
           :is-textarea="true"
           :max-length="200"
-          :placeholder="'Vui long nhap toi da 200 ky tu'"
+          :placeholder="'Vui long nhập tối đa 200 ký tự'"
           :rows="3"
           :model-value="formState.description"
           :form-sate="formState"
@@ -179,7 +178,7 @@
         />
         <UploadForm
           :item="{
-            label: getText('product', langStore.lang, 'image_product'),
+            label: getText('product', langStore.lang, 'IMAGE_PRODUCT'),
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"

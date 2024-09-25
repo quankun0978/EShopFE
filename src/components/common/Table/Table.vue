@@ -97,6 +97,9 @@
             }"
           />
         </template>
+
+        <template #title v-else-if="column.hidden"> </template>
+
         <template #title v-else>
           <h3 style="text-align: center">
             {{ column.title }}
@@ -115,7 +118,7 @@
             />
           </div>
         </template>
-        <template #bodyCell="{ record }">
+        <template v-if="!column.hidden" #bodyCell="{ record }">
           {{ record[column.dataIndex] }}
         </template>
       </a-column>

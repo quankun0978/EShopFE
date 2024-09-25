@@ -47,6 +47,12 @@ export default function ListProduct() {
 
   const columns = [
     {
+      title: "",
+      dataIndex: "id",
+      hidden: true,
+      width:"0%"
+    },
+    {
       title: getText("product", langStore.lang, "CODE_SKU"),
       dataIndex: "codeSKU",
       input: objectQuery.codeSKU,

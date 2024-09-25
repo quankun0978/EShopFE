@@ -9,8 +9,8 @@ export const getAllProduct = async (data) => {
 
 // api lấy ra  hàng hóa theo mã sku
 
-export const getProductByCodeSku = async (codeSKU) => {
-  return await axios.get(`${HTTP_PATH_API.PRODUCT_DETAIL}=${codeSKU}`);
+export const getProductByCodeSku = async (id) => {
+  return await axios.get(`${HTTP_PATH_API.PRODUCT_DETAIL}=${+id}`);
 };
 
 // api thêm mới ra hàng hóa

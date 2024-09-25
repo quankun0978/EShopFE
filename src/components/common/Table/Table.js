@@ -26,6 +26,7 @@ const Table = (props) => {
   const router = useRouter();
   // sự kiện khi thay đổi các combo box
   const onSelectChange = (selectedRowKeys) => {
+    console.log(selectedRowKeys);
     state.selectedRowKeys = selectedRowKeys;
   };
   // sự kiện khi thay đổi các select tìm kiếm

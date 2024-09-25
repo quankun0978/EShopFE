@@ -7,7 +7,7 @@ export const HTTP_STATUS = {
 };
 export const HTTP_PATH_API = {
   PRODUCT_LIST: "/product/list",
-  PRODUCT_DETAIL: "/product/detail?codeSKU",
+  PRODUCT_DETAIL: "/product/detail?id",
   PRODUCT_ADD: "/product/add",
   PRODUCT_UPDATE: "/product/update",
   PRODUCT_DELETE: "/product/delete",

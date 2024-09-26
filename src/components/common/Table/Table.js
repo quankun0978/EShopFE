@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 //componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
@@ -19,15 +19,20 @@ import { useLangStore } from "@/store/lang";
 import { getText } from "@/constants/lang";
 const Table = (props) => {
   const langStore = useLangStore();
+  const idProduct = ref();
   const state = reactive({
     selectedRowKeys: [],
+    listId: [],
     loading: false,
   });
   const router = useRouter();
   // sự kiện khi thay đổi các combo box
-  const onSelectChange = (selectedRowKeys) => {
-    console.log(selectedRowKeys);
+  const onSelectChange = (selectedRowKeys, selectedRows) => {
     state.selectedRowKeys = selectedRowKeys;
+    if (selectedRows && selectedRows.length > 0 && selectedRows[0].id) {
+      state.listId.push(selectedRows[0].id);
+      idProduct.value = selectedRows[0].id;
+    }
   };
   // sự kiện khi thay đổi các select tìm kiếm
 
@@ -91,13 +96,19 @@ const Table = (props) => {
       router.push({
         name: route,
         params: {
-          id: state.selectedRowKeys[0],
+          id: idProduct.value,
         },
       });
     } else {
       e.preventDefault();
     }
   };
+
+  // const handleGetCheckboxProps = (record) => {
+  //   idProduct.value = record.id;
+  //   console.log(idProduct.value);
+  // };
+
   return {
     Input,
     Select,

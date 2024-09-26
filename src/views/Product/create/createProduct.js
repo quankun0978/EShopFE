@@ -3,7 +3,12 @@ import { onMounted, reactive, ref, watchEffect } from "vue";
 
 import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
-import { createProduct, generateListSKU, generateSKU } from "@/api/apiProduct";
+import {
+  createProduct,
+  generateListSKU,
+  generateSKU,
+  isCodeSKU,
+} from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
@@ -317,7 +322,9 @@ const CreateProduct = () => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = (key) => {
+  const handleSave = async (key) => {
+    const res = await isCodeSKU(key);
+    console.log(res);
     Object.assign(
       optionAtributes.value.filter((item) => key === item.codeSKU)[0],
       editableData[key]

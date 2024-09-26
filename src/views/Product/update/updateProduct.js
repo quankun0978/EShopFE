@@ -14,6 +14,7 @@ import {
   generateListUpdateSKU,
   generateSKU,
   getProductByCodeSku,
+  isCodeSKU,
   updateProduct,
 } from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
@@ -216,7 +217,7 @@ const UpdateProduct = () => {
       });
 
       const res = await updateProduct({
-        listSKUsUpdate: {
+        listSkuUpdate: {
           ...formState,
           products: payload,
           isHide: "Có",
@@ -225,7 +226,7 @@ const UpdateProduct = () => {
             fileData: imageUrl.value.split(",")[1],
           },
         },
-        listSKUsDelele: listDelete.value,
+        listSKUsDelete: listDelete.value,
       });
       if (res && res.success) {
         Notification.success(
@@ -304,7 +305,7 @@ const UpdateProduct = () => {
         if (dt.length > items.length) {
           const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));
           const datas = [...listDelete.value];
-          datas.push(codeSKU.codeSKU);
+          datas.push(codeSKU.id);
           listDelete.value = datas;
           const dataUpdate = dt
             .filter((item) => items.some((k) => k.color === item.color))
@@ -357,6 +358,7 @@ const UpdateProduct = () => {
   // xử lý khi người dùng ấn vào 1 ô input để chỉnh sửa của bảng thuộc tính
 
   const handleEdit = (key, columnKey) => {
+    console.log(1)
     columnValue.value = columnKey;
     editableData[key] = cloneDeep(
       optionAtributes.value.filter((item) => key === item.codeSKU)[0]
@@ -365,13 +367,27 @@ const UpdateProduct = () => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = (key) => {
+  const handleSave = async (key) => {
+    const k = optionAtributes.value.filter((item) => key === item.codeSKU)[0];
+    console.log(k.codeSKU);
     Object.assign(
       optionAtributes.value.filter((item) => key === item.codeSKU)[0],
       editableData[key]
     );
+
+    // handleCheckIsCodeSku(editableData[key].codeSKU);
     delete editableData[key];
   };
+
+  const handleCheckIsCodeSku = async (codeSKU) => {
+    const res = await isCodeSKU(codeSKU);
+    if (res.success) {
+      Notification.error(
+        getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+      );
+    }
+  };
+
   return {
     formState,
     optionAtributes,

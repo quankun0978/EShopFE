@@ -37,24 +37,16 @@
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
+        tag="button"
         @click.prevent.capture="
           (e) => handlePreventDefault(e, 'update_product')
         "
-        :to="{
-          name: 'update_product',
-          params: {
-            id: state.selectedRowKeys[0] ? state.selectedRowKeys[0] : '#',
-          },
-        }"
         class="item-action"
       >
         <EditOutlined />
         {{ getText("shared", langStore.lang, "EDIT") }}
       </RouterLink>
-      <div
-        class="item-action"
-        @click="() => handleDeleteData(state.selectedRowKeys)"
-      >
+      <div class="item-action" @click="() => handleDeleteData(state.listId)">
         <DeleteOutlined />
         {{ getText("shared", langStore.lang, "DELETE") }}
       </div>
@@ -72,6 +64,7 @@
       :row-selection="{
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
+        // getCheckboxProps: handleGetCheckboxProps,
       }"
       :data-source="items"
       :style="style"
@@ -97,8 +90,6 @@
             }"
           />
         </template>
-
-        <template #title v-else-if="column.hidden"> </template>
 
         <template #title v-else>
           <h3 style="text-align: center">

@@ -59,3 +59,9 @@ export const generateListUpdateSKU = async (codeSKUParent, colors, id) => {
     id,
   });
 };
+
+export const isCodeSKU = async (codeSKU) => {
+  return await axios.post(
+    HTTP_PATH_API.PRODUCT_Is_CODE_SKU + `?codeSKU=${codeSKU}`
+  );
+};

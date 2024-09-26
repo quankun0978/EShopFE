@@ -14,4 +14,5 @@ export const HTTP_PATH_API = {
   PRODUCT_GENERATE_SKU: "/product/generate_SKU",
   PRODUCT_GENERATE_LIST_SKU: "/product/list_generate_SKU",
   PRODUCT_GENERATE_LIST_SKU_UPDATE: "/product/list_generate_SKU_update",
+  PRODUCT_Is_CODE_SKU: "/product/is_code_sku",
 };

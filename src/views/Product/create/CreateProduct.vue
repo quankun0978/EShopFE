@@ -203,7 +203,7 @@
   </div>
 </template>
 <script setup>
-import CreateProduct from "./CreateProduct";
+import CreateProduct from "./createProduct.js";
 
 const {
   formState,

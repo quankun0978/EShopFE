@@ -37,7 +37,7 @@
               >
                 <a-input
                   v-model:value="editableData[record.codeSKU][column.key]"
-                  @pressEnter="handleSave(record.codeSKU)"
+                  @pressEnter.prevent="handleSave(record.codeSKU)"
                 />
               </div>
 

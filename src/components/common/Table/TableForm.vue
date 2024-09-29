@@ -21,7 +21,7 @@
         style="width: 50vw"
         :scroll="{ y: 230, scrollToFirstRowOnChange: true, x: 700 }"
       >
-        <template v-if="isAction" #bodyCell="{ column, text, record }">
+        <template v-if="isAction" #bodyCell="{ column, text, record, index }">
           <template v-if="column.key === 'action'">
             <FontAwesomeIcon
               @click="() => handleDeleteRow(record.codeSKU)"
@@ -37,7 +37,9 @@
               >
                 <a-input
                   v-model:value="editableData[record.codeSKU][column.key]"
-                  @pressEnter.prevent="handleSave(record.codeSKU)"
+                  @pressEnter.prevent="
+                    handleSave(record.codeSKU, columnKey, index)
+                  "
                 />
               </div>
 

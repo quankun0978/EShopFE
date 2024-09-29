@@ -2,6 +2,8 @@ export const texts = {
   shared: {
     en: {
       SAVE: "Save",
+      ID:"ID",
+      STT:"STT",
       ALL: "All",
       CANCEL: "Cancel",
       ADD: "Add new",
@@ -36,6 +38,8 @@ export const texts = {
     vn: {
       SAVE: "Lưu",
       ALL: "Tất cả",
+      ID:"ID",
+      STT:"STT",
       CANCEL: "Hủy",
       ADD: "Thêm mới",
       EDIT: "Chỉnh sửa",
@@ -85,6 +89,8 @@ export const texts = {
       INFO_ATRIBUTES: "INFOMATION ATRIBUTES",
       DETAIL_ATRIBUTES: "Detail Atributes",
       CODE_SKU_IS_EXSITS: "Code sku is exsits",
+      CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
+
     },
     vn: {
       PRODUCT: "Hàng hóa",
@@ -102,7 +108,8 @@ export const texts = {
       DISPLAY_ON_SALES_SCREEN: "Hiển thị lên màn hình bán hàng",
       INFO_ATRIBUTES: "THÔNG TIN THUỘC TÍNH",
       DETAIL_ATRIBUTES: "Chi tiết thuộc tính",
-      CODE_SKU_IS_EXSITS: "Mã SKU đã tồn tại",
+      CODE_SKU_IS_EXSITS: "Đã có mã SKU tồn tại trong hệ thống",
+      CODE_SKU_IS_DUPLICATE: "Đã có mã sku trùng nhau vui lòng thử lại",
     },
   },
 };

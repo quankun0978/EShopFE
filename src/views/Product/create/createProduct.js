@@ -23,6 +23,7 @@ import { getText } from "@/constants/lang";
 import { useLangStore } from "@/store/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
+import { HTTP_STATUS } from "@/api/apiConfig";
 const CreateProduct = () => {
   const langStore = useLangStore();
 
@@ -46,6 +47,9 @@ const CreateProduct = () => {
 
   const optionAtributes = ref([]);
   const isDisable = ref(false);
+  const error = ref("");
+  const indexCurrent = ref(0);
+  const isValid = ref(true);
   const isDisabledAtribute = ref(true);
   const inputName = ref(null);
   const router = useRouter();
@@ -106,52 +110,61 @@ const CreateProduct = () => {
 
   const onFinish = async () => {
     try {
-      let payload = [];
-      if (optionAtributes.value && optionAtributes.value.length > 0) {
-        payload = [...optionAtributes.value].map((item) => {
-          if (item.isParent !== 1) {
+      if (isValid.value) {
+        let payload = [];
+        if (optionAtributes.value && optionAtributes.value.length > 0) {
+          payload = [...optionAtributes.value].map((item) => {
+            if (item.isParent !== 1) {
+              return {
+                ...item,
+                isHide:
+                  formState.isHide.length > 0
+                    ? getText("shared", langStore.lang, "YES")
+                    : getText("shared", langStore.lang, "NO"),
+                description: formState.description,
+              };
+            }
             return {
               ...item,
-              isHide:
-                formState.isHide.length > 0
-                  ? getText("shared", langStore.lang, "YES")
-                  : getText("shared", langStore.lang, "NO"),
+              isHide: getText("shared", langStore.lang, "NO"),
               description: formState.description,
             };
-          }
-          return {
-            ...item,
-            isHide: getText("shared", langStore.lang, "NO"),
-            description: formState.description,
-          };
+          });
+        }
+        const res = await createProduct({
+          ...formState,
+          products: payload,
+          image: {
+            fileName: imageFile.value.name,
+            fileData: imageUrl.value.split(",")[1],
+          },
+          color: "null",
+          isHide: getText("shared", langStore.lang, "YES"),
         });
-      }
-      const res = await createProduct({
-        ...formState,
-        products: payload,
-        image: {
-          fileName: imageFile.value.name,
-          fileData: imageUrl.value.split(",")[1],
-        },
-        color: "null",
-        isHide: getText("shared", langStore.lang, "YES"),
-      });
-      if (res && res.success) {
-        Notification.success(
-          getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
-        );
-        router.push({
-          name: "list_product",
-        });
+        if (res && res.success) {
+          Notification.success(
+            getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
+          );
+          router.push({
+            name: "list_product",
+          });
+        } else {
+          Notification.error(
+            getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
+          );
+        }
       } else {
-        Notification.error(
-          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-        );
+        Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
           getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+        );
+      }
+      if (error.status === HTTP_STATUS.CONFLIC_REQUEST) {
+        Notification.error(
+          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
         );
       }
     }
@@ -272,6 +285,7 @@ const CreateProduct = () => {
       } else {
         const index =
           optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
+        indexCurrent.value = index;
         dt.push(items[index]);
         optionAtributes.value = dt;
       }
@@ -322,14 +336,71 @@ const CreateProduct = () => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = async (key) => {
-    const res = await isCodeSKU(key);
-    console.log(res);
-    Object.assign(
-      optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-      editableData[key]
+  const handleSave = async (key, column, index) => {
+    try {
+      const codeSKU = editableData[key].codeSKU;
+      const codeSKUCurrent = optionAtributes.value.filter(
+        (item) => key === item.codeSKU
+      )[0].codeSKU;
+
+      if (!handleCheckDuplicateCodeSku(key, index)) {
+        isValid.value = false;
+        error.value = getText(
+          "product",
+          langStore.lang,
+          "CODE_SKU_IS_DUPLICATE"
+        );
+        Notification.error(
+          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
+        );
+        return;
+      } else if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+        await handleCheckIsCodeSku(codeSKU);
+      } else {
+        Object.assign(
+          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+          editableData[key]
+        );
+        delete editableData[key];
+      }
+    } catch (error) {
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        editableData[key]
+      );
+      delete editableData[key];
+    }
+  };
+  const handleCheckIsCodeSku = async (codeSKU) => {
+    const res = await isCodeSKU(codeSKU);
+    if (res.success) {
+      isValid.value = false;
+      error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+      Notification.error(
+        getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+      );
+      return false;
+    }
+    return true;
+  };
+  const handleCheckDuplicateCodeSku = (codeSKU, index) => {
+    console.log(
+      optionAtributes.value[index].codeSKU,
+      editableData[codeSKU].codeSKU,
+      codeSKU
     );
-    delete editableData[key];
+    if (codeSKU) {
+      const dataByCodeSku = optionAtributes.value.filter(
+        (item) => editableData[codeSKU].codeSKU === item.codeSKU
+      );
+      console.log(dataByCodeSku);
+      if (
+        dataByCodeSku.length > 0 &&
+        optionAtributes.value[index].codeSKU !== editableData[codeSKU].codeSKU
+      )
+        return false;
+    }
+    return true;
   };
   return {
     formState,

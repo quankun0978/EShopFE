@@ -52,6 +52,8 @@ const UpdateProduct = () => {
   const optionAtributes = ref([]);
   const dataValues = ref([]);
   const isDisable = ref(false);
+  const error = ref("");
+  const isValid = ref(true);
   const router = useRouter();
   const form = Form.useForm(formState);
   const selectedRowKeys = ref([]);
@@ -208,42 +210,45 @@ const UpdateProduct = () => {
 
   const onFinish = async () => {
     try {
-      const payload = [...optionAtributes.value].map((item) => {
-        return {
-          ...item,
-          description: formState.description,
-          status: formState.status,
-        };
-      });
-
-      const res = await updateProduct({
-        listSkuUpdate: {
-          ...formState,
-          products: payload,
-          isHide: "Có",
-          image: {
-            fileName: imageFile.value.name,
-            fileData: imageUrl.value.split(",")[1],
-          },
-        },
-        listSKUsDelete: listDelete.value,
-      });
-      if (res && res.success) {
-        Notification.success(
-          getText("shared", langStore.lang, "UPDATE_SUCCESS")
-        );
-        router.push({
-          name: "list_product",
+      if (isValid.value) {
+        const payload = [...optionAtributes.value].map((item) => {
+          return {
+            ...item,
+            description: formState.description,
+            status: formState.status,
+          };
         });
+        const res = await updateProduct({
+          listSkuUpdate: {
+            ...formState,
+            products: payload,
+            isHide: "Có",
+            image: {
+              fileName: imageFile.value.name,
+              fileData: imageUrl.value.split(",")[1],
+            },
+          },
+          listSKUsDelete: listDelete.value,
+        });
+        if (res && res.success) {
+          Notification.success(
+            getText("shared", langStore.lang, "UPDATE_SUCCESS")
+          );
+          router.push({
+            name: "list_product",
+          });
+        } else {
+          Notification.error(
+            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+          );
+        }
       } else {
-        Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-        );
+        Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
         );
       }
     }
@@ -358,7 +363,7 @@ const UpdateProduct = () => {
   // xử lý khi người dùng ấn vào 1 ô input để chỉnh sửa của bảng thuộc tính
 
   const handleEdit = (key, columnKey) => {
-    console.log(1)
+    console.log(1);
     columnValue.value = columnKey;
     editableData[key] = cloneDeep(
       optionAtributes.value.filter((item) => key === item.codeSKU)[0]
@@ -367,25 +372,92 @@ const UpdateProduct = () => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = async (key) => {
-    const k = optionAtributes.value.filter((item) => key === item.codeSKU)[0];
-    console.log(k.codeSKU);
-    Object.assign(
-      optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-      editableData[key]
-    );
-
-    // handleCheckIsCodeSku(editableData[key].codeSKU);
-    delete editableData[key];
+  const handleSave = async (key, column, index) => {
+    try {
+      const codeSKU = editableData[key].codeSKU;
+      const codeSKUCurrent = optionAtributes.value.filter(
+        (item) => key === item.codeSKU
+      )[0].codeSKU;
+      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+        const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+        error.value = getText(
+          "product",
+          langStore.lang,
+          "CODE_SKU_IS_DUPLICATE"
+        );
+        if (!isCheckCodeSku) {
+          Notification.error(
+            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+          );
+        } else if (!handleCheckDuplicateCodeSku(key, index)) {
+          isValid.value = false;
+          error.value = getText(
+            "product",
+            langStore.lang,
+            "CODE_SKU_IS_DUPLICATE"
+          );
+          Notification.error(
+            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
+          );
+          return;
+        } else {
+          Object.assign(
+            optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+            editableData[key]
+          );
+          delete editableData[key];
+        }
+      } else {
+        Object.assign(
+          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+          editableData[key]
+        );
+        delete editableData[key];
+      }
+    } catch (error) {
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        editableData[key]
+      );
+      delete editableData[key];
+    }
   };
 
+  // kiểm tra xem mã đã tồn tại chưa
+
   const handleCheckIsCodeSku = async (codeSKU) => {
-    const res = await isCodeSKU(codeSKU);
-    if (res.success) {
-      Notification.error(
-        getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-      );
+    try {
+      const res = await isCodeSKU(codeSKU);
+      if (res.success) {
+        isValid.value = false;
+        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return true;
     }
+  };
+
+  // kiểm tra xem có truyền lên 2 mã trùng nhau không
+
+  const handleCheckDuplicateCodeSku = (codeSKU, index) => {
+    console.log(
+      optionAtributes.value[index].codeSKU,
+      editableData[codeSKU].codeSKU,
+      codeSKU
+    );
+    if (codeSKU) {
+      const dataByCodeSku = optionAtributes.value.filter(
+        (item) => editableData[codeSKU].codeSKU === item.codeSKU
+      );
+      if (
+        dataByCodeSku.length > 0 &&
+        optionAtributes.value[index].codeSKU !== editableData[codeSKU].codeSKU
+      )
+        return false;
+    }
+    return true;
   };
 
   return {

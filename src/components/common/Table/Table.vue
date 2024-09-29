@@ -37,10 +37,15 @@
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
-        tag="button"
         @click.prevent.capture="
           (e) => handlePreventDefault(e, 'update_product')
         "
+        :to="{
+          name: 'update_product',
+          params: {
+            id: state.selectedRowKeys[0] ? state.selectedRowKeys[0] : '#',
+          },
+        }"
         class="item-action"
       >
         <EditOutlined />

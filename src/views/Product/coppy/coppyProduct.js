@@ -14,6 +14,7 @@ import {
   generateListSKU,
   generateSKU,
   getProductByCodeSku,
+  isCodeSKU,
 } from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
@@ -50,6 +51,8 @@ const CoppyProduct = () => {
   const optionAtributes = ref([]);
   const dataValues = ref([]);
   const isDisable = ref(false);
+  const isValid = ref(true);
+  const error = ref("");
   const isDisabledAtribute = ref(false);
   const router = useRouter();
   const form = Form.useForm(formState);
@@ -217,34 +220,40 @@ const CoppyProduct = () => {
 
   const onFinish = async () => {
     try {
-      const payload = [...optionAtributes.value].map((item) => {
-        return {
-          ...item,
-          description: formState.description,
-          status: formState.status,
-        };
-      });
-
-      const res = await createProduct({
-        ...formState,
-        products: payload,
-        isHide: getText("shared", langStore.lang, "YES"),
-        image: {
-          fileName: imageFile.value.name,
-          fileData: imageUrl.value.split(",")[1],
-        },
-      });
-      if (res && res.success) {
-        Notification.success(
-          getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
-        );
-        router.push({
-          name: "list_product",
+      console.log(isValid.value);
+      if (isValid.value) {
+        console.log(56);
+        const payload = [...optionAtributes.value].map((item) => {
+          return {
+            ...item,
+            description: formState.description,
+            status: formState.status,
+          };
         });
+
+        const res = await createProduct({
+          ...formState,
+          products: payload,
+          isHide: getText("shared", langStore.lang, "YES"),
+          image: {
+            fileName: imageFile.value.name,
+            fileData: imageUrl.value.split(",")[1],
+          },
+        });
+        if (res && res.success) {
+          Notification.success(
+            getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
+          );
+          router.push({
+            name: "list_product",
+          });
+        } else {
+          Notification.error(
+            getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
+          );
+        }
       } else {
-        Notification.error(
-          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-        );
+        Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
@@ -373,12 +382,89 @@ const CoppyProduct = () => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = (key) => {
-    Object.assign(
-      optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-      editableData[key]
+  const handleSave = async (key, column, index) => {
+    try {
+      const codeSKU = editableData[key].codeSKU;
+      const codeSKUCurrent = optionAtributes.value.filter(
+        (item) => key === item.codeSKU
+      )[0].codeSKU;
+      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+        const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+        error.value = getText(
+          "product",
+          langStore.lang,
+          "CODE_SKU_IS_DUPLICATE"
+        );
+        if (!isCheckCodeSku) {
+          Notification.error(
+            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+          );
+        } else if (!handleCheckDuplicateCodeSku(key, index)) {
+          isValid.value = false;
+          error.value = getText(
+            "product",
+            langStore.lang,
+            "CODE_SKU_IS_DUPLICATE"
+          );
+          Notification.error(
+            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
+          );
+          return;
+        } else {
+          Object.assign(
+            optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+            editableData[key]
+          );
+          delete editableData[key];
+        }
+      } else {
+        Object.assign(
+          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+          editableData[key]
+        );
+        delete editableData[key];
+      }
+    } catch (error) {
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        editableData[key]
+      );
+      delete editableData[key];
+    }
+  };
+
+  const handleCheckIsCodeSku = async (codeSKU) => {
+    try {
+      const res = await isCodeSKU(codeSKU);
+      console.log(res.success);
+      if (res.success) {
+        isValid.value = false;
+        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return true;
+    }
+  };
+
+  const handleCheckDuplicateCodeSku = (codeSKU, index) => {
+    console.log(
+      optionAtributes.value[index].codeSKU,
+      editableData[codeSKU].codeSKU,
+      codeSKU
     );
-    delete editableData[key];
+    if (codeSKU) {
+      const dataByCodeSku = optionAtributes.value.filter(
+        (item) => editableData[codeSKU].codeSKU === item.codeSKU
+      );
+      if (
+        dataByCodeSku.length > 0 &&
+        optionAtributes.value[index].codeSKU !== editableData[codeSKU].codeSKU
+      )
+        return false;
+    }
+    return true;
   };
   return {
     formState,

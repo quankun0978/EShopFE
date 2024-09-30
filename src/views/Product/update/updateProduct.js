@@ -27,7 +27,7 @@ import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
 
-const UpdateProduct = () => {
+const UpdateProduct = (action) => {
   const langStore = useLangStore();
 
   const formState = reactive({
@@ -66,19 +66,6 @@ const UpdateProduct = () => {
     Init();
   });
 
-  // hàm lấy ra các giá trị ban đầu
-
-  const Init = () => {
-    useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
-        "shared",
-        langStore.lang,
-        "EDIT"
-      )}`,
-    });
-    handleGetData();
-  };
-
   // cập nhật giá mua và giá bán khi có thay đổi
 
   watchEffect(() => {
@@ -93,6 +80,19 @@ const UpdateProduct = () => {
       formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
     }
   });
+
+  // hàm lấy ra các giá trị ban đầu
+
+  const Init = () => {
+    useMenuStore().updateHeader({
+      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
+        "shared",
+        langStore.lang,
+        "EDIT"
+      )}`,
+    });
+    handleGetData();
+  };
 
   // xử lý lấy ra dữ liệu hàng hóa
 
@@ -216,6 +216,7 @@ const UpdateProduct = () => {
             ...item,
             description: formState.description,
             status: formState.status,
+            id: item.id ? item.id : -1,
           };
         });
         const res = await updateProduct({
@@ -315,10 +316,8 @@ const UpdateProduct = () => {
           const dataUpdate = dt
             .filter((item) => items.some((k) => k.color === item.color))
             .map((item) => {
-              const value = items.find((i) => i.color === item.color);
               return {
                 ...item,
-                codeSKU: value.codeSKU,
               };
             });
 
@@ -363,7 +362,6 @@ const UpdateProduct = () => {
   // xử lý khi người dùng ấn vào 1 ô input để chỉnh sửa của bảng thuộc tính
 
   const handleEdit = (key, columnKey) => {
-    console.log(1);
     columnValue.value = columnKey;
     editableData[key] = cloneDeep(
       optionAtributes.value.filter((item) => key === item.codeSKU)[0]
@@ -401,6 +399,7 @@ const UpdateProduct = () => {
           );
           return;
         } else {
+          isValid.value = true;
           Object.assign(
             optionAtributes.value.filter((item) => key === item.codeSKU)[0],
             editableData[key]
@@ -408,6 +407,7 @@ const UpdateProduct = () => {
           delete editableData[key];
         }
       } else {
+        isValid.value = true;
         Object.assign(
           optionAtributes.value.filter((item) => key === item.codeSKU)[0],
           editableData[key]
@@ -415,6 +415,7 @@ const UpdateProduct = () => {
         delete editableData[key];
       }
     } catch (error) {
+      isValid.value = true;
       Object.assign(
         optionAtributes.value.filter((item) => key === item.codeSKU)[0],
         editableData[key]
@@ -423,7 +424,7 @@ const UpdateProduct = () => {
     }
   };
 
-  // kiểm tra xem mã đã tồn tại chưa
+  // kiểm tra xem mã sku đã tồn tại chưa
 
   const handleCheckIsCodeSku = async (codeSKU) => {
     try {
@@ -442,11 +443,6 @@ const UpdateProduct = () => {
   // kiểm tra xem có truyền lên 2 mã trùng nhau không
 
   const handleCheckDuplicateCodeSku = (codeSKU, index) => {
-    console.log(
-      optionAtributes.value[index].codeSKU,
-      editableData[codeSKU].codeSKU,
-      codeSKU
-    );
     if (codeSKU) {
       const dataByCodeSku = optionAtributes.value.filter(
         (item) => editableData[codeSKU].codeSKU === item.codeSKU

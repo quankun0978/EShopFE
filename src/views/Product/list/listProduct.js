@@ -14,7 +14,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
 
-export default function ListProduct() {
+const ListProduct = () => {
   const langStore = useLangStore();
 
   const objectQuery = reactive({
@@ -249,4 +249,5 @@ export default function ListProduct() {
     onClickDelete,
     Table,
   };
-}
+};
+export default ListProduct;

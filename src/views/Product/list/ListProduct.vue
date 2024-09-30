@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import ListProduct from "./ListProduct";
+import ListProduct from "./listProduct";
 const {
   data,
   Table,

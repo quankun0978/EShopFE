@@ -220,9 +220,7 @@ const CoppyProduct = () => {
 
   const onFinish = async () => {
     try {
-      console.log(isValid.value);
       if (isValid.value) {
-        console.log(56);
         const payload = [...optionAtributes.value].map((item) => {
           return {
             ...item,
@@ -411,6 +409,7 @@ const CoppyProduct = () => {
           );
           return;
         } else {
+          isValid.value = true;
           Object.assign(
             optionAtributes.value.filter((item) => key === item.codeSKU)[0],
             editableData[key]
@@ -418,6 +417,7 @@ const CoppyProduct = () => {
           delete editableData[key];
         }
       } else {
+        isValid.value = true;
         Object.assign(
           optionAtributes.value.filter((item) => key === item.codeSKU)[0],
           editableData[key]
@@ -425,6 +425,7 @@ const CoppyProduct = () => {
         delete editableData[key];
       }
     } catch (error) {
+      isValid.value = true;
       Object.assign(
         optionAtributes.value.filter((item) => key === item.codeSKU)[0],
         editableData[key]
@@ -433,10 +434,11 @@ const CoppyProduct = () => {
     }
   };
 
+  // kiểm tra xem mã đã tồn tại chưa
+
   const handleCheckIsCodeSku = async (codeSKU) => {
     try {
       const res = await isCodeSKU(codeSKU);
-      console.log(res.success);
       if (res.success) {
         isValid.value = false;
         error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
@@ -448,12 +450,9 @@ const CoppyProduct = () => {
     }
   };
 
+  // kiểm tra xem có truyền lên 2 mã trùng nhau không
+
   const handleCheckDuplicateCodeSku = (codeSKU, index) => {
-    console.log(
-      optionAtributes.value[index].codeSKU,
-      editableData[codeSKU].codeSKU,
-      codeSKU
-    );
     if (codeSKU) {
       const dataByCodeSku = optionAtributes.value.filter(
         (item) => editableData[codeSKU].codeSKU === item.codeSKU

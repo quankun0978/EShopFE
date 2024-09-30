@@ -29,9 +29,10 @@ const Table = (props) => {
   // sự kiện khi thay đổi các combo box
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     state.selectedRowKeys = selectedRowKeys;
-    if (selectedRows && selectedRows.length > 0 && selectedRows[0].id) {
-      state.listId.push(selectedRows[0].id);
-      idProduct.value = selectedRows[0].id;
+    if (selectedRows && selectedRows.length > 0) {
+      const listId = selectedRows.map((item) => item.id);
+      idProduct.value = listId[0];
+      state.listId = listId;
     }
   };
   // sự kiện khi thay đổi các select tìm kiếm
@@ -103,11 +104,6 @@ const Table = (props) => {
       e.preventDefault();
     }
   };
-
-  // const handleGetCheckboxProps = (record) => {
-  //   idProduct.value = record.id;
-  //   console.log(idProduct.value);
-  // };
 
   return {
     Input,

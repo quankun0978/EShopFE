@@ -9,6 +9,7 @@ const handleError = (error) => {
       break;
     case HTTP_STATUS.INTERNAL_SERVER_ERROR:
       showMessageError(getText("shared", lang.vn, "ERROR_OCCURRED_SERVER"));
+      break;
     case HTTP_STATUS.ERROR_NETWORK:
       showMessageError(getText("shared", lang.vn, "ERROR_OCCURRED_SERVER"));
       break;

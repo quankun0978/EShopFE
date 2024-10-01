@@ -106,6 +106,7 @@
           :is-disable="isDisable"
         />
         <CheckboxForm
+          :text="'Hiển thị lên màn hình bán hàng'"
           :item="{
             value: getText('shared', langStore.lang, 'YES'),
           }"

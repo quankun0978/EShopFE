@@ -139,7 +139,10 @@ const CreateProduct = () => {
             fileData: imageUrl.value.split(",")[1],
           },
           color: "null",
-          isHide: getText("shared", langStore.lang, "YES"),
+          isHide:
+            formState.isHide.length > 0
+              ? getText("shared", langStore.lang, "YES")
+              : getText("shared", langStore.lang, "NO"),
         });
         if (res && res.success) {
           Notification.success(

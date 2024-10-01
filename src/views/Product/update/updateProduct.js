@@ -223,7 +223,10 @@ const UpdateProduct = (action) => {
           listSkuUpdate: {
             ...formState,
             products: payload,
-            isHide: "Có",
+            isHide:
+              formState.isHide.length > 0
+                ? getText("shared", langStore.lang, "YES")
+                : getText("shared", langStore.lang, "NO"),
             image: {
               fileName: imageFile.value.name,
               fileData: imageUrl.value.split(",")[1],
@@ -307,7 +310,6 @@ const UpdateProduct = (action) => {
             };
           });
         const listSkus = items.map((item) => item.codeSKU);
-        console.log(items);
         const dt = [...optionAtributes.value];
         if (dt.length > items.length) {
           const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));

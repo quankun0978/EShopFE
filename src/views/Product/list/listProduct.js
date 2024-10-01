@@ -229,7 +229,7 @@ const ListProduct = () => {
   const onClickDelete = (data) => {
     if (data && data.length > 0) {
       showConfirm({
-        title: `Bạn muốn xóa sản phẩm ${data.join(",")}?`,
+        title: `Bạn muốn xóa các sản phẩm ?`,
         icon: ExclamationCircleOutlined,
         content: "",
         okText: getText("shared", langStore.lang, "CONFIRM"),

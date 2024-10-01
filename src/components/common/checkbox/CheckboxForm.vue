@@ -11,26 +11,32 @@
       :label="item.label && item.label"
       :rules="rules"
     >
-      <a-checkbox-group
+      <!-- <a-checkbox-group
         :tabindex="tabIndex"
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :options="options"
         @change="onChange"
-      />
+      /> -->
+      <a-checkbox @change="onChange" v-model:checked="checked">{{ text && text }}</a-checkbox>
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
+import { ref } from "vue";
+
 const props = defineProps({
   defaultValue: String,
   placeholder: String,
   item: Object,
   name: String,
   rules: Array,
+  text: String,
   options: Array,
   value: String,
   formSate: Object,
   onChange: Function,
+  checked: Boolean,
   tabIndex: Number, // Thêm tabIndex vào props
 });
+const checked = ref(props.checked);
 </script>

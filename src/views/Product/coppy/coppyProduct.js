@@ -36,7 +36,7 @@ const CoppyProduct = () => {
     unit: "",
     price: "",
     sell: "",
-    isHide: [],
+    isHide: false,
     type: "",
     managerBy: "",
     color: "",
@@ -222,17 +222,21 @@ const CoppyProduct = () => {
     try {
       if (isValid.value) {
         const payload = [...optionAtributes.value].map((item) => {
+          const { id, ...itemPost } = item;
           return {
-            ...item,
+            ...itemPost,
             description: formState.description,
             status: formState.status,
           };
         });
-
+        const { id, ...payloadPost } = formState;
         const res = await createProduct({
-          ...formState,
+          ...payloadPost,
           products: payload,
-          isHide: getText("shared", langStore.lang, "YES"),
+          isHide:
+            formState.isHide === true
+              ? getText("shared", langStore.lang, "NO")
+              : getText("shared", langStore.lang, "YES"),
           image: {
             fileName: imageFile.value.name,
             fileData: imageUrl.value.split(",")[1],
@@ -264,8 +268,8 @@ const CoppyProduct = () => {
 
   // xử lý khi có thay đổi checkbox hiển thị
 
-  const handleChangeIsHide = (values) => {
-    formState.isHide = values;
+  const handleChangeIsHide = (e) => {
+    formState.isHide = e.target.checked;
   };
 
   // xử lý khi có thay đổi trạng thái
@@ -283,6 +287,7 @@ const CoppyProduct = () => {
   // xử lý khi có thay đổi màu sắc
 
   const handleChangeColor = async (values) => {
+
     if (values && values.length > 0) {
       dataValues.value = values;
       // isDisable.value = true;

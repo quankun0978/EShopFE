@@ -169,7 +169,7 @@ const UpdateProduct = (action) => {
           return {
             ...item,
             codeSKU: res.data[index],
-            name: formState.name + `(${dataValues.value[index]})`,
+            // name: formState.name + `(${dataValues.value[index]})`,
           };
         });
         optionAtributes.value = dataCP;

@@ -27,7 +27,7 @@ import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
 
-const useAction = (action) => {
+const useAction = ({ action, path }) => {
   const langStore = useLangStore();
 
   const formState = reactive({
@@ -66,6 +66,14 @@ const useAction = (action) => {
     Init();
   });
 
+  // watchEffect(() => {
+  //   if (formState.codeSKU) {
+  //     isDisabledAtribute.value = false;
+  //   } else {
+  //     isDisabledAtribute.value = true;
+  //   }
+  // });
+
   // cập nhật giá mua và giá bán khi có thay đổi
 
   watchEffect(() => {
@@ -85,13 +93,11 @@ const useAction = (action) => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
-        "shared",
-        langStore.lang,
-        "EDIT"
-      )}`,
+      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${path}`,
     });
-    handleGetData();
+    if (action !== "add") {
+      handleGetData();
+    }
   };
 
   // xử lý lấy ra dữ liệu hàng hóa
@@ -169,7 +175,7 @@ const useAction = (action) => {
           return {
             ...item,
             codeSKU: res.data[index],
-            name: formState.name + `(${dataValues.value[index]})`,
+            // name: formState.name + `(${dataValues.value[index]})`,
           };
         });
         optionAtributes.value = dataCP;

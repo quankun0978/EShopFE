@@ -66,7 +66,7 @@ const CreateProduct = () => {
   // cập nhật tên dựa trên các thay đổi
 
   watchEffect(() => {
-    if (formState.name) {
+    if (formState.codeSKU) {
       isDisabledAtribute.value = false;
     } else {
       isDisabledAtribute.value = true;
@@ -188,6 +188,10 @@ const CreateProduct = () => {
 
   const handlePressEnterCodeSKU = async (e) => {
     e.preventDefault();
+    await handleGetListCode1();
+  };
+
+  const handleGetListCode1 = async () => {
     if (formState.codeSKU) {
       const res = await generateListSKU(formState.codeSKU, dataValues.value);
       if (res.success) {
@@ -199,7 +203,6 @@ const CreateProduct = () => {
         });
         optionAtributes.value = dataCP;
       }
-    } else {
     }
   };
 

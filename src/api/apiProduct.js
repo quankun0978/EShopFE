@@ -52,11 +52,11 @@ export const generateListSKU = async (codeSKUParent, colors) => {
   });
 };
 
-export const generateListUpdateSKU = async (codeSKUParent, colors, id) => {
+export const generateListUpdateSKU = async (colors, id, listIdDelete) => {
   return await axios.post(HTTP_PATH_API.PRODUCT_GENERATE_LIST_SKU_UPDATE, {
-    codeSKUParent,
     colors,
     id,
+    listIdDelete,
   });
 };
 

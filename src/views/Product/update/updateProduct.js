@@ -285,9 +285,9 @@ const UpdateProduct = (action) => {
         };
       });
       const res = await generateListUpdateSKU(
-        formState.codeSKU,
         values,
-        formState.id
+        formState.id,
+        listDelete.value
       );
       if (res.success) {
         const items =
@@ -307,6 +307,7 @@ const UpdateProduct = (action) => {
             };
           });
         const listSkus = items.map((item) => item.codeSKU);
+        console.log(items);
         const dt = [...optionAtributes.value];
         if (dt.length > items.length) {
           const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));

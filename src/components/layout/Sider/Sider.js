@@ -6,14 +6,14 @@ import Menu from "@/components/common/Menu/Menu.vue";
 import IconBoxesStacked from "@/components/icons/IconBoxesStacked.vue";
 // store
 import { useLangStore } from "@/store/lang";
+import { $t } from "@/config/app";
+
 // hàm hỗ trợ
-import { getText } from "@/constants/lang";
 
 const Sider = () => {
-  const langStore = useLangStore();
   const items = [
     {
-      label: getText("product", langStore.lang, "PRODUCT"),
+      label: $t("product.COPPY.PRODUCT"),
       key: "1",
       icon: () => h(IconBoxesStacked),
     },
@@ -30,6 +30,7 @@ const Sider = () => {
   const onBreakpoint = (broken) => {};
   const selectedKeys = ref(["1"]);
   return {
+    $t,
     items,
     Logo,
     Menu,

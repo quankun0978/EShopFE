@@ -22,7 +22,7 @@
         class="item-action"
       >
         <PlusOutlined />
-        {{ getText("shared", langStore.lang, "ADD") }}
+        {{ $t("product.CREATE.ADD") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -33,7 +33,7 @@
         class="item-action"
       >
         <CopyOutlined />
-        {{ getText("shared", langStore.lang, "COPPY") }}
+        {{ $t("product.COPPY.COPPY") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -49,15 +49,15 @@
         class="item-action"
       >
         <EditOutlined />
-        {{ getText("shared", langStore.lang, "EDIT") }}
+        {{ $t("product.LIST.EDIT") }}
       </RouterLink>
       <div class="item-action" @click="() => handleDeleteData(state.listId)">
         <DeleteOutlined />
-        {{ getText("shared", langStore.lang, "DELETE") }}
+        {{ $t("product.LIST.DELETE") }}
       </div>
       <div class="item-action">
         <SyncOutlined />
-        {{ getText("shared", langStore.lang, "LOAD") }}
+        {{ $t("product.LIST.LOAD") }}
       </div>
     </div>
 
@@ -134,6 +134,7 @@
       v-bind:-handle-select-change="HandleChangePageSize"
     />
   </a-config-provider>
+
 </template>
 
 <script setup>
@@ -164,10 +165,8 @@ const {
   EditOutlined,
   DeleteOutlined,
   SyncOutlined,
-  langStore,
   state,
   handleColumnInputChange,
-  getText,
   handleColumnSelectChange,
   HandleClickNextLastPage,
   handlePreventDefault,

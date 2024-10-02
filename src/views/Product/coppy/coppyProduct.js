@@ -19,17 +19,14 @@ import {
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
-import { useLangStore } from "@/store/lang";
-import { getText } from "@/constants/lang";
 import * as options from "@/constants/options";
 import { generateRandomId } from "@/helpers/Funcs/helper";
 import { validateNumber } from "@/helpers/Funcs/helper";
 import { HTTP_STATUS } from "@/api/apiConfig";
+import { $t } from "@/config/app";
 const CoppyProduct = () => {
-  const langStore = useLangStore();
-
   const formState = reactive({
-    status: getText("product", langStore.lang, "IN_BUSINESS"),
+    status: $t("product.COPPY.IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -69,11 +66,9 @@ const CoppyProduct = () => {
   // hàm lấy ra các giá trị ban đầu
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
-        "shared",
-        langStore.lang,
-        "COPPY"
-      )}`,
+      namePath: `${$t("product.COPPY.PRODUCT")} / ${$t(
+        "product.COPPY.COPPY"
+      )}}`,
     });
     handleGetData();
   };
@@ -113,8 +108,8 @@ const CoppyProduct = () => {
           ...res.data.data,
           unit:
             res.data.data.unit === "double"
-              ? getText("shared", langStore.lang, "PAIR")
-              : getText("shared", langStore.lang, "SINGLE"),
+              ? $t("product.COPPY.PAIR")
+              : $t("product.COPPY.SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
           optionAtributes.value = dataAtributes;
@@ -235,33 +230,27 @@ const CoppyProduct = () => {
           products: payload,
           isHide:
             formState.isHide === true
-              ? getText("shared", langStore.lang, "NO")
-              : getText("shared", langStore.lang, "YES"),
+              ? $t("product.COPPY.NO")
+              : $t("product.UPDATE.YES"),
           image: {
             fileName: imageFile.value.name,
             fileData: imageUrl.value.split(",")[1],
           },
         });
         if (res && res.success) {
-          Notification.success(
-            getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
-          );
+          Notification.success($t("product.COPPY.ADD_NEW_SUCCESS"));
           router.push({
             name: "list_product",
           });
         } else {
-          Notification.error(
-            getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-          );
+          Notification.error($t("product.COPPY.ERROR_OCCURRED_TRY_AGAIN"));
         }
       } else {
         Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
-        Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-        );
+        Notification.error($t("product.COPPY.CODE_SKU_IS_EXSITS"));
       }
     }
   };
@@ -287,7 +276,6 @@ const CoppyProduct = () => {
   // xử lý khi có thay đổi màu sắc
 
   const handleChangeColor = async (values) => {
-
     if (values && values.length > 0) {
       dataValues.value = values;
       // isDisable.value = true;
@@ -310,7 +298,7 @@ const CoppyProduct = () => {
             return {
               ...formState,
               isParent: 0,
-              isHide: "Không",
+              isHide: $t("product.COPPY.NO"),
               color: values[index],
               name: formState.name + `(${values[index]})`,
               codeSKU: item,
@@ -387,32 +375,32 @@ const CoppyProduct = () => {
 
   const handleSave = async (key, column, index) => {
     try {
-      const codeSKU = editableData[key].codeSKU;
-      const codeSKUCurrent = optionAtributes.value.filter(
-        (item) => key === item.codeSKU
-      )[0].codeSKU;
-      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-        const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-        error.value = getText(
-          "product",
-          langStore.lang,
-          "CODE_SKU_IS_DUPLICATE"
-        );
-        if (!isCheckCodeSku) {
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-          );
-        } else if (!handleCheckDuplicateCodeSku(key, index)) {
-          isValid.value = false;
-          error.value = getText(
-            "product",
-            langStore.lang,
-            "CODE_SKU_IS_DUPLICATE"
-          );
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
-          );
-          return;
+      if (
+        editableData[key][column] !== null &&
+        editableData[key][column] !== ""
+      ) {
+        const codeSKU = editableData[key].codeSKU;
+        const codeSKUCurrent = optionAtributes.value.filter(
+          (item) => key === item.codeSKU
+        )[0].codeSKU;
+        if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+          const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+          error.value = $t("product.COPPY.CODE_SKU_IS_DUPLICATE");
+          if (!isCheckCodeSku) {
+            Notification.error($t("product.COPPY.CODE_SKU_IS_EXSITS"));
+          } else if (!handleCheckDuplicateCodeSku(key, index)) {
+            isValid.value = false;
+            error.value = $t("product.COPPY.CODE_SKU_IS_DUPLICATE");
+            Notification.error($t("product.COPPY.CODE_SKU_IS_DUPLICATE"));
+            return;
+          } else {
+            isValid.value = true;
+            Object.assign(
+              optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+              editableData[key]
+            );
+            delete editableData[key];
+          }
         } else {
           isValid.value = true;
           Object.assign(
@@ -422,12 +410,9 @@ const CoppyProduct = () => {
           delete editableData[key];
         }
       } else {
-        isValid.value = true;
-        Object.assign(
-          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-          editableData[key]
-        );
-        delete editableData[key];
+        isValid.value = false;
+        error.value = $t("product.COPPY.ERROR_REQUIRED");
+        Notification.error($t("product.COPPY.ERROR_REQUIRED"));
       }
     } catch (error) {
       isValid.value = true;
@@ -446,7 +431,7 @@ const CoppyProduct = () => {
       const res = await isCodeSKU(codeSKU);
       if (res.success) {
         isValid.value = false;
-        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        error.value = $t("product.COPPY.CODE_SKU_IS_EXSITS");
         return false;
       }
       return true;
@@ -471,6 +456,7 @@ const CoppyProduct = () => {
     return true;
   };
   return {
+    $t,
     formState,
     optionAtributes,
     selectedRowKeys,
@@ -499,9 +485,7 @@ const CoppyProduct = () => {
     imageUrl,
     handleImageSelected,
     Form,
-    langStore,
     isDisabledAtribute,
-    getText,
     form,
     columnValue,
     editableData,

@@ -31,7 +31,7 @@ const useAction = ({ action, path }) => {
   const langStore = useLangStore();
 
   const formState = reactive({
-    status: getText("product", langStore.lang, "IN_BUSINESS"),
+    status: $t('product.EDIT.IN_BUSINESS'),
     codeSKU: "",
     group: "",
     name: "",
@@ -93,7 +93,7 @@ const useAction = ({ action, path }) => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${path}`,
+      namePath: `${$t('product.COPPY.PRODUCT')} / ${path}`,
     });
     if (action !== "add") {
       handleGetData();
@@ -113,8 +113,8 @@ const useAction = ({ action, path }) => {
           price: `${res.data.price ? res.data.price : ""}`,
           unit:
             res.data.data.unit === "double"
-              ? getText("shared", langStore.lang, "PAIR")
-              : getText("shared", langStore.lang, "SINGLE"),
+              ? $t('product.EDIT.PAIR')
+              : $t('product.EDIT.SINGLE'),
         };
         if (dataAtributes && dataAtributes.length > 0) {
           optionAtributes.value = dataAtributes;
@@ -239,14 +239,14 @@ const useAction = ({ action, path }) => {
         });
         if (res && res.success) {
           Notification.success(
-            getText("shared", langStore.lang, "UPDATE_SUCCESS")
+           $t('product.EDIT.UPDATE_SUCCESS')
           );
           router.push({
             name: "list_product",
           });
         } else {
           Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+           $t('product.EDIT.CODE_SKU_IS_EXSITS')
           );
         }
       } else {
@@ -255,7 +255,7 @@ const useAction = ({ action, path }) => {
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
         Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
+          $t('product.EDIT.CODE_SKU_IS_DUPLICATE')
         );
       }
     }
@@ -384,24 +384,16 @@ const useAction = ({ action, path }) => {
       )[0].codeSKU;
       if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
         const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-        error.value = getText(
-          "product",
-          langStore.lang,
-          "CODE_SKU_IS_DUPLICATE"
-        );
+        error.value = $t('product.EDIT.CODE_SKU_IS_DUPLICATE');
         if (!isCheckCodeSku) {
           Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
+           $t('product.EDIT.CODE_SKU_IS_EXSITS')
           );
         } else if (!handleCheckDuplicateCodeSku(key, index)) {
           isValid.value = false;
-          error.value = getText(
-            "product",
-            langStore.lang,
-            "CODE_SKU_IS_DUPLICATE"
-          );
+          error.value = $t('product.EDIT.CODE_SKU_IS_DUPLICATE');
           Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
+            $t('product.EDIT.CODE_SKU_IS_DUPLICATE')
           );
           return;
         } else {
@@ -437,7 +429,7 @@ const useAction = ({ action, path }) => {
       const res = await isCodeSKU(codeSKU);
       if (res.success) {
         isValid.value = false;
-        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        error.value =$t('product.EDIT.CODE_SKU_IS_EXSITS');
         return false;
       }
       return true;

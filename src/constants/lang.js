@@ -2,8 +2,8 @@ export const texts = {
   shared: {
     en: {
       SAVE: "Save",
-      ID:"ID",
-      STT:"STT",
+      ID: "ID",
+      STT: "STT",
       ALL: "All",
       CANCEL: "Cancel",
       ADD: "Add new",
@@ -28,6 +28,7 @@ export const texts = {
       UPDATE_SUCCESS: "Update is successfull",
       DELETE_SUCCESS: "Delete is successfull",
       CONFIRM: "Confirm",
+      ERROR_REQUIRED: "Please required",
       ERROR_OCCURRED_TRY_AGAIN: "An error occurred please try again",
       ERROR_OCCURRED_SERVER:
         "An error occurred on the server, please check the server.",
@@ -38,8 +39,8 @@ export const texts = {
     vn: {
       SAVE: "Lưu",
       ALL: "Tất cả",
-      ID:"ID",
-      STT:"STT",
+      ID: "ID",
+      STT: "STT",
       CANCEL: "Hủy",
       ADD: "Thêm mới",
       EDIT: "Chỉnh sửa",
@@ -67,6 +68,7 @@ export const texts = {
       ERROR_OCCURRED_SERVER:
         "Đã xảy ra lỗi trên máy chủ, vui lòng kiểm tra máy chủ.",
       ERROR_BAD_REQUEST: "Đã có lỗi trong yêu cầu được gửi",
+      ERROR_REQUIRED: "Vui lòng không bỏ trống dữ liệu dữ liệu",
       ERROR_NOT_FOUND:
         "Yêu cầu được gửi là về một bản ghi không tồn tại và máy chủ không hoạt động",
     },
@@ -90,7 +92,6 @@ export const texts = {
       DETAIL_ATRIBUTES: "Detail Atributes",
       CODE_SKU_IS_EXSITS: "Code sku is exsits",
       CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
-
     },
     vn: {
       PRODUCT: "Hàng hóa",

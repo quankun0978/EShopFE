@@ -5,12 +5,12 @@
       <Button
         :tab-index="tabIndexSave"
         :is-save="true"
-        :text="getText('shared', langStore.lang, 'SAVE')"
+        :text="$t('product.CREATE.SAVE')"
         :handle-click="handleSave"
       />
       <Button
         :tab-index="tabIndexExit"
-        :text="getText('shared', langStore.lang, 'CANCEL')"
+        :text="$t('product.CREATE.CANCEL')"
         :is-exit="true"
         :handle-click="handleExit"
       />
@@ -21,12 +21,6 @@
 <script setup>
 // component
 import Button from "../common/Button/Button.vue";
-
-// strore
-import { useLangStore } from "@/store/lang";
-
-// hàm bổ trợ
-import { getText } from "@/constants/lang";
 
 const props = defineProps({
   options: Array,
@@ -39,6 +33,4 @@ const props = defineProps({
   handleSave: Function,
   handleExit: Function,
 });
-
-const langStore = useLangStore();
 </script>

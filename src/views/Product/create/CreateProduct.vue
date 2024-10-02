@@ -28,16 +28,19 @@
             :form-state="formState"
             :tab-index="1"
             :item="{
-              label: getText('product', langStore.lang, 'BUSINESS_STATUS'),
+              label: $t('product.CREATE.BUSINESS_STATUS'),
               value: 'status',
             }"
           />
           <InputForm
             :rules="[
-              { required: true, message: 'Vui lòng không bỏ trống tên!' },
+              {
+                required: true,
+                message: 'Vui lòng không bỏ trống dữ liệu dữ liệu tên!',
+              },
             ]"
             :item="{
-              label: getText('product', langStore.lang, 'NAME_PRODUCT'),
+              label: $t('product.CREATE.NAME_PRODUCT'),
               value: 'name',
             }"
             :input-ref="inputName"
@@ -49,7 +52,7 @@
           />
           <SelectForm
             :item="{
-              label: getText('product', langStore.lang, 'GROUP_PRODUCT'),
+              label: $t('product.CREATE.GROUP_PRODUCT'),
               value: 'group',
             }"
             :style="{ width: 200 }"
@@ -60,7 +63,7 @@
           />
           <InputForm
             :item="{
-              label: getText('product', langStore.lang, 'CODE_SKU'),
+              label: $t('product.CREATE.CODE_SKU'),
               value: 'codeSKU',
             }"
             :model-value="formState.codeSKU"
@@ -70,12 +73,15 @@
             :is-disable="isDisable"
             :tab-index="4"
             :rules="[
-              { required: true, message: 'Vui lòng không bỏ trống mã SKU!' },
+              {
+                required: true,
+                message: 'Vui lòng không bỏ trống dữ liệu dữ liệu mã SKU!',
+              },
             ]"
           />
           <InputForm
             :item="{
-              label: getText('shared', langStore.lang, 'PRICE'),
+              label: $t('product.CREATE.PRICE'),
               value: 'price',
             }"
             :rules="[
@@ -92,7 +98,7 @@
           />
           <InputForm
             :item="{
-              label: getText('shared', langStore.lang, 'SELL'),
+              label: $t('product.CREATE.SELL'),
               value: 'sell',
             }"
             :model-value="formState.sell"
@@ -110,7 +116,7 @@
           <SelectForm
             :-on-change="handleChangeUnit"
             :item="{
-              label: getText('shared', langStore.lang, 'UNIT'),
+              label: $t('product.CREATE.UNIT'),
               value: 'unit',
             }"
             :style="{ width: 200 }"
@@ -120,6 +126,7 @@
             :tab-index="7"
           />
           <CheckboxForm
+            :text="'Hiển thị lên màn hình bán hàng'"
             :item="{
               value: 'isHide',
             }"
@@ -131,13 +138,13 @@
         </div>
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">
-            {{ getText("product", langStore.lang, "INFO_ATRIBUTES") }}
+            {{ $t("product.CREATE.INFO_ATRIBUTES") }}
           </p>
           <SelectForm
             :is-mode-tag="true"
             :-on-change="handleChangeColor"
             :item="{
-              label: getText('shared', langStore.lang, 'ATRIBUTES'),
+              label: $t('product.CREATE.ATRIBUTES'),
               value: 'color',
             }"
             :options="selectedRowKeys"
@@ -160,7 +167,7 @@
             }"
             :columns="options.columnsAtributes"
             :item="{
-              label: getText('product', langStore.lang, 'DETAIL_ATRIBUTES'),
+              label: $t('product.CREATE.DETAIL_ATRIBUTES'),
               name: 'detail',
             }"
           />
@@ -169,12 +176,12 @@
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
           <InputForm
             :item="{
-              label: getText('shared', langStore.lang, 'DESCRIPTION'),
+              label: $t('product.CREATE.DESCRIPTION'),
               value: 'description',
             }"
             :is-textarea="true"
             :max-length="200"
-            :placeholder="'Vui long nhap toi da 200 ky tu'"
+            :placeholder="'Vui lòng nhập tối đa 200 ký tự'"
             :rows="3"
             :model-value="formState.description"
             :form-sate="formState"
@@ -183,7 +190,7 @@
           />
           <UploadForm
             :item="{
-              label: getText('product', langStore.lang, 'IMAGE_PRODUCT'),
+              label: $t('product.CREATE.IMAGE_PRODUCT'),
               value: 'image',
             }"
             :handle-image-selected="handleImageSelected"
@@ -231,9 +238,7 @@ const {
   validateNumber,
   form,
   imageUrl,
-  getText,
   isDisabledAtribute,
-  langStore,
   inputName,
   isDisable,
   columnValue,

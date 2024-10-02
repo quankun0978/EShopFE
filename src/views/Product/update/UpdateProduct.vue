@@ -27,14 +27,14 @@
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
-            label: getText('product', langStore.lang, 'BUSINESS_STATUS'),
+            label: $t('product.CREATE.BUSINESS_STATUS'),
             value: 'status',
           }"
         />
         <InputForm
           :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
-            label: getText('product', langStore.lang, 'NAME_PRODUCT'),
+            label: $t('product.CREATE.NAME_PRODUCT'),
             value: 'name',
           }"
           :tab-index="2"
@@ -45,7 +45,7 @@
         />
         <SelectForm
           :item="{
-            label: getText('product', langStore.lang, 'GROUP_PRODUCT'),
+            label: $t('product.CREATE.GROUP_PRODUCT'),
             value: 'group',
           }"
           :tab-index="3"
@@ -56,7 +56,7 @@
         />
         <InputForm
           :item="{
-            label: getText('product', langStore.lang, 'CODE_SKU'),
+            label: $t('product.CREATE.CODE_SKU'),
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
@@ -71,7 +71,7 @@
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'PRICE'),
+            label: $t('product.CREATE.PRICE'),
             value: 'price',
           }"
           :model-value="formState.price"
@@ -88,7 +88,7 @@
         />
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'SELL'),
+            label: $t('product.CREATE.SELL'),
             value: 'sell',
           }"
           :rules="[
@@ -105,7 +105,7 @@
         <SelectForm
           :-on-change="handleChangeUnit"
           :item="{
-            label: getText('shared', langStore.lang, 'UNIT'),
+            label: $t('product.CREATE.UNIT'),
             value: 'unit',
           }"
           :style="{ width: 200 }"
@@ -116,7 +116,7 @@
         />
         <CheckboxForm
           :item="{
-            value: getText('shared', langStore.lang, 'YES'),
+            value: $t('product.UPDATE.YES'),
           }"
           :options="options.optionsiSHide"
           :form-sate="formState"
@@ -126,13 +126,13 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          {{ getText("product", langStore.lang, "INFO_ATRIBUTES") }}
+          {{ $t("product.CREATE.INFO_ATRIBUTES") }}
         </p>
         <SelectForm
           :is-mode-tag="true"
           :-on-change="handleChangeColor"
           :item="{
-            label: getText('shared', langStore.lang, 'ATRIBUTES'),
+            label: $t('product.CREATE.ATRIBUTES'),
             value: 'color',
           }"
           :tab-index="9"
@@ -155,7 +155,7 @@
           }"
           :columns="options.columnsAtributes"
           :item="{
-            label: getText('product', langStore.lang, 'DETAIL_ATRIBUTES'),
+            label: $t('product.CREATE.DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
         />
@@ -164,7 +164,7 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: getText('shared', langStore.lang, 'DESCRIPTION'),
+            label: $t('product.CREATE.DESCRIPTION'),
             value: 'description',
           }"
           :is-textarea="true"
@@ -178,7 +178,7 @@
         />
         <UploadForm
           :item="{
-            label: getText('product', langStore.lang, 'IMAGE_PRODUCT'),
+            label: $t('product.CREATE.IMAGE_PRODUCT'),
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"
@@ -191,7 +191,7 @@
   </a-form>
 </template>
 <script setup>
-import UpdateProduct from "./UpdateProduct.js";
+import UpdateProduct from "./updateProduct";
 const {
   formState,
   options,
@@ -218,8 +218,6 @@ const {
   validateNumber,
   form,
   imageUrl,
-  getText,
-  langStore,
   isDisable,
   columnValue,
   handleChangeStatus,

@@ -20,18 +20,15 @@ import {
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
-import { useLangStore } from "@/store/lang";
-import { getText } from "@/constants/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
+import { $t } from "@/config/app";
 
 const UpdateProduct = (action) => {
-  const langStore = useLangStore();
-
   const formState = reactive({
-    status: getText("product", langStore.lang, "IN_BUSINESS"),
+    status: $t("product.UPDATE.IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -85,10 +82,8 @@ const UpdateProduct = (action) => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
-        "shared",
-        langStore.lang,
-        "EDIT"
+      namePath: `${$t("product.UPDATE.PRODUCT")} / ${$t(
+        "product.UPDATE.EDIT"
       )}`,
     });
     handleGetData();
@@ -107,8 +102,8 @@ const UpdateProduct = (action) => {
           price: `${res.data.price ? res.data.price : ""}`,
           unit:
             res.data.data.unit === "double"
-              ? getText("shared", langStore.lang, "PAIR")
-              : getText("shared", langStore.lang, "SINGLE"),
+              ? $t("product.UPDATE.PAIR")
+              : $t("product.UPDATE.SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
           optionAtributes.value = dataAtributes;
@@ -225,8 +220,8 @@ const UpdateProduct = (action) => {
             products: payload,
             isHide:
               formState.isHide.length > 0
-                ? getText("shared", langStore.lang, "YES")
-                : getText("shared", langStore.lang, "NO"),
+                ? $t("product.UPDATE.YES")
+                : $t("product.UPDATE.NO"),
             image: {
               fileName: imageFile.value.name,
               fileData: imageUrl.value.split(",")[1],
@@ -235,25 +230,19 @@ const UpdateProduct = (action) => {
           listSKUsDelete: listDelete.value,
         });
         if (res && res.success) {
-          Notification.success(
-            getText("shared", langStore.lang, "UPDATE_SUCCESS")
-          );
+          Notification.success($t("product.UPDATE.EDIT_SUCCESS"));
           router.push({
             name: "list_product",
           });
         } else {
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-          );
+          Notification.error($t("product.UPDATE.CODE_SKU_IS_EXSITS"));
         }
       } else {
         Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
-        Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
-        );
+        Notification.error($t("product.UPDATE.CODE_SKU_IS_DUPLICATE"));
       }
     }
   };
@@ -375,32 +364,32 @@ const UpdateProduct = (action) => {
 
   const handleSave = async (key, column, index) => {
     try {
-      const codeSKU = editableData[key].codeSKU;
-      const codeSKUCurrent = optionAtributes.value.filter(
-        (item) => key === item.codeSKU
-      )[0].codeSKU;
-      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-        const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-        error.value = getText(
-          "product",
-          langStore.lang,
-          "CODE_SKU_IS_DUPLICATE"
-        );
-        if (!isCheckCodeSku) {
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-          );
-        } else if (!handleCheckDuplicateCodeSku(key, index)) {
-          isValid.value = false;
-          error.value = getText(
-            "product",
-            langStore.lang,
-            "CODE_SKU_IS_DUPLICATE"
-          );
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
-          );
-          return;
+      if (
+        editableData[key][column] !== null &&
+        editableData[key][column] !== ""
+      ) {
+        const codeSKU = editableData[key].codeSKU;
+        const codeSKUCurrent = optionAtributes.value.filter(
+          (item) => key === item.codeSKU
+        )[0].codeSKU;
+        if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+          const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+          error.value = $t("product.UPDATE.CODE_SKU_IS_DUPLICATE");
+          if (!isCheckCodeSku) {
+            Notification.error($t("product.UPDATE.CODE_SKU_IS_EXSITS"));
+          } else if (!handleCheckDuplicateCodeSku(key, index)) {
+            isValid.value = false;
+            error.value = $t("product.UPDATE.CODE_SKU_IS_DUPLICATE");
+            Notification.error($t("product.UPDATE.CODE_SKU_IS_DUPLICATE"));
+            return;
+          } else {
+            isValid.value = true;
+            Object.assign(
+              optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+              editableData[key]
+            );
+            delete editableData[key];
+          }
         } else {
           isValid.value = true;
           Object.assign(
@@ -410,12 +399,9 @@ const UpdateProduct = (action) => {
           delete editableData[key];
         }
       } else {
-        isValid.value = true;
-        Object.assign(
-          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-          editableData[key]
-        );
-        delete editableData[key];
+        isValid.value = false;
+        error.value = $t("product.UPDATE.ERROR_REQUIRED");
+        Notification.error($t("product.UPDATE.ERROR_REQUIRED"));
       }
     } catch (error) {
       isValid.value = true;
@@ -434,7 +420,7 @@ const UpdateProduct = (action) => {
       const res = await isCodeSKU(codeSKU);
       if (res.success) {
         isValid.value = false;
-        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        error.value = $t("product.UPDATE.CODE_SKU_IS_EXSITS");
         return false;
       }
       return true;
@@ -488,8 +474,6 @@ const UpdateProduct = (action) => {
     imageUrl,
     handleImageSelected,
     Form,
-    langStore,
-    getText,
     form,
     columnValue,
     editableData,

@@ -1,64 +1,63 @@
 import { useLangStore } from "@/store/lang";
-import { getText } from "./lang";
-const langStore = useLangStore();
+import { $t } from "@/config/app";
 export const optionsStatus = [
   {
-    label: getText("product", langStore.lang, "IN_BUSINESS"),
-    value: getText("product", langStore.lang, "IN_BUSINESS"),
+    label: $t("product.UPDATE.IN_BUSINESS"),
+    value: $t("product.UPDATE.IN_BUSINESS"),
   },
   {
-    label: getText("product", langStore.lang, "OUT_BUSINESS"),
-    value: getText("product", langStore.lang, "OUT_BUSINESS"),
+    label: $t("product.UPDATE.OUT_BUSINESS"),
+    value: $t("product.UPDATE.OUT_BUSINESS"),
   },
 ];
 
 export const optionsGroup = [
   {
-    label: getText("product", langStore.lang, "BOAT_PLATFORM"),
-    value: getText("product", langStore.lang, "BOAT_PLATFORM"),
+    label: $t("product.UPDATE.BOAT_PLATFORM"),
+    value: $t("product.UPDATE.BOAT_PLATFORM"),
   },
   {
-    label: getText("product", langStore.lang, "HOUSEHOLD_GOODS"),
-    value: getText("product", langStore.lang, "HOUSEHOLD_GOODS"),
+    label: $t("product.UPDATE.HOUSEHOLD_GOODS"),
+    value: $t("product.UPDATE.HOUSEHOLD_GOODS"),
   },
 ];
 
 export const optionsUnit = [
   {
-    label: getText("shared", langStore.lang, "SINGLE"),
-    value: getText("shared", langStore.lang, "SINGLE"),
+    label: $t("product.UPDATE.SINGLE"),
+    value: $t("product.UPDATE.SINGLE"),
   },
   {
-    label: getText("shared", langStore.lang, "PAIR"),
-    value: getText("shared", langStore.lang, "PAIR"),
+    label: $t("product.UPDATE.PAIR"),
+    value: $t("product.UPDATE.PAIR"),
   },
 ];
 
 export const columnsAtributes = [
   {
-    title: getText("product", langStore.lang, "NAME_PRODUCT"),
+    title: $t("product.UPDATE.NAME_PRODUCT"),
     dataIndex: "name",
     width: "30%",
     key: "name",
   },
   {
-    title: getText("product", langStore.lang, "CODE_SKU"),
+    title: $t("product.UPDATE.CODE_SKU"),
     dataIndex: "codeSKU",
     key: "codeSKU",
   },
 
   {
-    title: getText("shared", langStore.lang, "BARCODE"),
+    title: $t("product.UPDATE.BARCODE"),
     dataIndex: "barcode",
     key: "barcode",
   },
   {
-    title: getText("shared", langStore.lang, "PRICE"),
+    title: $t("product.UPDATE.PRICE"),
     dataIndex: "price",
     key: "price",
   },
   {
-    title: getText("shared", langStore.lang, "SELL"),
+    title: $t("product.UPDATE.SELL"),
     dataIndex: "sell",
     key: "sell",
   },
@@ -72,7 +71,7 @@ export const columnsAtributes = [
 
 export const optionsiSHide = [
   {
-    label: getText("product", langStore.lang, "DISPLAY_ON_SALES_SCREEN"),
-    value: getText("shared", langStore.lang, "YES"),
+    label: $t("product.UPDATE.DISPLAY_ON_SALES_SCREEN"),
+    value: $t("product.UPDATE.YES"),
   },
 ];

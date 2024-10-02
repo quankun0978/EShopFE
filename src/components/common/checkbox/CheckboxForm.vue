@@ -11,13 +11,9 @@
       :label="item.label && item.label"
       :rules="rules"
     >
-      <!-- <a-checkbox-group
-        :tabindex="tabIndex"
-        v-model:value="formSate[`${item && item.value && item.value}`]"
-        :options="options"
-        @change="onChange"
-      /> -->
-      <a-checkbox @change="onChange" v-model:checked="checked">{{ text && text }}</a-checkbox>
+      <a-checkbox @change="onChange" v-model:checked="checked">{{
+        text && text
+      }}</a-checkbox>
     </a-form-item>
   </a-config-provider>
 </template>

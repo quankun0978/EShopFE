@@ -13,6 +13,7 @@ import { getText } from "@/constants/lang";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
+import { $t } from "@/config/app";
 
 const ListProduct = () => {
   const langStore = useLangStore();
@@ -23,10 +24,10 @@ const ListProduct = () => {
     group: "",
     unit: "",
     price: "10000000",
-    isHide: getText("shared", langStore.lang, "ALL"),
-    type: getText("shared", langStore.lang, "ALL"),
-    managerBy: getText("shared", langStore.lang, "ALL"),
-    status: getText("shared", langStore.lang, "ALL"),
+    isHide: $t("product.LIST.ALL"),
+    type: $t("product.LIST.ALL"),
+    managerBy: $t("product.LIST.ALL"),
+    status: $t("product.LIST.ALL"),
     pageNumber: "1",
     pageSize: "20",
   });
@@ -47,12 +48,12 @@ const ListProduct = () => {
 
   const columns = [
     {
-      title: getText("product", langStore.lang, "CODE_SKU"),
+      title: $t("product.LIST.CODE_SKU"),
       dataIndex: "codeSKU",
       input: objectQuery.codeSKU,
     },
     {
-      title: getText("product", langStore.lang, "NAME_PRODUCT"),
+      title: $t("product.LIST.NAME_PRODUCT"),
       dataIndex: "name",
       width: "30%",
       input: objectQuery.name,
@@ -68,92 +69,92 @@ const ListProduct = () => {
       input: objectQuery.unit,
     },
     {
-      title: getText("shared", langStore.lang, "PRICE"),
+      title: $t("product.LIST.PRICE"),
       dataIndex: "price",
       input: objectQuery.price,
     },
     {
-      title: getText("product", langStore.lang, "DISPLAY_ON_SALES_SCREEN"),
+      title: $t("product.LIST.DISPLAY_ON_SALES_SCREEN"),
       dataIndex: "isHide",
       isSelect: true,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "ALL"),
-            value: getText("shared", langStore.lang, "ALL"),
+            label: $t("product.LIST.ALL"),
+            value: $t("product.LIST.ALL"),
           },
           {
-            label: getText("shared", langStore.lang, "YES"),
-            value: getText("shared", langStore.lang, "YES"),
+            label: $t("product.LIST.YES"),
+            value: $t("product.LIST.YES"),
           },
           {
-            label: getText("shared", langStore.lang, "NO"),
-            value: getText("shared", langStore.lang, "NO"),
+            label: $t("product.LIST.NO"),
+            value: $t("product.LIST.NO"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "ALL"),
+        defaultValue: $t("product.LIST.ALL"),
       },
       input: objectQuery.isHide,
     },
     {
-      title: getText("product", langStore.lang, "TYPE_PRODUCT"),
+      title: $t("product.LIST.TYPE_PRODUCT"),
       dataIndex: "type",
       isSelect: true,
       input: objectQuery.type,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "ALL"),
-            value: getText("shared", langStore.lang, "ALL"),
+            label: $t("product.LIST.ALL"),
+            value: $t("product.LIST.ALL"),
           },
           {
-            label: getText("product", langStore.lang, "PRODUCT"),
-            value: getText("product", langStore.lang, "PRODUCT"),
+            label: $t("product.COPPY.PRODUCT"),
+            value: $t("product.COPPY.PRODUCT"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "ALL"),
+        defaultValue: $t("product.LIST.ALL"),
       },
     },
     {
-      title: getText("product", langStore.lang, "MANAGER_BY"),
+      title: $t("product.LIST.MANAGER_BY"),
       dataIndex: "managerBy",
       isSelect: true,
       input: objectQuery.managerBy,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "ALL"),
-            value: getText("shared", langStore.lang, "ALL"),
+            label: $t("product.LIST.ALL"),
+            value: $t("product.LIST.ALL"),
           },
           {
-            label: getText("shared", langStore.lang, "OTHER"),
-            value: getText("shared", langStore.lang, "OTHER"),
+            label: $t("product.LIST.OTHER"),
+            value: $t("product.LIST.OTHER"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "ALL"),
+        defaultValue: $t("product.LIST.ALL"),
       },
     },
     {
-      title: getText("shared", langStore.lang, "STATUS"),
+      title: $t("product.LIST.STATUS"),
       dataIndex: "status",
       isSelect: true,
       input: objectQuery.status,
       select: {
         options: [
           {
-            label: getText("shared", langStore.lang, "ALL"),
-            value: getText("shared", langStore.lang, "ALL"),
+            label: $t("product.LIST.ALL"),
+            value: $t("product.LIST.ALL"),
           },
           {
-            label: getText("product", langStore.lang, "IN_BUSINESS"),
-            value: getText("product", langStore.lang, "IN_BUSINESS"),
+            label: $t("product.LIST.IN_BUSINESS"),
+            value: $t("product.LIST.IN_BUSINESS"),
           },
           {
-            label: getText("product", langStore.lang, "OUT_BUSINESS"),
-            value: getText("product", langStore.lang, "OUT_BUSINESS"),
+            label: $t("product.LIST.OUT_BUSINESS"),
+            value: $t("product.LIST.OUT_BUSINESS"),
           },
         ],
-        defaultValue: getText("shared", langStore.lang, "ALL"),
+        defaultValue: $t("product.LIST.ALL"),
       },
     },
   ];
@@ -166,7 +167,7 @@ const ListProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: getText("product", langStore.lang, "PRODUCT"),
+      namePath: $t("product.COPPY.PRODUCT"),
       isBack: true,
     });
     handleGetData();
@@ -210,19 +211,13 @@ const ListProduct = () => {
     try {
       const res = await deleteProduct(data);
       if (res?.success) {
-        Notification.success(
-          getText("shared", langStore.lang, "DELETE_SUCCESS")
-        );
+        Notification.success($t("product.LIST.DELETE_SUCCESS"));
         handleGetData();
       } else {
-        Notification.error(
-          getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-        );
+        Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
       }
     } catch (error) {
-      Notification.error(
-        getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-      );
+      Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
     }
   };
 
@@ -232,8 +227,8 @@ const ListProduct = () => {
         title: `Bạn muốn xóa các sản phẩm ?`,
         icon: ExclamationCircleOutlined,
         content: "",
-        okText: getText("shared", langStore.lang, "CONFIRM"),
-        cancelText: getText("shared", langStore.lang, "CANCEL"),
+        okText: $t("product.LIST.CONFIRM"),
+        cancelText: $t("product.LIST.CANCEL"),
         handleOk: () => handleDeleteData(data),
       });
     }

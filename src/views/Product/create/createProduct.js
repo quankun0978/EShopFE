@@ -24,18 +24,19 @@ import { useLangStore } from "@/store/lang";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
+import { $t } from "@/config/app";
 const CreateProduct = () => {
   const langStore = useLangStore();
 
   const formState = reactive({
-    status: getText("product", langStore.lang, "IN_BUSINESS"),
+    status: $t("product.CREATE.IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
     unit: "",
     price: "",
     sell: "",
-    isHide: [],
+    isHide: false,
     type: "",
     managerBy: "",
     color: "",
@@ -90,7 +91,7 @@ const CreateProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${getText("product", langStore.lang, "PRODUCT")} / ${getText(
+      namePath: `${$t("product.COPPY.PRODUCT")} / ${getText(
         "shared",
         langStore.lang,
         "ADD"
@@ -118,15 +119,15 @@ const CreateProduct = () => {
               return {
                 ...item,
                 isHide:
-                  formState.isHide.length > 0
-                    ? getText("shared", langStore.lang, "YES")
-                    : getText("shared", langStore.lang, "NO"),
+                  formState.isHide === true
+                    ? $t("product.CREATE.NO")
+                    : $t("product.CREATE.YES"),
                 description: formState.description,
               };
             }
             return {
               ...item,
-              isHide: getText("shared", langStore.lang, "NO"),
+              isHide: $t("product.CREATE.NO"),
               description: formState.description,
             };
           });
@@ -141,8 +142,8 @@ const CreateProduct = () => {
           color: "null",
           isHide:
             formState.isHide.length > 0
-              ? getText("shared", langStore.lang, "YES")
-              : getText("shared", langStore.lang, "NO"),
+              ? $t("product.CREATE.YES")
+              : $t("product.CREATE.NO"),
         });
         if (res && res.success) {
           Notification.success(
@@ -152,23 +153,17 @@ const CreateProduct = () => {
             name: "list_product",
           });
         } else {
-          Notification.error(
-            getText("shared", langStore.lang, "ERROR_OCCURRED_TRY_AGAIN")
-          );
+          Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
         }
       } else {
         Notification.error(error.value);
       }
     } catch (error) {
       if (error.status === HTTP_STATUS.BAD_REQUEST) {
-        Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-        );
+        Notification.error($t("product.CREATE.CODE_SKU_IS_EXSITS"));
       }
       if (error.status === HTTP_STATUS.CONFLIC_REQUEST) {
-        Notification.error(
-          getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
-        );
+        Notification.error($t("product.CREATE.CODE_SKU_IS_DUPLICATE"));
       }
     }
   };
@@ -242,8 +237,8 @@ const CreateProduct = () => {
 
   // xử lý khi có thay đổi checkbox hiển thị
 
-  const handleChangeIsHide = (values) => {
-    formState.isHide = values;
+  const handleChangeIsHide = (e) => {
+    formState.isHide = e.target.checked;
   };
 
   // xử lý khi có thay đổi đơn vị
@@ -265,7 +260,7 @@ const CreateProduct = () => {
           return {
             ...formState,
             isParent: 0,
-            isHide: getText("shared", langStore.lang, "NO"),
+            isHide: $t("product.CREATE.NO"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
             barcode: generateRandomId(),
@@ -292,6 +287,7 @@ const CreateProduct = () => {
         const index =
           optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
         indexCurrent.value = index;
+
         dt.push(items[index]);
         optionAtributes.value = dt;
       }
@@ -344,32 +340,37 @@ const CreateProduct = () => {
 
   const handleSave = async (key, column, index) => {
     try {
-      const codeSKU = editableData[key].codeSKU;
-      const codeSKUCurrent = optionAtributes.value.filter(
-        (item) => key === item.codeSKU
-      )[0].codeSKU;
-      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-        const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-        error.value = getText(
-          "product",
-          langStore.lang,
-          "CODE_SKU_IS_DUPLICATE"
-        );
-        if (!isCheckCodeSku) {
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_EXSITS")
-          );
-        } else if (!handleCheckDuplicateCodeSku(key, index)) {
-          isValid.value = false;
-          error.value = getText(
-            "product",
-            langStore.lang,
-            "CODE_SKU_IS_DUPLICATE"
-          );
-          Notification.error(
-            getText("product", langStore.lang, "CODE_SKU_IS_DUPLICATE")
-          );
-          return;
+      if (
+        editableData[key][column] !== null &&
+        editableData[key][column] !== ""
+      ) {
+        const codeSKU = editableData[key].codeSKU;
+        const codeSKUCurrent = optionAtributes.value.filter(
+          (item) => key === item.codeSKU
+        )[0].codeSKU;
+
+        if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+          const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+          error.value = $t("product.CREATE.CODE_SKU_IS_DUPLICATE");
+          if (!isCheckCodeSku) {
+            Notification.error($t("product.CREATE.CODE_SKU_IS_EXSITS"));
+          } else if (!handleCheckDuplicateCodeSku(key, index)) {
+            isValid.value = false;
+            error.value = getText(
+              "product",
+              langStore.lang,
+              "CODE_SKU_IS_DUPLICATE"
+            );
+            Notification.error($t("product.CREATE.CODE_SKU_IS_DUPLICATE"));
+            return;
+          } else {
+            isValid.value = true;
+            Object.assign(
+              optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+              editableData[key]
+            );
+            delete editableData[key];
+          }
         } else {
           isValid.value = true;
           Object.assign(
@@ -379,12 +380,9 @@ const CreateProduct = () => {
           delete editableData[key];
         }
       } else {
-        isValid.value = true;
-        Object.assign(
-          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-          editableData[key]
-        );
-        delete editableData[key];
+        isValid.value = false;
+        error.value = $t("product.CREATE.ERROR_REQUIRED");
+        Notification.error($t("product.CREATE.ERROR_REQUIRED"));
       }
     } catch (error) {
       isValid.value = true;
@@ -403,7 +401,7 @@ const CreateProduct = () => {
       const res = await isCodeSKU(codeSKU);
       if (res.success) {
         isValid.value = false;
-        error.value = getText("product", langStore.lang, "CODE_SKU_IS_EXSITS");
+        error.value = $t("product.CREATE.CODE_SKU_IS_EXSITS");
         return false;
       }
       return true;

@@ -1,11 +1,7 @@
-import coppyProduct from "./coppyProduct";
-import createProduct from "./createProduct";
+import actionProduct from "./actionProduct";
 import listProduct from "./listProduct";
-import updateProduct from "./updateProduct";
 
 export default {
-  CREATE: createProduct,
-  UPDATE: updateProduct,
-  COPPY: coppyProduct,
+  ACTION: actionProduct,
   LIST: listProduct,
 };

@@ -1,17 +1,5 @@
 import { useMenuStore } from "@/store/menu";
 import { onMounted, reactive, ref, watchEffect } from "vue";
-
-import { useRouter } from "vue-router";
-import { Form } from "ant-design-vue";
-import {
-  createProduct,
-  generateListSKU,
-  generateSKU,
-  isCodeSKU,
-} from "@/api/apiProduct";
-import { cloneDeep } from "lodash";
-import { Notification } from "@/components/common/Notification/Notification";
-import { useImageUpload } from "@/hooks/useImagrUpload";
 import Action from "@/components/Action/Action.vue";
 import InputForm from "@/components/common/Input/InputForm.vue";
 import RadioForm from "@/components/common/Radio/RadioForm.vue";
@@ -19,17 +7,29 @@ import SelectForm from "@/components/common/Select/SelectForm.vue";
 import CheckboxForm from "@/components/common/checkbox/CheckboxForm.vue";
 import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
-import { getText } from "@/constants/lang";
-import { useLangStore } from "@/store/lang";
+import { useRoute, useRouter } from "vue-router";
+import { Form } from "ant-design-vue";
+import {
+  createProduct,
+  generateListSKU,
+  generateListUpdateSKU,
+  generateSKU,
+  getProductByCodeSku,
+  isCodeSKU,
+  updateProduct,
+} from "@/api/apiProduct";
+import { cloneDeep } from "lodash";
+import { Notification } from "@/components/common/Notification/Notification";
+import { useImageUpload } from "@/hooks/useImagrUpload";
 import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
+
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
 import { $t } from "@/config/app";
-const CreateProduct = () => {
-  const langStore = useLangStore();
 
+const actionProduct = ({ action, namePath }) => {
   const formState = reactive({
-    status: $t("product.CREATE.IN_BUSINESS"),
+    status: $t("product.ACTION.IN_BUSINESS"),
     codeSKU: "",
     group: "",
     name: "",
@@ -42,29 +42,28 @@ const CreateProduct = () => {
     color: "",
     description: "",
     barcode: "",
+    size: 30,
     isParent: 1,
     imageUrl: "",
+    id: null,
   });
-
   const optionAtributes = ref([]);
+  const dataValues = ref([]);
   const isDisable = ref(false);
-  const error = ref("");
-  const indexCurrent = ref(0);
-  const isValid = ref(true);
   const isDisabledAtribute = ref(true);
-  const inputName = ref(null);
+  const error = ref("");
+  const isValid = ref(true);
   const router = useRouter();
   const form = Form.useForm(formState);
   const selectedRowKeys = ref([]);
+  const listDelete = ref([]);
   const editableData = reactive({});
   const columnValue = ref("");
   let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
-  const dataValues = ref([]);
+  const route = useRoute();
   onMounted(() => {
     Init();
   });
-
-  // cập nhật tên dựa trên các thay đổi
 
   watchEffect(() => {
     if (formState.codeSKU) {
@@ -74,6 +73,10 @@ const CreateProduct = () => {
     }
   });
 
+  console.log(formState);
+
+  // cập nhật giá mua và giá bán khi có thay đổi
+
   watchEffect(() => {
     if (optionAtributes.value.length > 0) {
       const price = optionAtributes.value.reduce((accumulator, currrent) => {
@@ -82,8 +85,8 @@ const CreateProduct = () => {
       const sell = optionAtributes.value.reduce((accumulator, currrent) => {
         return accumulator + +currrent.sell;
       }, 0);
-      formState.sell = `${Math.floor(sell / optionAtributes.value.length)}`;
-      formState.price = `${Math.floor(price / optionAtributes.value.length)}`;
+      formState.sell = `${Math.floor(+sell / optionAtributes.value.length)}`;
+      formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
     }
   });
 
@@ -91,81 +94,49 @@ const CreateProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: `${$t("product.COPPY.PRODUCT")} / ${getText(
-        "shared",
-        langStore.lang,
-        "ADD"
-      )}`,
+      namePath: `${$t("product.ACTION.PRODUCT")} / ${namePath}`,
     });
+    if (action !== "create") {
+      handleGetData();
+    }
   };
 
-  // trở về màn danh sách hàng hóa
+  // xử lý lấy ra dữ liệu hàng hóa
 
-  const onClickExit = () => {
-    router.push({
-      name: "list_product",
-    });
-  };
-
-  // xử lý thêm mới hàng hóa
-
-  const onFinish = async () => {
+  const handleGetData = async () => {
     try {
-      if (isValid.value) {
-        let payload = [];
-        if (optionAtributes.value && optionAtributes.value.length > 0) {
-          payload = [...optionAtributes.value].map((item) => {
-            if (item.isParent !== 1) {
-              return {
-                ...item,
-                isHide:
-                  formState.isHide === true
-                    ? $t("product.CREATE.NO")
-                    : $t("product.CREATE.YES"),
-                description: formState.description,
-              };
-            }
+      const res = await getProductByCodeSku(route.params.id);
+      if (res.success) {
+        const dataAtributes = res.data.atributes;
+        const dt = {
+          ...res.data.data,
+          sell: `${res.data.sell ? res.data.sell : ""}`,
+          price: `${res.data.price ? res.data.price : ""}`,
+          isHide: res.isHide === $t("product.ACTION.NO") ? true : false,
+          unit:
+            res.data.data.unit === "double"
+              ? $t("product.ACTION.PAIR")
+              : $t("product.ACTION.SINGLE"),
+        };
+        if (dataAtributes && dataAtributes.length > 0) {
+          optionAtributes.value = dataAtributes;
+          const dataColor = dataAtributes.map((item) => {
             return {
-              ...item,
-              isHide: $t("product.CREATE.NO"),
-              description: formState.description,
+              value: item.color,
+              label: item.color,
             };
           });
+          dataValues.value = dataColor.map((item) => item.value);
+          selectedRowKeys.value = dataColor;
         }
-        const res = await createProduct({
-          ...formState,
-          products: payload,
-          image: {
-            fileName: imageFile.value.name,
-            fileData: imageUrl.value.split(",")[1],
-          },
-          color: "null",
-          isHide:
-            formState.isHide.length > 0
-              ? $t("product.CREATE.YES")
-              : $t("product.CREATE.NO"),
-        });
-        if (res && res.success) {
-          Notification.success(
-            getText("shared", langStore.lang, "ADD_NEW_SUCCESS")
-          );
-          router.push({
-            name: "list_product",
-          });
-        } else {
-          Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
+        Object.assign(formState, dt);
+        imageUrl.value = formState.imageUrl;
+        if (action === "coppy") {
+          formState.codeSKU = await hanldeGetCode(formState.name, "", true);
+          handleGetListCode();
         }
-      } else {
-        Notification.error(error.value);
       }
-    } catch (error) {
-      if (error.status === HTTP_STATUS.BAD_REQUEST) {
-        Notification.error($t("product.CREATE.CODE_SKU_IS_EXSITS"));
-      }
-      if (error.status === HTTP_STATUS.CONFLIC_REQUEST) {
-        Notification.error($t("product.CREATE.CODE_SKU_IS_DUPLICATE"));
-      }
-    }
+    } catch (error) {}
   };
 
   // xử lý khi người dùng enter ô nhập tên
@@ -179,28 +150,6 @@ const CreateProduct = () => {
       }
     } else {
       formState.codeSKU = "";
-    }
-  };
-
-  // xử lý khi người dùng enter ô nhập mã sku
-
-  const handlePressEnterCodeSKU = async (e) => {
-    e.preventDefault();
-    await handleGetListCode1();
-  };
-
-  const handleGetListCode1 = async () => {
-    if (formState.codeSKU) {
-      const res = await generateListSKU(formState.codeSKU, dataValues.value);
-      if (res.success) {
-        const dataCP = [...optionAtributes.value].map((item, index) => {
-          return {
-            ...item,
-            codeSKU: res.data[index],
-          };
-        });
-        optionAtributes.value = dataCP;
-      }
     }
   };
 
@@ -222,6 +171,13 @@ const CreateProduct = () => {
     }
   };
 
+  // xử lý khi người dùng enter ô nhập mã sku
+
+  const handlePressEnterCodeSKU = async (e) => {
+    e.preventDefault();
+    handleGetListCode();
+  };
+
   // xử lý khi tạo ra mã sku mới dựa vào tên
 
   const hanldeGetCode = async (name) => {
@@ -235,10 +191,102 @@ const CreateProduct = () => {
     return name;
   };
 
+  // trở về màn danh sách hàng hóa
+
+  const onClickExit = () => {
+    router.push({
+      name: "list_product",
+    });
+  };
+
+  // xử lý cập nhật hàng hóa
+
+  const onFinish = async () => {
+    try {
+      if (isValid.value) {
+        const payload = [...optionAtributes.value].map((item) => {
+          return {
+            ...item,
+            isHide:
+              formState.isHide === true
+                ? $t("product.ACTION.OTHER")
+                : $t("product.ACTION.YES"),
+            description: formState.description,
+            description: formState.description,
+            status: formState.status,
+            id: item.id ? item.id : -1,
+          };
+        });
+        handlePostData(payload);
+      } else {
+        Notification.error(error.value);
+      }
+    } catch (error) {
+      if (error.status === HTTP_STATUS.BAD_REQUEST) {
+        Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
+      }
+    }
+  };
+
+  const handlePostData = async (payload) => {
+    if (action === "update") {
+      const res = await updateProduct({
+        listSkuUpdate: {
+          ...formState,
+          products: payload,
+          isHide: formState.isHide
+            ? $t("product.ACTION.NO")
+            : $t("product.ACTION.YES"),
+          image: {
+            fileName: imageFile.value.name,
+            fileData: imageUrl.value.split(",")[1],
+          },
+        },
+        listSKUsDelete: listDelete.value,
+      });
+      if (res && res.success) {
+        Notification.success($t("product.ACTION.UPDATE_SUCCESS"));
+        router.push({
+          name: "list_product",
+        });
+      } else {
+        Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
+      }
+    } else {
+      const res = await createProduct({
+        ...formState,
+        products: payload,
+        image: {
+          fileName: imageFile.value.name,
+          fileData: imageUrl.value.split(",")[1],
+        },
+        color: "null",
+        isHide:
+          formState.isHide.length > 0
+            ? $t("product.ACTION.YES")
+            : $t("product.ACTION.OTHER"),
+      });
+      if (res && res.success) {
+        Notification.success($t("product.ACTION.ADD_NEW_SUCCESS"));
+        router.push({
+          name: "list_product",
+        });
+      } else {
+        Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
+      }
+    }
+  };
+
   // xử lý khi có thay đổi checkbox hiển thị
 
   const handleChangeIsHide = (e) => {
     formState.isHide = e.target.checked;
+  };
+
+  // xử lý khi có thay đổi trạng thái
+
+  const handleChangeStatus = (e) => {
+    formState.status = e.target.value;
   };
 
   // xử lý khi có thay đổi đơn vị
@@ -260,7 +308,7 @@ const CreateProduct = () => {
           return {
             ...formState,
             isParent: 0,
-            isHide: $t("product.CREATE.NO"),
+            isHide: $t("product.ACTION.OTHER"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
             barcode: generateRandomId(),
@@ -286,9 +334,55 @@ const CreateProduct = () => {
       } else {
         const index =
           optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
-        indexCurrent.value = index;
-
         dt.push(items[index]);
+        optionAtributes.value = dt;
+      }
+    }
+  };
+
+  const handleGetListCodeUpdate = async (values) => {
+    const res = await generateListUpdateSKU(
+      values,
+      formState.id,
+      listDelete.value
+    );
+    if (res.success) {
+      const items =
+        res.data &&
+        res.data.length > 0 &&
+        res.data.map((item, index) => {
+          return {
+            ...formState,
+            isParent: 0,
+            isHide: "Không",
+            color: values[index],
+            name: formState.name + `(${values[index]})`,
+            codeSKU: item,
+            barcode: generateRandomId(),
+            price: formState.price ? formState.price : "0",
+            sell: formState.sell ? formState.sell : "0",
+          };
+        });
+      const listSkus = items.map((item) => item.codeSKU);
+      const dt = [...optionAtributes.value];
+      if (dt.length > items.length) {
+        const codeSKU = dt.find((item) => !listSkus.includes(item.codeSKU));
+        const datas = [...listDelete.value];
+        datas.push(codeSKU.id);
+        listDelete.value = datas;
+        const dataUpdate = dt
+          .filter((item) => items.some((k) => k.color === item.color))
+          .map((item) => {
+            return {
+              ...item,
+            };
+          });
+
+        optionAtributes.value = dataUpdate;
+      } else {
+        const index =
+          optionAtributes.value.length === 0 ? 0 : values.length - 1;
+        dt.push({ ...items[index], id: null });
         optionAtributes.value = dt;
       }
     }
@@ -297,10 +391,21 @@ const CreateProduct = () => {
   // xử lý khi có thay đổi màu sắc
 
   const handleChangeColor = async (values) => {
-    selectedRowKeys.value = values;
+    // selectedRowKeys.value = values;
+
     if (values && values.length > 0) {
       dataValues.value = values;
-      handleGetListCode();
+      // selectedRowKeys.value = values.map((item) => {
+      //   return {
+      //     value: item,
+      //     label: item,
+      //   };
+      // });
+      if (action === "update") {
+        handleGetListCodeUpdate(values);
+      } else {
+        handleGetListCode();
+      }
     } else {
       optionAtributes.value = [];
     }
@@ -310,20 +415,22 @@ const CreateProduct = () => {
 
   const handleDeleteRow = (codeSKU) => {
     if (optionAtributes.value && optionAtributes.value.length > 0) {
-      if (optionAtributes.value.length === 1) {
-      }
       const dtDelete = optionAtributes.value.find(
         (item) => item.codeSKU === codeSKU
       );
+      const datas = [...listDelete.value];
+      datas.push(codeSKU);
+      listDelete.value = datas;
       const dt = optionAtributes.value.filter(
         (item) => item.codeSKU !== codeSKU
       );
       const selectedDelete = selectedRowKeys.value.filter(
-        (item) => item != dtDelete.color
+        (item) => item.value != dtDelete.color
       );
       optionAtributes.value = dt;
       selectedRowKeys.value = selectedDelete;
     } else {
+      isDisable.value = false;
     }
   };
 
@@ -348,20 +455,15 @@ const CreateProduct = () => {
         const codeSKUCurrent = optionAtributes.value.filter(
           (item) => key === item.codeSKU
         )[0].codeSKU;
-
         if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
           const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-          error.value = $t("product.CREATE.CODE_SKU_IS_DUPLICATE");
+          error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
           if (!isCheckCodeSku) {
-            Notification.error($t("product.CREATE.CODE_SKU_IS_EXSITS"));
+            Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
           } else if (!handleCheckDuplicateCodeSku(key, index)) {
             isValid.value = false;
-            error.value = getText(
-              "product",
-              langStore.lang,
-              "CODE_SKU_IS_DUPLICATE"
-            );
-            Notification.error($t("product.CREATE.CODE_SKU_IS_DUPLICATE"));
+            error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
+            Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
             return;
           } else {
             isValid.value = true;
@@ -381,8 +483,8 @@ const CreateProduct = () => {
         }
       } else {
         isValid.value = false;
-        error.value = $t("product.CREATE.ERROR_REQUIRED");
-        Notification.error($t("product.CREATE.ERROR_REQUIRED"));
+        error.value = $t("product.ACTION.ERROR_REQUIRED");
+        Notification.error($t("product.ACTION.ERROR_REQUIRED"));
       }
     } catch (error) {
       isValid.value = true;
@@ -401,7 +503,7 @@ const CreateProduct = () => {
       const res = await isCodeSKU(codeSKU);
       if (res.success) {
         isValid.value = false;
-        error.value = $t("product.CREATE.CODE_SKU_IS_EXSITS");
+        error.value = $t("product.ACTION.CODE_SKU_IS_EXSITS");
         return false;
       }
       return true;
@@ -425,6 +527,7 @@ const CreateProduct = () => {
     }
     return true;
   };
+
   return {
     formState,
     optionAtributes,
@@ -439,6 +542,7 @@ const CreateProduct = () => {
     handleChangeColor,
     handleDeleteRow,
     handleEdit,
+    handleChangeStatus,
     handleSave,
     Action,
     InputForm,
@@ -453,15 +557,11 @@ const CreateProduct = () => {
     imageUrl,
     handleImageSelected,
     Form,
-    langStore,
-    isDisabledAtribute,
-    getText,
     form,
-    inputName,
     columnValue,
     editableData,
     options,
   };
 };
 
-export default CreateProduct;
+export default actionProduct;

@@ -5,7 +5,6 @@ import Logo from "@/assets/imgs/Logo_Full_White.png";
 import Menu from "@/components/common/Menu/Menu.vue";
 import IconBoxesStacked from "@/components/icons/IconBoxesStacked.vue";
 // store
-import { useLangStore } from "@/store/lang";
 import { $t } from "@/config/app";
 
 // hàm hỗ trợ
@@ -13,7 +12,7 @@ import { $t } from "@/config/app";
 const Sider = () => {
   const items = [
     {
-      label: $t("product.COPPY.PRODUCT"),
+      label: $t("product.ACTION.PRODUCT"),
       key: "1",
       icon: () => h(IconBoxesStacked),
     },
@@ -35,7 +34,6 @@ const Sider = () => {
     Logo,
     Menu,
     IconBoxesStacked,
-    useLangStore,
     onCollapse,
     onBreakpoint,
     selectedKeys,

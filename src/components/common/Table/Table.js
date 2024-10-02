@@ -14,11 +14,8 @@ import {
   SyncOutlined,
 } from "@ant-design/icons-vue";
 //store
-import { useLangStore } from "@/store/lang";
 // hàm bổ trợ
-import { getText } from "@/constants/lang";
 const Table = (props) => {
-  const langStore = useLangStore();
   const idProduct = ref();
   const state = reactive({
     selectedRowKeys: [],
@@ -115,10 +112,8 @@ const Table = (props) => {
     EditOutlined,
     DeleteOutlined,
     SyncOutlined,
-    langStore,
     state,
     handleColumnInputChange,
-    getText,
     handleColumnSelectChange,
     HandleClickNextLastPage,
     handlePreventDefault,

@@ -12,9 +12,7 @@ import {
 } from "@ant-design/icons-vue";
 //store
 import { useMenuStore } from "@/store/menu";
-import { useLangStore } from "@/store/lang";
 // hàm bổ trợ
-import { getText } from "@/constants/lang";
 const Header = () => {
   const options = [
     {
@@ -59,13 +57,10 @@ const Header = () => {
   ];
   // store lưu trữ các trạng thái của menu
   const menuStore = useMenuStore();
-  const langStore = useLangStore();
   return {
     options,
     segments,
     menuStore,
-    langStore,
-    getText,
     Select,
     Dropdown,
     Segment,

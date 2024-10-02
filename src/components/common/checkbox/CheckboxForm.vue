@@ -11,14 +11,16 @@
       :label="item.label && item.label"
       :rules="rules"
     >
-      <a-checkbox @change="onChange" v-model:checked="checked">{{
-        text && text
-      }}</a-checkbox>
+      <a-checkbox
+        @change="onChange"
+        v-model:checked="formSate[`${item && item.value && item.value}`]"
+        >{{ text && text }}</a-checkbox
+      >
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 
 const props = defineProps({
   defaultValue: String,
@@ -35,4 +37,9 @@ const props = defineProps({
   tabIndex: Number, // Thêm tabIndex vào props
 });
 const checked = ref(props.checked);
+watchEffect(() => {
+  console.log(props.value);
+  checked.value = props.checked;
+});
+console.log(checked.value);
 </script>

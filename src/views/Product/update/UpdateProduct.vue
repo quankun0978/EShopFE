@@ -27,14 +27,14 @@
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
-            label: $t('product.CREATE.BUSINESS_STATUS'),
+            label: $t('product.ACTION.BUSINESS_STATUS'),
             value: 'status',
           }"
         />
         <InputForm
           :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
-            label: $t('product.CREATE.NAME_PRODUCT'),
+            label: $t('product.ACTION.NAME_PRODUCT'),
             value: 'name',
           }"
           :tab-index="2"
@@ -45,7 +45,7 @@
         />
         <SelectForm
           :item="{
-            label: $t('product.CREATE.GROUP_PRODUCT'),
+            label: $t('product.ACTION.GROUP_PRODUCT'),
             value: 'group',
           }"
           :tab-index="3"
@@ -56,7 +56,7 @@
         />
         <InputForm
           :item="{
-            label: $t('product.CREATE.CODE_SKU'),
+            label: $t('product.ACTION.CODE_SKU'),
             value: 'codeSKU',
           }"
           :model-value="formState.codeSKU"
@@ -71,7 +71,7 @@
         />
         <InputForm
           :item="{
-            label: $t('product.CREATE.PRICE'),
+            label: $t('product.ACTION.PRICE'),
             value: 'price',
           }"
           :model-value="formState.price"
@@ -82,19 +82,19 @@
           :rules="[
             {
               validator: validateNumber,
-              message: 'Vui lòng nhập một số hợp lệ!',
+              message: $t('product.ACTION.ERROR_VALID_NUMBER'),
             },
           ]"
         />
         <InputForm
           :item="{
-            label: $t('product.CREATE.SELL'),
+            label: $t('product.ACTION.SELL'),
             value: 'sell',
           }"
           :rules="[
             {
               validator: validateNumber,
-              message: 'Vui lòng nhập một số hợp lệ!',
+              message: $t('product.ACTION.ERROR_VALID_NUMBER'),
             },
           ]"
           :model-value="formState.sell"
@@ -105,7 +105,7 @@
         <SelectForm
           :-on-change="handleChangeUnit"
           :item="{
-            label: $t('product.CREATE.UNIT'),
+            label: $t('product.ACTION.UNIT'),
             value: 'unit',
           }"
           :style="{ width: 200 }"
@@ -115,8 +115,9 @@
           :tab-index="7"
         />
         <CheckboxForm
+          :text="$t('product.ACTION.IS_SHOW_SCREEN')"
           :item="{
-            value: $t('product.UPDATE.YES'),
+            value: 'isHide',
           }"
           :options="options.optionsiSHide"
           :form-sate="formState"
@@ -126,13 +127,13 @@
       </div>
       <div>
         <p style="padding-bottom: 8px; font-weight: 600">
-          {{ $t("product.CREATE.INFO_ATRIBUTES") }}
+          {{ $t("product.ACTION.INFO_ATRIBUTES") }}
         </p>
         <SelectForm
           :is-mode-tag="true"
           :-on-change="handleChangeColor"
           :item="{
-            label: $t('product.CREATE.ATRIBUTES'),
+            label: $t('product.ACTION.ATRIBUTES'),
             value: 'color',
           }"
           :tab-index="9"
@@ -155,7 +156,7 @@
           }"
           :columns="options.columnsAtributes"
           :item="{
-            label: $t('product.CREATE.DETAIL_ATRIBUTES'),
+            label: $t('product.ACTION.DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
         />
@@ -164,12 +165,12 @@
         <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
         <InputForm
           :item="{
-            label: $t('product.CREATE.DESCRIPTION'),
+            label: $t('product.ACTION.DESCRIPTION'),
             value: 'description',
           }"
           :is-textarea="true"
           :max-length="200"
-          :placeholder="'Vui long nhập tối đa 200 ký tự'"
+          :placeholder="$t('product.ACTION.ERROR_MAX_LENGTH')"
           :rows="3"
           :model-value="formState.description"
           :form-sate="formState"
@@ -178,7 +179,7 @@
         />
         <UploadForm
           :item="{
-            label: $t('product.CREATE.IMAGE_PRODUCT'),
+            label: $t('product.ACTION.IMAGE_PRODUCT'),
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"
@@ -191,7 +192,8 @@
   </a-form>
 </template>
 <script setup>
-import UpdateProduct from "./updateProduct";
+import actionProduct from "../actionProduct";
+
 const {
   formState,
   options,
@@ -222,5 +224,5 @@ const {
   columnValue,
   handleChangeStatus,
   editableData,
-} = UpdateProduct();
+} = actionProduct({ action: "update", namePath: "chỉnh sửa" });
 </script>

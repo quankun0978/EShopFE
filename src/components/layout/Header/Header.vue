@@ -17,7 +17,7 @@
           >
             <ArrowLeftOutlined />
             <span class="span">{{
-              $t("product.CREATE.BACK_TO_START_PAGE")
+              $t("product.ACTION.BACK_TO_START_PAGE")
             }}</span>
           </a-space>
         </router-link>

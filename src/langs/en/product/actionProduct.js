@@ -1,4 +1,4 @@
-const updateProduct = {
+const actionProduct = {
   SAVE: "Save",
   ID: "ID",
   STT: "STT",
@@ -51,4 +51,4 @@ const updateProduct = {
   CODE_SKU_IS_EXSITS: "Code sku is exsits",
   CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
 };
-export default updateProduct;
+export default actionProduct;

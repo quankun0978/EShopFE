@@ -6,9 +6,6 @@ import { showConfirm } from "@/components/common/Modal/Confirm";
 import { convertNumber, parseFormattedNumber } from "@/helpers/Funcs/helper";
 //store
 import { useMenuStore } from "@/store/menu";
-import { useLangStore } from "@/store/lang";
-// hàm bổ trợ
-import { getText } from "@/constants/lang";
 // component
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { Notification } from "@/components/common/Notification/Notification";
@@ -16,8 +13,6 @@ import Table from "@/components/common/Table/Table.vue";
 import { $t } from "@/config/app";
 
 const ListProduct = () => {
-  const langStore = useLangStore();
-
   const objectQuery = reactive({
     codeSKU: "",
     name: "",
@@ -59,12 +54,12 @@ const ListProduct = () => {
       input: objectQuery.name,
     },
     {
-      title: getText("product", langStore.lang, "GROUP_PRODUCT"),
+      title: $t("product.LIST.GROUP_PRODUCT"),
       dataIndex: "group",
       input: objectQuery.group,
     },
     {
-      title: getText("shared", langStore.lang, "UNIT"),
+      title: $t("product.LIST.UNIT"),
       dataIndex: "unit",
       input: objectQuery.unit,
     },
@@ -108,8 +103,8 @@ const ListProduct = () => {
             value: $t("product.LIST.ALL"),
           },
           {
-            label: $t("product.COPPY.PRODUCT"),
-            value: $t("product.COPPY.PRODUCT"),
+            label: $t("product.LIST.PRODUCT"),
+            value: $t("product.LIST.PRODUCT"),
           },
         ],
         defaultValue: $t("product.LIST.ALL"),
@@ -167,7 +162,7 @@ const ListProduct = () => {
 
   const Init = () => {
     useMenuStore().updateHeader({
-      namePath: $t("product.COPPY.PRODUCT"),
+      namePath: $t("product.LIST.PRODUCT"),
       isBack: true,
     });
     handleGetData();

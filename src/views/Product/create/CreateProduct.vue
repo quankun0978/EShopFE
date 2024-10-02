@@ -28,7 +28,7 @@
             :form-state="formState"
             :tab-index="1"
             :item="{
-              label: $t('product.CREATE.BUSINESS_STATUS'),
+              label: $t('product.ACTION.BUSINESS_STATUS'),
               value: 'status',
             }"
           />
@@ -40,7 +40,7 @@
               },
             ]"
             :item="{
-              label: $t('product.CREATE.NAME_PRODUCT'),
+              label: $t('product.ACTION.NAME_PRODUCT'),
               value: 'name',
             }"
             :input-ref="inputName"
@@ -52,7 +52,7 @@
           />
           <SelectForm
             :item="{
-              label: $t('product.CREATE.GROUP_PRODUCT'),
+              label: $t('product.ACTION.GROUP_PRODUCT'),
               value: 'group',
             }"
             :style="{ width: 200 }"
@@ -63,7 +63,7 @@
           />
           <InputForm
             :item="{
-              label: $t('product.CREATE.CODE_SKU'),
+              label: $t('product.ACTION.CODE_SKU'),
               value: 'codeSKU',
             }"
             :model-value="formState.codeSKU"
@@ -81,13 +81,13 @@
           />
           <InputForm
             :item="{
-              label: $t('product.CREATE.PRICE'),
+              label: $t('product.ACTION.PRICE'),
               value: 'price',
             }"
             :rules="[
               {
                 validator: validateNumber,
-                message: 'Vui lòng nhập một số hợp lệ!',
+                message: $t('product.ACTION.ERROR_VALID_NUMBER'),
               },
             ]"
             :model-value="formState.price"
@@ -98,7 +98,7 @@
           />
           <InputForm
             :item="{
-              label: $t('product.CREATE.SELL'),
+              label: $t('product.ACTION.SELL'),
               value: 'sell',
             }"
             :model-value="formState.sell"
@@ -109,14 +109,14 @@
             :rules="[
               {
                 validator: validateNumber,
-                message: 'Vui lòng nhập một số hợp lệ!',
+                message: $t('product.ACTION.ERROR_VALID_NUMBER'),
               },
             ]"
           />
           <SelectForm
             :-on-change="handleChangeUnit"
             :item="{
-              label: $t('product.CREATE.UNIT'),
+              label: $t('product.ACTION.UNIT'),
               value: 'unit',
             }"
             :style="{ width: 200 }"
@@ -126,7 +126,8 @@
             :tab-index="7"
           />
           <CheckboxForm
-            :text="'Hiển thị lên màn hình bán hàng'"
+            :checked="formState.isHide"
+            :text="$t('product.ACTION.IS_SHOW_SCREEN')"
             :item="{
               value: 'isHide',
             }"
@@ -138,13 +139,13 @@
         </div>
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">
-            {{ $t("product.CREATE.INFO_ATRIBUTES") }}
+            {{ $t("product.ACTION.INFO_ATRIBUTES") }}
           </p>
           <SelectForm
             :is-mode-tag="true"
             :-on-change="handleChangeColor"
             :item="{
-              label: $t('product.CREATE.ATRIBUTES'),
+              label: $t('product.ACTION.ATRIBUTES'),
               value: 'color',
             }"
             :options="selectedRowKeys"
@@ -167,7 +168,7 @@
             }"
             :columns="options.columnsAtributes"
             :item="{
-              label: $t('product.CREATE.DETAIL_ATRIBUTES'),
+              label: $t('product.ACTION.DETAIL_ATRIBUTES'),
               name: 'detail',
             }"
           />
@@ -176,12 +177,12 @@
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
           <InputForm
             :item="{
-              label: $t('product.CREATE.DESCRIPTION'),
+              label: $t('product.ACTION.DESCRIPTION'),
               value: 'description',
             }"
             :is-textarea="true"
             :max-length="200"
-            :placeholder="'Vui lòng nhập tối đa 200 ký tự'"
+            :placeholder="$t('product.ACTION.ERROR_MAX_LENGTH')"
             :rows="3"
             :model-value="formState.description"
             :form-sate="formState"
@@ -190,7 +191,7 @@
           />
           <UploadForm
             :item="{
-              label: $t('product.CREATE.IMAGE_PRODUCT'),
+              label: $t('product.ACTION.IMAGE_PRODUCT'),
               value: 'image',
             }"
             :handle-image-selected="handleImageSelected"
@@ -210,8 +211,7 @@
   </div>
 </template>
 <script setup>
-import CreateProduct from "./createProduct.js";
-
+import actionProduct from "../actionProduct";
 const {
   formState,
   options,
@@ -243,5 +243,5 @@ const {
   isDisable,
   columnValue,
   editableData,
-} = CreateProduct();
+} = actionProduct({ action: "create", namePath: "Thêm mới" });
 </script>

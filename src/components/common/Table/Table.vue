@@ -22,7 +22,7 @@
         class="item-action"
       >
         <PlusOutlined />
-        {{ $t("product.CREATE.ADD") }}
+        {{ $t("product.LIST.ADD") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"
@@ -33,7 +33,7 @@
         class="item-action"
       >
         <CopyOutlined />
-        {{ $t("product.COPPY.COPPY") }}
+        {{ $t("product.LIST.COPPY") }}
       </RouterLink>
       <RouterLink
         :disabled="state.selectedRowKeys.length === 1 ? null : true"

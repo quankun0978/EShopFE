@@ -1,63 +1,62 @@
-import { useLangStore } from "@/store/lang";
 import { $t } from "@/config/app";
 export const optionsStatus = [
   {
-    label: $t("product.UPDATE.IN_BUSINESS"),
-    value: $t("product.UPDATE.IN_BUSINESS"),
+    label: $t("product.ACTION.IN_BUSINESS"),
+    value: $t("product.ACTION.IN_BUSINESS"),
   },
   {
-    label: $t("product.UPDATE.OUT_BUSINESS"),
-    value: $t("product.UPDATE.OUT_BUSINESS"),
+    label: $t("product.ACTION.OUT_BUSINESS"),
+    value: $t("product.ACTION.OUT_BUSINESS"),
   },
 ];
 
 export const optionsGroup = [
   {
-    label: $t("product.UPDATE.BOAT_PLATFORM"),
-    value: $t("product.UPDATE.BOAT_PLATFORM"),
+    label: $t("product.ACTION.BOAT_PLATFORM"),
+    value: $t("product.ACTION.BOAT_PLATFORM"),
   },
   {
-    label: $t("product.UPDATE.HOUSEHOLD_GOODS"),
-    value: $t("product.UPDATE.HOUSEHOLD_GOODS"),
+    label: $t("product.ACTION.HOUSEHOLD_GOODS"),
+    value: $t("product.ACTION.HOUSEHOLD_GOODS"),
   },
 ];
 
 export const optionsUnit = [
   {
-    label: $t("product.UPDATE.SINGLE"),
-    value: $t("product.UPDATE.SINGLE"),
+    label: $t("product.ACTION.SINGLE"),
+    value: $t("product.ACTION.SINGLE"),
   },
   {
-    label: $t("product.UPDATE.PAIR"),
-    value: $t("product.UPDATE.PAIR"),
+    label: $t("product.ACTION.PAIR"),
+    value: $t("product.ACTION.PAIR"),
   },
 ];
 
 export const columnsAtributes = [
   {
-    title: $t("product.UPDATE.NAME_PRODUCT"),
+    title: $t("product.ACTION.NAME_PRODUCT"),
     dataIndex: "name",
     width: "30%",
     key: "name",
   },
   {
-    title: $t("product.UPDATE.CODE_SKU"),
+    title: $t("product.ACTION.CODE_SKU"),
     dataIndex: "codeSKU",
     key: "codeSKU",
   },
 
   {
-    title: $t("product.UPDATE.BARCODE"),
+    title: $t("product.ACTION.BARCODE"),
     dataIndex: "barcode",
     key: "barcode",
   },
   {
-    title: $t("product.UPDATE.PRICE"),
+    title: $t("product.ACTION.PRICE"),
     dataIndex: "price",
     key: "price",
   },
   {
-    title: $t("product.UPDATE.SELL"),
+    title: $t("product.ACTION.SELL"),
     dataIndex: "sell",
     key: "sell",
   },
@@ -71,7 +70,7 @@ export const columnsAtributes = [
 
 export const optionsiSHide = [
   {
-    label: $t("product.UPDATE.DISPLAY_ON_SALES_SCREEN"),
-    value: $t("product.UPDATE.YES"),
+    label: $t("product.ACTION.DISPLAY_ON_SALES_SCREEN"),
+    value: $t("product.ACTION.YES"),
   },
 ];

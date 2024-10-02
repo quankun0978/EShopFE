@@ -5,12 +5,12 @@
       <Button
         :tab-index="tabIndexSave"
         :is-save="true"
-        :text="$t('product.CREATE.SAVE')"
+        :text="$t('product.ACTION.SAVE')"
         :handle-click="handleSave"
       />
       <Button
         :tab-index="tabIndexExit"
-        :text="$t('product.CREATE.CANCEL')"
+        :text="$t('product.ACTION.CANCEL')"
         :is-exit="true"
         :handle-click="handleExit"
       />

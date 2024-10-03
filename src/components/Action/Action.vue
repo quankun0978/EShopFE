@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div :style="style" style="background-color: white; width: 100%">
     <a-divider v-if="isFirst" />
     <a-space style="padding: 8px">
       <Button

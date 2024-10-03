@@ -17,12 +17,14 @@
         :placeholder="placeholder"
         :style="style"
         :disabled="isDisabledAtribute"
+        :filter-option="filterOption"
         mode="tags"
         ref="selectRef"
         :tabindex="tabIndex"
         :open="dropdownOpen"
         @blur="closeDropdown"
         @change="(e) => handleChange(e)"
+        show-search
         @keydown.enter.prevent="showDropdown"
         @click="showDropdown"
       />
@@ -36,9 +38,11 @@
         :tabindex="tabIndex"
         ref="selectRef"
         :open="dropdownOpen"
+        :filter-option="filterOption"
         @keydown.enter.prevent="showDropdown"
         @click="showDropdown"
         @blur="closeDropdown"
+        show-search
         @change="(e) => handleChange(e)"
       />
     </a-form-item>
@@ -84,5 +88,8 @@ const handleChange = (e) => {
     // Kiểm tra xem onChange có phải là hàm không
     props.OnChange(e); // Gọi hàm onChange với giá trị đã chọn
   }
+};
+const filterOption = (input, option) => {
+  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 </script>

@@ -23,6 +23,7 @@
         :tabindex="tabIndex"
       />
       <a-input
+        :autofocus="item.value === 'name'"
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @input="onInput"

@@ -9,6 +9,8 @@
       :placeholder="placeholder"
       :style="style"
       :options="items"
+      :filter-option="filterOption"
+      show-search
       @change="OnChange"
     >
     </a-select>
@@ -27,4 +29,7 @@ const props = defineProps({
 });
 const items = ref(props.options);
 const value = ref([props.defaultValue]);
+const filterOption = (input, option) => {
+  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
 </script>

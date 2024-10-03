@@ -73,8 +73,6 @@ const actionProduct = ({ action, namePath }) => {
     }
   });
 
-  console.log(formState);
-
   // cập nhật giá mua và giá bán khi có thay đổi
 
   watchEffect(() => {
@@ -207,6 +205,8 @@ const actionProduct = ({ action, namePath }) => {
         const payload = [...optionAtributes.value].map((item) => {
           return {
             ...item,
+            price: item.price ? item.price : 0,
+            sell: item.sell ? item.sell : 0,
             isHide:
               formState.isHide === true
                 ? $t("product.ACTION.OTHER")
@@ -391,7 +391,7 @@ const actionProduct = ({ action, namePath }) => {
   // xử lý khi có thay đổi màu sắc
 
   const handleChangeColor = async (values) => {
-    // selectedRowKeys.value = values;
+    selectedRowKeys.value = values;
 
     if (values && values.length > 0) {
       dataValues.value = values;
@@ -414,6 +414,8 @@ const actionProduct = ({ action, namePath }) => {
   // xử lý khi có xóa 1 hàng của bảng thuộc tính
 
   const handleDeleteRow = (codeSKU) => {
+    console.log(selectedRowKeys.value);
+    console.log(codeSKU);
     if (optionAtributes.value && optionAtributes.value.length > 0) {
       const dtDelete = optionAtributes.value.find(
         (item) => item.codeSKU === codeSKU
@@ -425,8 +427,9 @@ const actionProduct = ({ action, namePath }) => {
         (item) => item.codeSKU !== codeSKU
       );
       const selectedDelete = selectedRowKeys.value.filter(
-        (item) => item.value != dtDelete.color
+        (item) => item != dtDelete.color
       );
+      console.log(selectedDelete);
       optionAtributes.value = dt;
       selectedRowKeys.value = selectedDelete;
     } else {

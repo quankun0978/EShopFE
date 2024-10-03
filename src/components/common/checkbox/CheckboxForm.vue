@@ -38,8 +38,6 @@ const props = defineProps({
 });
 const checked = ref(props.checked);
 watchEffect(() => {
-  console.log(props.value);
   checked.value = props.checked;
 });
-console.log(checked.value);
 </script>

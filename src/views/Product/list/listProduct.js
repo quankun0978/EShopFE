@@ -111,25 +111,6 @@ const ListProduct = () => {
       },
     },
     {
-      title: $t("product.LIST.MANAGER_BY"),
-      dataIndex: "managerBy",
-      isSelect: true,
-      input: objectQuery.managerBy,
-      select: {
-        options: [
-          {
-            label: $t("product.LIST.ALL"),
-            value: $t("product.LIST.ALL"),
-          },
-          {
-            label: $t("product.LIST.OTHER"),
-            value: $t("product.LIST.OTHER"),
-          },
-        ],
-        defaultValue: $t("product.LIST.ALL"),
-      },
-    },
-    {
       title: $t("product.LIST.STATUS"),
       dataIndex: "status",
       isSelect: true,

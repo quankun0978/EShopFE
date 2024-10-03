@@ -3,6 +3,7 @@
     <a-form
       :model="formState"
       ref="form_create_data"
+      style="position: relative"
       name="basic"
       :form="form"
       autocomplete="off"
@@ -200,12 +201,10 @@
           />
         </div>
       </div>
-
       <Action
-        :is-first="true"
         :handle-exit="onClickExit"
-        :tab-index-save="11"
-        :tab-index-exit="12"
+        :tab-index-save="13"
+        :tab-index-exit="14"
       />
     </a-form>
   </div>

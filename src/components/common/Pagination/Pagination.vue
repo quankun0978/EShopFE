@@ -2,6 +2,8 @@
   <div
     style="
       display: flex;
+      position: fixed;
+      bottom: 0;
       justify-content: space-between;
       align-items: center;
       padding: 10px 8px;

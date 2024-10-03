@@ -62,6 +62,7 @@
     </div>
 
     <a-table
+      @row-click="testEvent"
       v-if="isInput"
       class="table-custom"
       :bordered="bordered"
@@ -114,7 +115,11 @@
             />
           </div>
         </template>
-        <template v-if="!column.hidden" #bodyCell="{ record }">
+        <template
+          @click="testEvent"
+          v-if="!column.hidden"
+          #bodyCell="{ record }"
+        >
           {{ record[column.dataIndex] }}
         </template>
       </a-column>
@@ -134,7 +139,6 @@
       v-bind:-handle-select-change="HandleChangePageSize"
     />
   </a-config-provider>
-
 </template>
 
 <script setup>
@@ -154,6 +158,10 @@ const props = defineProps({
   handleRefreshQuery: Function,
   handleDeleteData: Function,
 });
+
+const testEvent = () => {
+  alert("hihi");
+};
 
 const {
   Input,

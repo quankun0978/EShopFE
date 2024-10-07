@@ -3,7 +3,7 @@
     <a-form
       :model="formState"
       ref="form_create_data"
-      style="position: relative"
+      style="display: flex; flex-direction: column; height: 90vh"
       name="basic"
       :form="form"
       autocomplete="off"
@@ -21,7 +21,7 @@
         :tab-index-save="13"
         :tab-index-exit="14"
       />
-      <div style="padding: 8px; height: 80vh; overflow-y: scroll">
+      <div style="padding: 8px; overflow-y: auto">
         <div>
           <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
           <RadioForm
@@ -48,6 +48,7 @@
             v-bind:model-value="formState.name"
             :form-sate="formState"
             @press-enter.prevent="handlePressEnterName"
+            @press-tab="handlePressEnterName"
             :is-disable="isDisable"
             :tab-index="2"
           />
@@ -191,6 +192,7 @@
             :tab-index="10"
           />
           <UploadForm
+            :text="'Biểu tượng'"
             :item="{
               label: $t('product.ACTION.IMAGE_PRODUCT'),
               value: 'image',
@@ -202,6 +204,10 @@
         </div>
       </div>
       <Action
+        :style="{
+          position: 'fixed',
+          bottom: '0',
+        }"
         :handle-exit="onClickExit"
         :tab-index-save="13"
         :tab-index-exit="14"

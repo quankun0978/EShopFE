@@ -140,7 +140,7 @@ const actionProduct = ({ action, namePath }) => {
   // xử lý khi người dùng enter ô nhập tên
 
   const handlePressEnterName = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (formState.name) {
       formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
       if (optionAtributes.value.length > 0) {
@@ -280,7 +280,9 @@ const actionProduct = ({ action, namePath }) => {
   // xử lý khi có thay đổi checkbox hiển thị
 
   const handleChangeIsHide = (e) => {
-    formState.isHide = e.target.checked;
+    if (e.target !== undefined) {
+      formState.isHide = e.target.checked;
+    }
   };
 
   // xử lý khi có thay đổi trạng thái

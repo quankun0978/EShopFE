@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Chiều cao đầy đủ của viewport */
+            margin: 0; /* Bỏ margin mặc định */
+        }
+
+        div {
+            width: 100px;
+        }
+
+        #div1 {
+            background-color: red;
+            height: 100px; /* Chiều cao cố định cho khối đỏ */
+        }
+
+        #div2 {
+            background-color: green;
+            flex-grow: 1; /* Khối xanh lá cây sẽ chiếm không gian còn lại */
+        }
+
+        #div3 {
+            background-color: blue;
+            height: 100px; /* Chiều cao cố định cho khối xanh */
+        }
+    </style>
+</head>
+<body>
+    <div id="div1"></div> <!-- Khối đỏ ở đầu -->
+    <div id="div2"></div> <!-- Khối xanh lá cây chiếm không gian còn lại -->
+    <div id="div3"></div> <!-- Khối xanh ở cuối -->
+</body>
+</html>

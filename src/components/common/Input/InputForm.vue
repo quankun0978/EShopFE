@@ -23,11 +23,11 @@
         :tabindex="tabIndex"
       />
       <a-input
-        :autofocus="item.value === 'name'"
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @input="onInput"
         @pressEnter="onPressEnter"
+        @keydown="pressTab"
         :disabled="isDisable"
         ref="inputRef"
         :tabindex="tabIndex"
@@ -36,6 +36,8 @@
   </a-config-provider>
 </template>
 <script setup>
+import { onMounted, ref, watchEffect } from "vue";
+
 const props = defineProps({
   value: String,
   modelValue: String,
@@ -49,8 +51,21 @@ const props = defineProps({
   formSate: Object,
   onInput: Function,
   onPressEnter: Function,
+  onPressTab: Function,
   isDisable: Boolean,
   inputRef: String,
   tabIndex: Number,
 });
+// onMounted(() => {
+//   props.focusName = "name";
+// });
+
+const pressTab = (e) => {
+  if (e.key === "Tab") {
+    if (props.onPressTab) {
+      props.onPressTab(e);
+    }
+    // Thực hiện các hành động khác nếu cần
+  }
+};
 </script>

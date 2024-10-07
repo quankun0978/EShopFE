@@ -6,8 +6,14 @@
   >
     <a-form-item :label="item.label && item.label">
       <a-form-item :name="item.name && item.name">
-        <label :tabindex="tabIndex" for="image-upload" class="upload-custom">
+        <label
+          :tabindex="tabIndex"
+          for="image-upload"
+          class="upload-custom"
+          @keydown.enter.prevent="handleEnterLabel"
+        >
           <div
+            @keydown="handleTest"
             style="
               display: flex;
               justify-content: flex-end;
@@ -15,7 +21,7 @@
               gap: 4px;
             "
           >
-            <IconPencil /> Bieu tuong
+            <IconPencil /> {{ text }}
           </div>
           <IconOpenDocument />
           <div
@@ -59,6 +65,7 @@ import IconPencil from "@/components/icons/IconPencil.vue";
 import "./UploadForm.scss";
 const props = defineProps({
   options: Array,
+  text: String,
   placeholder: String,
   style: Object,
   defaultValue: String,
@@ -69,4 +76,8 @@ const props = defineProps({
   imageUrl: String,
   tabIndex: Number, // Thêm tabIndex vào props
 });
+const handleEnterLabel = (e) => {
+  // props.handleImageSelected(e);
+  document.getElementById("image-upload").click();
+};
 </script>

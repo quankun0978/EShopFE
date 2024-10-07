@@ -12,7 +12,9 @@
       :rules="rules"
     >
       <a-checkbox
+        :tabindex="'7'"
         @change="onChange"
+        @keydown.enter.prevent="toggleCheckbox"
         v-model:checked="formSate[`${item && item.value && item.value}`]"
         >{{ text && text }}</a-checkbox
       >
@@ -40,4 +42,13 @@ const checked = ref(props.checked);
 watchEffect(() => {
   checked.value = props.checked;
 });
+const toggleCheckbox = () => {
+  // Đảo ngược giá trị checkbox hiện tại
+  const currentValue = props.formSate[props.item.value];
+  props.formSate[props.item.value] = !currentValue;
+  // Gọi hàm onChange nếu nó đã được cung cấp
+  if (props.onChange) {
+    props.onChange(props.formSate[props.item.value]);
+  }
+};
 </script>

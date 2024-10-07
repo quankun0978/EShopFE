@@ -77,14 +77,14 @@
       :pagination="false"
     >
       <a-column
-        v-for="column in columns"
+        v-for="(column, index) in columns"
         :key="column.dataIndex"
         :dataIndex="column.dataIndex"
       >
         <template #title v-if="column.isSelect">
-          <h3 style="text-align: center">
+          <h4 style="text-align: center">
             {{ column.title }}
-          </h3>
+          </h4>
           <Select
             :options="column.select.options"
             :-on-change="
@@ -98,9 +98,9 @@
         </template>
 
         <template #title v-else>
-          <h3 style="text-align: center">
+          <h4 style="text-align: center">
             {{ column.title }}
-          </h3>
+          </h4>
           <div style="display: flex">
             <Button
               :handle-click="handleSearch"
@@ -115,12 +115,20 @@
             />
           </div>
         </template>
-        <template
-          @click="testEvent"
-          v-if="!column.hidden"
-          #bodyCell="{ record }"
-        >
-          {{ record[column.dataIndex] }}
+        <template @click="testEvent" :ref="firstRow" #bodyCell="{ record }">
+          <div
+            :key="record.name"
+            v-if="index === 1"
+            ref="firstRow"
+            tabindex="1"
+          >
+            <!-- Thêm ref vào hàng đầu tiên -->
+            {{ record[column.dataIndex] }}
+          </div>
+          <div v-else>
+            {{ console.log(index) }}
+            {{ record[column.dataIndex] }}
+          </div>
         </template>
       </a-column>
     </a-table>
@@ -144,6 +152,7 @@
 <script setup>
 import "./table.scss";
 import Table from "./Table.js";
+import { onMounted, ref } from "vue";
 const props = defineProps({
   items: Array,
   columns: Array,
@@ -185,6 +194,12 @@ const {
   HandleClickPrevPage,
   HandleClickRefreshPage,
 } = Table(props);
+const firstRow = ref(null);
+onMounted(() => {
+  if (firstRow.value) {
+    firstRow.value.focus(); // Tự động focus vào hàng đầu tiên
+  }
+});
 </script>
 <style lang="scss" scoped>
 @import "./Table.scss";

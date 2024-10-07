@@ -21,7 +21,7 @@
         mode="tags"
         ref="selectRef"
         :tabindex="tabIndex"
-        :open="dropdownOpen"
+        :open="false"
         @blur="closeDropdown"
         @change="(e) => handleChange(e)"
         show-search

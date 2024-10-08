@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref, watchEffect } from "vue";
 //componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
@@ -19,17 +19,23 @@ const Table = (props) => {
   const idProduct = ref();
   const state = reactive({
     selectedRowKeys: [],
-    listId: [],
     loading: false,
   });
   const router = useRouter();
+
+  watchEffect(() => {
+    if (props.items && props.items.length > 0) {
+      idProduct.value = props.items[0].id;
+      state.selectedRowKeys = [props.items[0].id];
+    }
+  });
+
   // sự kiện khi thay đổi các combo box
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
+  const onSelectChange = (selectedRowKeys) => {
+    console.log(selectedRowKeys);
     state.selectedRowKeys = selectedRowKeys;
-    if (selectedRows && selectedRows.length > 0) {
-      const listId = selectedRows.map((item) => item.id);
-      idProduct.value = listId[0];
-      state.listId = listId;
+    if (selectedRowKeys && selectedRowKeys.length > 0) {
+      idProduct.value = selectedRowKeys[0];
     }
   };
   // sự kiện khi thay đổi các select tìm kiếm

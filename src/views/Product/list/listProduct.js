@@ -173,7 +173,7 @@ const ListProduct = () => {
             res.data.data?.map((item) => ({
               ...item,
               price: convertNumber(item.price),
-              key: item.codeSKU,
+              key: item.id,
             })) || [];
           data.value = dt;
         }

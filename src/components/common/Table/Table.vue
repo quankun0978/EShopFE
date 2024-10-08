@@ -51,7 +51,10 @@
         <EditOutlined />
         {{ $t("product.LIST.EDIT") }}
       </RouterLink>
-      <div class="item-action" @click="() => handleDeleteData(state.listId)">
+      <div
+        class="item-action"
+        @click="() => handleDeleteData(state.selectedRowKeys)"
+      >
         <DeleteOutlined />
         {{ $t("product.LIST.DELETE") }}
       </div>
@@ -180,6 +183,7 @@ const {
   PlusOutlined,
   CopyOutlined,
   EditOutlined,
+  selectedRowKeys,
   DeleteOutlined,
   SyncOutlined,
   state,

@@ -1,6 +1,5 @@
 <template>
   <a-layout-sider
-    style="width: 80px; background-color: #00577b; min-height: 100vh"
     breakpoint="lg"
     class="layout-sider"
     collapsed-width="0"

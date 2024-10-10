@@ -1,24 +1,32 @@
 .upload-custom {
-    width: 200px;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 8px;
-    border: 1px dashed #026b97;
-    position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px dashed #026b97;
+  position: relative;
 }
 
 #image-upload {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    width: inherit;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: inherit;
+  height: 100%;
+}
+.upload-custom-box {
+  width: 40px;
+  margin: 0 auto;
+  background-color: #026b97;
+  padding: 4px;
+  color: #fff;
+  text-align: center;
 }

@@ -19,14 +19,20 @@ export const parseFormattedNumber = (formattedNumber) => {
 };
 export const validateNumber = (rule, value) => {
   if (!value) {
-    return Promise.reject(new Error("Vui lòng nhập một số!"));
+    return Promise.reject();
   } else if (isNaN(value)) {
-    return Promise.reject(new Error("Giá trị không phải là số!"));
+    return Promise.reject();
   } else {
     return Promise.resolve();
   }
 };
 
+// lấy ngẫu nhiên mã barcode
+
 export const generateRandomId = () => {
   return Math.floor(10000 + Math.random() * 90000).toString();
+};
+
+export const isStringNumber = (value) => {
+  return /^\d+$/.test(value);
 };

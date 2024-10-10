@@ -2,6 +2,7 @@
   <a-form
     :model="formState"
     name="basic"
+    style="display: flex; flex-direction: column; height: 90vh"
     :form="form"
     autocomplete="off"
     :label-col="{
@@ -18,9 +19,11 @@
       :tab-index-save="13"
       :tab-index-exit="14"
     />
-    <div style="padding: 8px; height: 80vh; overflow-y: scroll">
+    <div style="padding: 8px; overflow-y: auto">
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
+        <p class="title-form">
+          {{ $t("product.ACTION.BASIC_INFOMATION") }}
+        </p>
         <RadioForm
           :is-disable="isDisable"
           :options="options.optionsStatus"
@@ -32,11 +35,11 @@
           }"
         />
         <InputForm
-          :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
             label: $t('product.ACTION.NAME_PRODUCT'),
             value: 'name',
           }"
+          :is-required="true"
           :tab-index="2"
           @press-enter="handlePressEnterName"
           v-bind:model-value="formState.name"
@@ -65,9 +68,7 @@
           :form-sate="formState"
           :is-disable="false"
           :tab-index="4"
-          :rules="[
-            { required: true, message: 'Vui long không bỏ trống mã SKU!' },
-          ]"
+          :is-required="true"
         />
         <InputForm
           :item="{
@@ -126,7 +127,7 @@
         />
       </div>
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">
+        <p class="title-atributes-form">
           {{ $t("product.ACTION.INFO_ATRIBUTES") }}
         </p>
         <SelectForm
@@ -162,7 +163,9 @@
         />
       </div>
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
+        <p class="title-form">
+          {{ $t("product.ACTION.ADDITIONAL_INFOMATION") }}
+        </p>
         <InputForm
           :item="{
             label: $t('product.ACTION.DESCRIPTION'),
@@ -226,3 +229,6 @@ const {
   editableData,
 } = actionProduct({ action: "update", namePath: "chỉnh sửa" });
 </script>
+<style lang="scss" scoped>
+@import "../ActionProduct.scss";
+</style>

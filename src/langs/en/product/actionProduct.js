@@ -50,5 +50,7 @@ const actionProduct = {
   DETAIL_ATRIBUTES: "Detail Atributes",
   CODE_SKU_IS_EXSITS: "Code sku is exsits",
   CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
+  BASIC_INFOMATION: "Basic infomation",
+  ATRIBUTES_INFOMATION: "Additional infomation",
 };
 export default actionProduct;

@@ -16,7 +16,9 @@
     <Action :handle-exit="onClickExit" />
     <div style="padding: 8px; height: 80vh; overflow-y: scroll">
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN CƠ BẢN</p>
+        <p class="title-form">
+          {{ $t("product.ACTION.BASIC_INFOMATION") }}
+        </p>
         <RadioForm
           :is-disable="isDisable"
           :options="options.optionsStatus"
@@ -28,7 +30,6 @@
           }"
         />
         <InputForm
-          :rules="[{ required: true, message: 'Vui long nhap vao ten!' }]"
           :item="{
             label: $t('product.ACTION.NAME_PRODUCT'),
             value: 'name',
@@ -37,6 +38,7 @@
           v-bind:model-value="formState.name"
           :form-sate="formState"
           :is-disable="isDisable"
+          :is-required="true"
         />
         <SelectForm
           :item="{
@@ -58,9 +60,7 @@
           :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="false"
-          :rules="[
-            { required: true, message: 'Vui long không bỏ trống ma SKU!' },
-          ]"
+          :is-required="true"
         />
         <InputForm
           :item="{
@@ -116,7 +116,7 @@
         />
       </div>
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">
+        <p class="title-atributes-form">
           {{ $t("product.ACTION.INFO_ATRIBUTES") }}
         </p>
         <SelectForm
@@ -151,7 +151,9 @@
         />
       </div>
       <div>
-        <p style="padding-bottom: 8px; font-weight: 600">THÔNG TIN BỔ SUNG</p>
+        <p class="title-form">
+          {{ $t("product.ACTION.ADDITIONAL_INFOMATION") }}
+        </p>
         <InputForm
           :item="{
             label: $t('product.ACTION.DESCRIPTION'),
@@ -214,3 +216,6 @@ const {
   options,
 } = actionProduct({ action: "coppy", namePath: "nhân bản" });
 </script>
+<style lang="scss" scoped>
+@import "../ActionProduct.scss";
+</style>

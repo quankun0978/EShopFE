@@ -2,4 +2,12 @@
   background-color: #fff;
   padding-left: 8px;
   padding-right: 0px;
+  .layout-header-container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.align-center {
+  display: flex;
+  align-items: center;
 }

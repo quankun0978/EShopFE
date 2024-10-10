@@ -1,20 +1,17 @@
 <template>
   <a-layout-header class="layout-header">
-    <div style="display: flex; justify-content: space-between">
+    <div class="layout-header-container">
       <h3 style="display: flex; align-items: center">
         {{ menuStore.namePath }}
       </h3>
-      <a-space style="display: flex; align-items: center">
+      <a-space class="align-center">
         <router-link
           :to="{
             name: 'list_product',
           }"
           v-if="menuStore.isBack"
         >
-          <a-space
-            direction="horizontal"
-            style="display: flex; align-items: center"
-          >
+          <a-space direction="horizontal" class="align-center">
             <ArrowLeftOutlined />
             <span class="span">{{
               $t("product.ACTION.BACK_TO_START_PAGE")

@@ -5,7 +5,8 @@
     }"
   >
     <a-menu
-      style="background-color: #00577b"
+      :style="style"
+      class="menu-custom"
       :class="className"
       :selectedKeys="keySelect"
       theme="dark"
@@ -34,3 +35,6 @@ const onChange = (key) => {
   keySelect.value = key.keyPath;
 };
 </script>
+<style lang="scss" scoped>
+@import "./Menu.scss";
+</style>

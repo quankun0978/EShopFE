@@ -22,6 +22,15 @@ const Table = (props) => {
     loading: false,
   });
   const router = useRouter();
+  const isDisabled = ref(false);
+
+  watchEffect(() => {
+    if (state.selectedRowKeys.length === 1) {
+      isDisabled.value = false;
+    } else {
+      isDisabled.value = true;
+    }
+  });
 
   watchEffect(() => {
     if (props.items && props.items.length > 0) {
@@ -129,6 +138,7 @@ const Table = (props) => {
     HandleClickNextPage,
     HandleClickPrevPage,
     HandleClickRefreshPage,
+    isDisabled,
   };
 };
 

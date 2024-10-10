@@ -1,9 +1,5 @@
 <template>
-  <a-config-provider
-    :theme="{
-      token: {}, // Sử dụng theme từ file config
-    }"
-  >
+  <a-config-provider>
     <a-dropdown :trigger="['click']">
       <a
         style="color: black; font-weight: bold; font-size: smaller"

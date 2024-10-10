@@ -8,13 +8,10 @@
         horizontalItemMarginRTL: '0',
         horizontalItemGutter: 0,
         fontSize: 11,
-      }, // Sử dụng theme từ file config
+      },
     }"
   >
-    <div
-      v-if="isAction"
-      style="display: flex; width: 100%; background-color: rgb(0, 87, 123)"
-    >
+    <div v-if="isAction" class="table-custom-action">
       <RouterLink
         :to="{
           name: 'create_product',
@@ -25,7 +22,7 @@
         {{ $t("product.LIST.ADD") }}
       </RouterLink>
       <RouterLink
-        :disabled="state.selectedRowKeys.length === 1 ? null : true"
+        :class="isDisabled && 'action-disabled'"
         @click.prevent.capture="(e) => handlePreventDefault(e, 'copy_product')"
         :to="{
           name: 'create_product',
@@ -36,7 +33,7 @@
         {{ $t("product.LIST.COPPY") }}
       </RouterLink>
       <RouterLink
-        :disabled="state.selectedRowKeys.length === 1 ? null : true"
+        :class="isDisabled && 'action-disabled'"
         @click.prevent.capture="
           (e) => handlePreventDefault(e, 'update_product')
         "
@@ -65,7 +62,6 @@
     </div>
 
     <a-table
-      @row-click="testEvent"
       v-if="isInput"
       class="table-custom"
       :bordered="bordered"
@@ -118,7 +114,7 @@
             />
           </div>
         </template>
-        <template @click="testEvent" :ref="firstRow" #bodyCell="{ record }">
+        <template :ref="firstRow" #bodyCell="{ record }">
           <div
             :key="record.name"
             v-if="index === 1"
@@ -171,10 +167,6 @@ const props = defineProps({
   handleDeleteData: Function,
 });
 
-const testEvent = () => {
-  alert("hihi");
-};
-
 const {
   Input,
   Select,
@@ -183,7 +175,6 @@ const {
   PlusOutlined,
   CopyOutlined,
   EditOutlined,
-  selectedRowKeys,
   DeleteOutlined,
   SyncOutlined,
   state,
@@ -192,6 +183,7 @@ const {
   HandleClickNextLastPage,
   handlePreventDefault,
   onSelectChange,
+  isDisabled,
   HandleChangePageSize,
   HandleClickNextFirstPage,
   HandleClickNextPage,

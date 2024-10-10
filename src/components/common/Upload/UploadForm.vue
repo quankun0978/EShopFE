@@ -24,18 +24,7 @@
             <IconPencil /> {{ text }}
           </div>
           <IconOpenDocument />
-          <div
-            style="
-              width: 40px;
-              margin: 0 auto;
-              background-color: #026b97;
-              padding: 4px;
-              color: #fff;
-              text-align: center;
-            "
-          >
-            ..
-          </div>
+          <div class="upload-custom-box">..</div>
           <img
             class="image"
             v-if="imageUrl"

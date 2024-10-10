@@ -1,5 +1,5 @@
 <template>
-  <div :style="style" style="background-color: white; width: 100%">
+  <div :style="style" class="action-custom">
     <a-divider v-if="isFirst" />
     <a-space style="padding: 8px">
       <Button
@@ -34,3 +34,7 @@ const props = defineProps({
   handleExit: Function,
 });
 </script>
+
+<style lang="scss" scoped>
+@import "./Action.scss";
+</style>

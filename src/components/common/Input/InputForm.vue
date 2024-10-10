@@ -9,7 +9,7 @@
     <a-form-item
       :label="item && item.label && item.label"
       :name="item && item.value && item.value"
-      :rules="rules"
+      :rules="rulesDefault"
     >
       <a-textarea
         v-if="isTextarea"
@@ -55,17 +55,24 @@ const props = defineProps({
   isDisable: Boolean,
   inputRef: String,
   tabIndex: Number,
+  validator: Function,
+  isRequired: Boolean,
 });
-// onMounted(() => {
-//   props.focusName = "name";
-// });
 
 const pressTab = (e) => {
   if (e.key === "Tab") {
     if (props.onPressTab) {
       props.onPressTab(e);
     }
-    // Thực hiện các hành động khác nếu cần
   }
 };
+const rulesDefault =
+  props.rules && props.rules.length > 0
+    ? props.rules
+    : [
+        {
+          required: props.isRequired,
+          message: `Vui lòng không bỏ trống ${props.item.label}!`,
+        },
+      ];
 </script>

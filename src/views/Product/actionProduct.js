@@ -21,7 +21,11 @@ import {
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
-import { generateRandomId, validateNumber } from "@/helpers/Funcs/helper";
+import {
+  generateRandomId,
+  isStringNumber,
+  validateNumber,
+} from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
@@ -451,47 +455,73 @@ const actionProduct = ({ action, namePath }) => {
   // xử lý khi ấn vào nút lưu
 
   const handleSave = async (key, column, index) => {
-    try {
-      if (
-        editableData[key][column] !== null &&
-        editableData[key][column] !== ""
-      ) {
-        const codeSKU = editableData[key].codeSKU;
-        const codeSKUCurrent = optionAtributes.value.filter(
-          (item) => key === item.codeSKU
-        )[0].codeSKU;
-        if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-          const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-          error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-          if (!isCheckCodeSku) {
-            Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
-          } else if (!handleCheckDuplicateCodeSku(key, index)) {
-            isValid.value = false;
-            error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-            Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
-            return;
-          } else {
-            isValid.value = true;
-            Object.assign(
-              optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-              editableData[key]
-            );
-            delete editableData[key];
-          }
-        } else {
-          isValid.value = true;
-          Object.assign(
-            optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-            editableData[key]
-          );
-          delete editableData[key];
-        }
+    if (
+      editableData[key][column] !== null &&
+      editableData[key][column] !== ""
+    ) {
+      const codeSKU = editableData[key].codeSKU;
+      const price = editableData[key].price;
+      const codeSKUCurrent = optionAtributes.value.filter(
+        (item) => key === item.codeSKU
+      )[0].codeSKU;
+      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+        handleCheckCodeExists(codeSKU, key);
+      } else if (column === "price") {
+        handleCheckNumber(price, key);
       } else {
+        isValid.value = true;
+        Object.assign(
+          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+          editableData[key]
+        );
+        delete editableData[key];
+      }
+    } else {
+      isValid.value = false;
+      error.value = $t("product.ACTION.ERROR_REQUIRED");
+      Notification.error($t("product.ACTION.ERROR_REQUIRED"));
+    }
+  };
+
+  // xử lý kiểm tra mã trùng
+
+  const handleCheckCodeExists = async (codeSKU, key) => {
+    try {
+      const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
+      error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
+      if (!isCheckCodeSku) {
+        Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
+      } else if (!handleCheckDuplicateCodeSku(key, index)) {
         isValid.value = false;
-        error.value = $t("product.ACTION.ERROR_REQUIRED");
-        Notification.error($t("product.ACTION.ERROR_REQUIRED"));
+        error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
+        Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
+        return;
+      } else {
+        isValid.value = true;
+        Object.assign(
+          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+          editableData[key]
+        );
+        delete editableData[key];
       }
     } catch (error) {
+      isValid.value = true;
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        editableData[key]
+      );
+      delete editableData[key];
+    }
+  };
+
+  // xử lý kiểm tra giá tiền có phải là số không
+
+  const handleCheckNumber = async (value, key) => {
+    const isCheckNumber = isStringNumber(value);
+    if (!isCheckNumber) {
+      Notification.error($t("product.ACTION.ERROR_VALID_NUMBER"));
+      error.value = $t("product.ACTION.ERROR_VALID_NUMBER");
+    } else {
       isValid.value = true;
       Object.assign(
         optionAtributes.value.filter((item) => key === item.codeSKU)[0],

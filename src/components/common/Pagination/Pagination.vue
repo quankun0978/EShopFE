@@ -1,15 +1,6 @@
 <template>
-  <div
-    style="
-      display: flex;
-      position: fixed;
-      bottom: 0;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 8px;
-    "
-  >
-    <div style="display: flex; align-items: center; gap: 4px">
+  <div class="pagination-custom">
+    <div class="pagination-custom-container">
       <a-button
         @click="HandleClickNextFirstPage"
         :disabled="pagination.pageNumber === 1"
@@ -90,3 +81,6 @@ const props = defineProps({
 const pagination = props.paginationProp;
 const valPageSize = ref(pagination.pageSize && pagination.pageSize);
 </script>
+<style lang="scss" scoped>
+@import "./Pagination.scss";
+</style>

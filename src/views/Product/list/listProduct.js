@@ -11,6 +11,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
 import { $t } from "@/config/app";
+import { optionPageSize } from "@/constants/options";
 
 const ListProduct = () => {
   const objectQuery = reactive({
@@ -32,13 +33,7 @@ const ListProduct = () => {
     pageSize: objectQuery.pageSize,
     totalPage: "5",
     totalRecord: "96",
-    optionPageSize: [
-      { label: "5", value: 5 },
-      { label: "10", value: 10 },
-      { label: "15", value: 15 },
-      { label: "20", value: 20 },
-      { label: "50", value: 50 },
-    ],
+    optionPageSize: optionPageSize,
   });
 
   const columns = [

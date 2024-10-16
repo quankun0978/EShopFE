@@ -25,22 +25,21 @@
       <a-input
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
-        @input="onInput"
-        @pressEnter="onPressEnter"
-        @keydown="pressTab"
+        @keydown="pressKeydown"
         :disabled="isDisable"
         ref="inputRef"
         :tabindex="tabIndex"
+        :style="style"
       />
     </a-form-item>
   </a-config-provider>
 </template>
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { convertNumber } from "@/helpers/Funcs/helper";
+import { ref } from "vue";
 
 const props = defineProps({
   value: String,
-  modelValue: String,
   placeholder: String,
   item: Object,
   rules: Array,
@@ -49,20 +48,20 @@ const props = defineProps({
   rows: Number,
   maxLength: Number,
   formSate: Object,
-  onInput: Function,
-  onPressEnter: Function,
-  onPressTab: Function,
+  onPressKeyDown: Function,
   isDisable: Boolean,
-  inputRef: String,
   tabIndex: Number,
   validator: Function,
   isRequired: Boolean,
 });
 
-const pressTab = (e) => {
-  if (e.key === "Tab") {
-    if (props.onPressTab) {
-      props.onPressTab(e);
+const pressKeydown = (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+  if (e.key === "Tab" || e.key === "Enter") {
+    if (props.onPressKeyDown) {
+      props.onPressKeyDown(e);
     }
   }
 };
@@ -75,4 +74,18 @@ const rulesDefault =
           message: `Vui lòng không bỏ trống ${props.item.label}!`,
         },
       ];
+// const onChange = (e) => {
+//   if (
+//     props.item.value &&
+//     (props.item.value === "price" || props.item.value === "sell")
+//   ) {
+//     const initValue = e.target.value
+//     if (e.target.value.length > 3) {
+//       console.log("hihi");
+//       props.formSate[props.item.value] = convertNumber(
+//         e.target.value
+//       ).toString();
+//     }
+//   }
+// };
 </script>

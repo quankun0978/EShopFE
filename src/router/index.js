@@ -21,19 +21,17 @@ const router = createRouter({
             {
               name: "create_product",
               path: "create",
-              component: () =>
-                import("@/views/Product/create/CreateProduct.vue"),
+              component: () => import("@/views/Product/action/Action.vue"),
             },
             {
               name: "update_product",
               path: "update/:id",
-              component: () =>
-                import("@/views/Product/update/UpdateProduct.vue"),
+              component: () => import("@/views/Product/action/Action.vue"),
             },
             {
               name: "copy_product",
               path: "copy/:id",
-              component: () => import("@/views/Product/coppy/CoppyProduct.vue"),
+              component: () => import("@/views/Product/action/Action.vue"),
             },
           ],
         },

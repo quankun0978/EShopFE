@@ -2,6 +2,7 @@
   <a-form
     :model="formState"
     name="basic"
+    style="display: flex; flex-direction: column; height: 90vh"
     :form="form"
     autocomplete="off"
     :label-col="{
@@ -13,8 +14,12 @@
     :wrapper-col="{ span: 12, xxl: 6 }"
     @finish="onFinish"
   >
-    <Action :handle-exit="onClickExit" />
-    <div style="padding: 8px; height: 80vh; overflow-y: scroll">
+    <Action
+      :handle-exit="onClickExit"
+      :tab-index-save="13"
+      :tab-index-exit="14"
+    />
+    <div style="padding: 8px; overflow-y: auto">
       <div>
         <p class="title-form">
           {{ $t("product.ACTION.BASIC_INFOMATION") }}
@@ -34,18 +39,18 @@
             label: $t('product.ACTION.NAME_PRODUCT'),
             value: 'name',
           }"
-          @press-enter="handlePressEnterName"
-          v-bind:model-value="formState.name"
+          :is-required="true"
+          :tab-index="2"
+          @press-key-down="handlePressEnterName"
           :form-sate="formState"
           :is-disable="isDisable"
-          :is-required="true"
         />
         <SelectForm
           :item="{
             label: $t('product.ACTION.GROUP_PRODUCT'),
             value: 'group',
           }"
-          :style="{ width: 200 }"
+          :tab-index="3"
           :form-sate="formState"
           :options="options.optionsGroup"
           :is-disable="isDisable"
@@ -55,11 +60,10 @@
             label: $t('product.ACTION.CODE_SKU'),
             value: 'codeSKU',
           }"
-          :model-value="formState.codeSKU"
           @press-enter="handlePressEnterCodeSKU"
-          :style="{ width: 200 }"
           :form-sate="formState"
           :is-disable="false"
+          :tab-index="4"
           :is-required="true"
         />
         <InputForm
@@ -67,32 +71,32 @@
             label: $t('product.ACTION.PRICE'),
             value: 'price',
           }"
-          :model-value="formState.price"
-          :style="{ width: 200 }"
+          :style="{ textAlign: 'end' }"
           :form-sate="formState"
+          :is-disable="optionAtributes.length > 0"
+          :tab-index="5"
           :rules="[
             {
               validator: validateNumber,
               message: $t('product.ACTION.ERROR_VALID_NUMBER'),
             },
           ]"
-          :is-disable="false"
         />
         <InputForm
           :item="{
             label: $t('product.ACTION.SELL'),
             value: 'sell',
           }"
-          :model-value="formState.sell"
-          :style="{ width: 200 }"
-          :form-sate="formState"
-          :is-disable="false"
           :rules="[
             {
               validator: validateNumber,
               message: $t('product.ACTION.ERROR_VALID_NUMBER'),
             },
           ]"
+          :style="{ textAlign: 'end' }"
+          :form-sate="formState"
+          :is-disable="optionAtributes.length > 0"
+          :tab-index="6"
         />
         <SelectForm
           :-on-change="handleChangeUnit"
@@ -100,19 +104,20 @@
             label: $t('product.ACTION.UNIT'),
             value: 'unit',
           }"
-          :style="{ width: 200 }"
           :options="options.optionsUnit"
           :form-sate="formState"
           :is-disable="isDisable"
+          :tab-index="7"
         />
         <CheckboxForm
           :text="$t('product.ACTION.IS_SHOW_SCREEN')"
           :item="{
-            value: $t('product.ACTION.YES'),
+            value: 'isHide',
           }"
           :options="options.optionsiSHide"
           :form-sate="formState"
           :on-change="handleChangeIsHide"
+          :tab-index="8"
         />
       </div>
       <div>
@@ -126,11 +131,11 @@
             label: $t('product.ACTION.ATRIBUTES'),
             value: 'color',
           }"
+          :tab-index="9"
           :options="selectedRowKeys"
           :value="formState.color"
-          :style="{ width: 200 }"
           :form-sate="formState"
-          :is-disabled-atribute="isDisabledAtribute"
+          :is-disabled-atribute="formState.isParent !== 1"
         />
         <TableForm
           :is-action="true"
@@ -163,9 +168,9 @@
           :max-length="200"
           :placeholder="$t('product.ACTION.ERROR_MAX_LENGTH')"
           :rows="3"
-          :model-value="formState.description"
           :form-sate="formState"
           :style="{ width: 200, height: '150px' }"
+          :tab-index="10"
         />
         <UploadForm
           :item="{
@@ -178,13 +183,25 @@
       </div>
     </div>
 
-    <Action :is-first="true" :handle-exit="onClickExit" />
+    <Action
+      :style="{
+        position: 'fixed',
+        bottom: '0',
+      }"
+      :handle-exit="onClickExit"
+      :tab-index-save="13"
+      :tab-index-exit="14"
+    />
   </a-form>
 </template>
 <script setup>
-import actionProduct from "../actionProduct";
+import { useRoute } from "vue-router";
+import actionProduct from "./actionProduct";
+import { getNamePath } from "@/helpers/Funcs/helper";
+const route = useRoute();
 const {
   formState,
+  options,
   optionAtributes,
   selectedRowKeys,
   onClickExit,
@@ -202,20 +219,22 @@ const {
   InputForm,
   TableForm,
   SelectForm,
-  isDisable,
   RadioForm,
   CheckboxForm,
   UploadForm,
   validateNumber,
-  imageUrl,
-  isDisabledAtribute,
-  handleChangeStatus,
   form,
+  imageUrl,
+  isDisable,
   columnValue,
+  handleChangeStatus,
   editableData,
-  options,
-} = actionProduct({ action: "coppy", namePath: "nhân bản" });
+} = actionProduct({
+  action: route.name,
+  namePath: getNamePath(route.name),
+  route: route,
+});
 </script>
 <style lang="scss" scoped>
-@import "../ActionProduct.scss";
+@import "./ActionProduct.scss";
 </style>

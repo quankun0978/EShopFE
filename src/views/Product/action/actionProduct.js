@@ -7,7 +7,7 @@ import SelectForm from "@/components/common/Select/SelectForm.vue";
 import CheckboxForm from "@/components/common/checkbox/CheckboxForm.vue";
 import TableForm from "@/components/common/Table/TableForm.vue";
 import UploadForm from "@/components/common/Upload/UploadForm.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { Form } from "ant-design-vue";
 import {
   createProduct,
@@ -31,7 +31,7 @@ import * as options from "@/constants/options";
 import { HTTP_STATUS } from "@/api/apiConfig";
 import { $t } from "@/config/app";
 
-const actionProduct = ({ action, namePath }) => {
+const actionProduct = ({ action, namePath, route }) => {
   const formState = reactive({
     status: $t("product.ACTION.IN_BUSINESS"),
     codeSKU: "",
@@ -64,7 +64,6 @@ const actionProduct = ({ action, namePath }) => {
   const editableData = reactive({});
   const columnValue = ref("");
   let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
-  const route = useRoute();
   onMounted(() => {
     Init();
   });
@@ -98,7 +97,7 @@ const actionProduct = ({ action, namePath }) => {
     useMenuStore().updateHeader({
       namePath: `${$t("product.ACTION.PRODUCT")} / ${namePath}`,
     });
-    if (action !== "create") {
+    if (action !== "create_product") {
       handleGetData();
     }
   };
@@ -133,7 +132,7 @@ const actionProduct = ({ action, namePath }) => {
         }
         Object.assign(formState, dt);
         imageUrl.value = formState.imageUrl;
-        if (action === "coppy") {
+        if (action === "copy_product") {
           formState.codeSKU = await hanldeGetCode(formState.name, "", true);
           handleGetListCode();
         }
@@ -232,8 +231,10 @@ const actionProduct = ({ action, namePath }) => {
     }
   };
 
+  // xử lý thêm mới hoặc cập nhật sản phẩm
+
   const handlePostData = async (payload) => {
-    if (action === "update") {
+    if (action === "update_product") {
       const res = await updateProduct({
         listSkuUpdate: {
           ...formState,
@@ -401,13 +402,7 @@ const actionProduct = ({ action, namePath }) => {
 
     if (values && values.length > 0) {
       dataValues.value = values;
-      // selectedRowKeys.value = values.map((item) => {
-      //   return {
-      //     value: item,
-      //     label: item,
-      //   };
-      // });
-      if (action === "update") {
+      if (action === "update_product") {
         handleGetListCodeUpdate(values);
       } else {
         handleGetListCode();

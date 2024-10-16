@@ -1,3 +1,5 @@
+import { $t } from "@/config/app";
+
 // hàm tạo ra chuỗi gồm các chữ cái đầu viết hoa của tên
 export const getInitials = (productName) => {
   return productName
@@ -35,4 +37,20 @@ export const generateRandomId = () => {
 
 export const isStringNumber = (value) => {
   return /^\d+$/.test(value);
+};
+
+export const getNamePath = (action) => {
+  switch (action) {
+    case "create_product":
+      return $t("product.ACTION.ADD");
+      break;
+    case "update_product":
+      return $t("product.ACTION.EDIT");
+      break;
+    case "copy_product":
+      return $t("product.ACTION.COPPY");
+      break;
+    default:
+      return "Thêm mới";
+  }
 };

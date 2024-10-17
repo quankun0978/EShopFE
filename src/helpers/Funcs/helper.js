@@ -11,7 +11,24 @@ export const getInitials = (productName) => {
 
 // hàm chuyển đổi số thành dạng 000.000
 export const convertNumber = (number) => {
-  return new Intl.NumberFormat("de-DE").format(number);
+  console.log(number);
+  const normalNumber = convertToNormalNumber(number);
+  const strRemoveLetter = removeLettersAndSpecialChars(normalNumber);
+  if (isNumeric(strRemoveLetter)) {
+    return new Intl.NumberFormat("en-US").format(strRemoveLetter).toString();
+  }
+  return "";
+};
+
+// hàm chuyển đổi ngược lại thành dạng 000000
+
+export const convertToNormalNumber = (value) => {
+  return value.replace(/\,/g, "");
+};
+
+// hàm xóa ký tự
+export const removeLettersAndSpecialChars = (str) => {
+  return str.replace(/[^0-9]/g, ""); // Giữ lại chỉ các ký tự số
 };
 
 // hàm chuyển đổi số
@@ -19,14 +36,19 @@ export const convertNumber = (number) => {
 export const parseFormattedNumber = (formattedNumber) => {
   return parseInt(formattedNumber.replace(/\./g, ""), 10);
 };
-export const validateNumber = (rule, value) => {
-  if (!value) {
-    return Promise.reject();
-  } else if (isNaN(value)) {
-    return Promise.reject();
-  } else {
-    return Promise.resolve();
-  }
+
+// export const validateNumber = (rule, value) => {
+//   if (!value) {
+//     return Promise.reject();
+//   } else if (isNaN(value)) {
+//     return Promise.reject();
+//   } else {
+//     return Promise.resolve();
+//   }
+// };
+
+export const isNumeric = (value) => {
+  return !isNaN(value) && !isNaN(parseFloat(value));
 };
 
 // lấy ngẫu nhiên mã barcode

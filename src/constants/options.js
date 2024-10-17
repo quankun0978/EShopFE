@@ -54,11 +54,13 @@ export const columnsAtributes = [
     title: $t("product.ACTION.PRICE"),
     dataIndex: "price",
     key: "price",
+    isNumber:true,
   },
   {
     title: $t("product.ACTION.SELL"),
     dataIndex: "sell",
     key: "sell",
+    isNumber:true,
   },
 
   {

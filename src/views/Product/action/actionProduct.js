@@ -22,9 +22,10 @@ import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
 import {
+  convertNumber,
+  convertToNormalNumber,
   generateRandomId,
   isStringNumber,
-  validateNumber,
 } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
@@ -78,18 +79,19 @@ const actionProduct = ({ action, namePath, route }) => {
 
   // cập nhật giá mua và giá bán khi có thay đổi
 
-  watchEffect(() => {
-    if (optionAtributes.value.length > 0) {
-      const price = optionAtributes.value.reduce((accumulator, currrent) => {
-        return accumulator + +currrent.price;
-      }, 0);
-      const sell = optionAtributes.value.reduce((accumulator, currrent) => {
-        return accumulator + +currrent.sell;
-      }, 0);
-      formState.sell = `${Math.floor(+sell / optionAtributes.value.length)}`;
-      formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
-    }
-  });
+  // watchEffect(() => {
+  //   if (optionAtributes.value.length > 0) {
+  //     const price = optionAtributes.value.reduce((accumulator, currrent) => {
+  //       return accumulator + +currrent.price;
+  //     }, 0);
+  //     const sell = optionAtributes.value.reduce((accumulator, currrent) => {
+  //       return accumulator + +currrent.sell;
+  //     }, 0);
+  //     console.log(price, sell);
+  //     formState.sell = `${Math.floor(+sell / optionAtributes.value.length)}`;
+  //     formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
+  //   }
+  // });
 
   // hàm lấy ra các giá trị ban đầu
 
@@ -306,7 +308,7 @@ const actionProduct = ({ action, namePath, route }) => {
 
   const handleGetListCode = async () => {
     const res = await generateListSKU(formState.codeSKU, dataValues.value);
-
+    console.log(formState.price);
     if (res.success) {
       const items =
         res.data &&
@@ -558,6 +560,8 @@ const actionProduct = ({ action, namePath, route }) => {
     return true;
   };
 
+  //
+
   return {
     formState,
     optionAtributes,
@@ -582,7 +586,6 @@ const actionProduct = ({ action, namePath, route }) => {
     RadioForm,
     CheckboxForm,
     UploadForm,
-    validateNumber,
     imageFile,
     imageUrl,
     handleImageSelected,

@@ -75,24 +75,12 @@
           :form-sate="formState"
           :is-disable="optionAtributes.length > 0"
           :tab-index="5"
-          :rules="[
-            {
-              validator: validateNumber,
-              message: $t('product.ACTION.ERROR_VALID_NUMBER'),
-            },
-          ]"
         />
         <InputForm
           :item="{
             label: $t('product.ACTION.SELL'),
             value: 'sell',
           }"
-          :rules="[
-            {
-              validator: validateNumber,
-              message: $t('product.ACTION.ERROR_VALID_NUMBER'),
-            },
-          ]"
           :style="{ textAlign: 'end' }"
           :form-sate="formState"
           :is-disable="optionAtributes.length > 0"
@@ -222,7 +210,6 @@ const {
   RadioForm,
   CheckboxForm,
   UploadForm,
-  validateNumber,
   form,
   imageUrl,
   isDisable,

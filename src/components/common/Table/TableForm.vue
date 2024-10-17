@@ -48,7 +48,11 @@
                 v-else
                 class="editable-cell-text-wrapper"
               >
-                {{ record[column.dataIndex] }}
+                {{
+                  column.isNumber
+                    ? convertNumber(record[column.dataIndex])
+                    : record[column.dataIndex]
+                }}
               </div>
             </div>
           </template>
@@ -61,6 +65,7 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { convertNumber } from "@/helpers/Funcs/helper";
 const props = defineProps({
   value: String,
   placeholder: String,

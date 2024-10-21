@@ -23,10 +23,19 @@
         :tabindex="tabIndex"
       />
       <a-input
+        v-else-if="isNumber"
+        v-model:value="formSate[`${item && item.value && item.value}`]"
+        @keydown="pressKeydown"
+        @change="onChangeNumber"
+        :disabled="isDisable"
+        ref="inputRef"
+        :tabindex="tabIndex"
+        :style="style"
+      />
+      <a-input
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @keydown="pressKeydown"
-        @change="onChange"
         :disabled="isDisable"
         ref="inputRef"
         :tabindex="tabIndex"
@@ -50,6 +59,7 @@ const props = defineProps({
   rules: Array,
   style: Object,
   isTextarea: Boolean,
+  isNumber: Boolean,
   rows: Number,
   maxLength: Number,
   formSate: Object,
@@ -85,20 +95,7 @@ const rulesDefault =
           message: `Vui lòng không bỏ trống ${props.item.label}!`,
         },
       ];
-const onChange = (e) => {
-  // if (
-  //   props.item.value &&
-  //   (props.item.value === "price" || props.item.value === "sell")
-  // ) {
-  //   const initValue = e.target.value;
-  //   props.formSate[props.item.value] = convertNumber(
-  //     convertToNormalNumber(initValue)
-  //   );
-  //   // if (!isNumeric(convertToNormalNumber(initValue))) {
-  //   //   props.formSate[props.item.value] = cons;
-  //   // } else {
-
-  //   // }
-  // }
+const onChangeNumber = (e) => {
+  props.formSate[props.item.value] = convertNumber(e.target.value);
 };
 </script>

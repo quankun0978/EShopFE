@@ -51,6 +51,7 @@ const actionProduct = ({ action, namePath, route }) => {
     isParent: 1,
     imageUrl: "",
     id: null,
+    imageBlob: "",
   });
   const optionAtributes = ref([]);
   const dataValues = ref([]);
@@ -110,11 +111,15 @@ const actionProduct = ({ action, namePath, route }) => {
     try {
       const res = await getProductByCodeSku(route.params.id);
       if (res.success) {
-        const dataAtributes = res.data.atributes;
+        const dataAtributes = res.data.atributes.map((item) => {
+          const { imageBlob, ...coppy } = item;
+          return { ...coppy, price: `${item.price}`, sell: `${item.sell}` };
+        });
+
         const dt = {
           ...res.data.data,
-          sell: `${res.data.sell ? res.data.sell : ""}`,
-          price: `${res.data.price ? res.data.price : ""}`,
+          sell: convertNumber(`${res.data.data.sell}`),
+          price: convertNumber(`${res.data.data.price}`),
           isHide: res.isHide === $t("product.ACTION.NO") ? true : false,
           unit:
             res.data.data.unit === "double"
@@ -122,7 +127,10 @@ const actionProduct = ({ action, namePath, route }) => {
               : $t("product.ACTION.SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
-          optionAtributes.value = dataAtributes;
+          console.log(dataAtributes);
+          if (action === "update_product") {
+            optionAtributes.value = dataAtributes;
+          }
           const dataColor = dataAtributes.map((item) => {
             return {
               value: item.color,
@@ -136,10 +144,12 @@ const actionProduct = ({ action, namePath, route }) => {
         imageUrl.value = formState.imageUrl;
         if (action === "copy_product") {
           formState.codeSKU = await hanldeGetCode(formState.name, "", true);
-          handleGetListCode();
+          handleGetListCoppy();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // xử lý khi người dùng enter ô nhập tên
@@ -207,16 +217,16 @@ const actionProduct = ({ action, namePath, route }) => {
   const onFinish = async () => {
     try {
       if (isValid.value) {
+        console.log(optionAtributes.value);
         const payload = [...optionAtributes.value].map((item) => {
           return {
             ...item,
-            price: item.price ? item.price : 0,
-            sell: item.sell ? item.sell : 0,
+            price: item.price ? +item.price : 0,
+            sell: item.sell ? +item.sell : 0,
             isHide:
               formState.isHide === true
                 ? $t("product.ACTION.OTHER")
                 : $t("product.ACTION.YES"),
-            description: formState.description,
             description: formState.description,
             status: formState.status,
             id: item.id ? item.id : -1,
@@ -240,6 +250,8 @@ const actionProduct = ({ action, namePath, route }) => {
       const res = await updateProduct({
         listSkuUpdate: {
           ...formState,
+          price: formState.price ? +convertToNormalNumber(formState.price) : 0,
+          sell: formState.sell ? +convertToNormalNumber(formState.sell) : 0,
           products: payload,
           isHide: formState.isHide
             ? $t("product.ACTION.NO")
@@ -260,13 +272,19 @@ const actionProduct = ({ action, namePath, route }) => {
         Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
       }
     } else {
+      const { id, imageBlob, ...coppy } = formState;
+      const imageCopy = {
+        fileName: imageFile.value.name,
+        fileData:
+          action === "copy_product"
+            ? formState.imageBlob
+            : imageUrl.value.split(",")[1],
+      };
+      console.log(formState.imageBlob);
       const res = await createProduct({
-        ...formState,
+        ...coppy,
         products: payload,
-        image: {
-          fileName: imageFile.value.name,
-          fileData: imageUrl.value.split(",")[1],
-        },
+        image: imageCopy,
         color: "null",
         isHide:
           formState.isHide.length > 0
@@ -308,7 +326,6 @@ const actionProduct = ({ action, namePath, route }) => {
 
   const handleGetListCode = async () => {
     const res = await generateListSKU(formState.codeSKU, dataValues.value);
-    console.log(formState.price);
     if (res.success) {
       const items =
         res.data &&
@@ -326,7 +343,9 @@ const actionProduct = ({ action, namePath, route }) => {
             sell: formState.sell ? `${formState.sell}` : "0",
           };
         });
+      console.log(items);
       const dt = [...optionAtributes.value];
+      console.log(dt);
       if (dt.length > items.length) {
         const dataUpdate = dt
           .filter((item) => items.some((k) => k.color === item.color))
@@ -338,16 +357,50 @@ const actionProduct = ({ action, namePath, route }) => {
               price: `${item.price}`,
             };
           });
-
         optionAtributes.value = dataUpdate;
       } else {
         const index =
           optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
         dt.push(items[index]);
+
         optionAtributes.value = dt;
       }
     }
   };
+
+  const handleGetListCoppy = async () => {
+    const res = await generateListSKU(formState.codeSKU, dataValues.value);
+    if (res.success) {
+      const items =
+        res.data &&
+        res.data.length > 0 &&
+        res.data.map((item, index) => {
+          return {
+            ...formState,
+            isParent: 0,
+            isHide: $t("product.ACTION.OTHER"),
+            color: dataValues.value[index],
+            name: formState.name + `(${dataValues.value[index]})`,
+            barcode: generateRandomId(),
+            codeSKU: item,
+            price: formState.price ? `${formState.price}` : "0",
+            sell: formState.sell ? `${formState.sell}` : "0",
+          };
+        });
+
+      const dataUpdate = items.map((item) => {
+        const value = items.find((i) => i.color === item.color);
+        return {
+          ...item,
+          codeSKU: value.codeSKU,
+          price: `${item.price}`,
+        };
+      });
+      optionAtributes.value = dataUpdate;
+    }
+  };
+
+  // xử lấy ra các mã code sku sẽ cập nhật
 
   const handleGetListCodeUpdate = async (values) => {
     const res = await generateListUpdateSKU(
@@ -401,7 +454,8 @@ const actionProduct = ({ action, namePath, route }) => {
 
   const handleChangeColor = async (values) => {
     selectedRowKeys.value = values;
-
+    formState.price = formState.price ? formState.price : 0;
+    formState.sell = formState.sell ? formState.sell : 0;
     if (values && values.length > 0) {
       dataValues.value = values;
       if (action === "update_product") {
@@ -417,8 +471,6 @@ const actionProduct = ({ action, namePath, route }) => {
   // xử lý khi có xóa 1 hàng của bảng thuộc tính
 
   const handleDeleteRow = (codeSKU) => {
-    console.log(selectedRowKeys.value);
-    console.log(codeSKU);
     if (optionAtributes.value && optionAtributes.value.length > 0) {
       const dtDelete = optionAtributes.value.find(
         (item) => item.codeSKU === codeSKU
@@ -432,7 +484,6 @@ const actionProduct = ({ action, namePath, route }) => {
       const selectedDelete = selectedRowKeys.value.filter(
         (item) => item != dtDelete.color
       );
-      console.log(selectedDelete);
       optionAtributes.value = dt;
       selectedRowKeys.value = selectedDelete;
     } else {
@@ -451,20 +502,20 @@ const actionProduct = ({ action, namePath, route }) => {
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = async (key, column, index) => {
+  const handleSave = async (key, column) => {
+    const temp = optionAtributes.value.filter(
+      (item) => key === item.codeSKU
+    )[0];
     if (
       editableData[key][column] !== null &&
       editableData[key][column] !== ""
     ) {
       const codeSKU = editableData[key].codeSKU;
-      const price = editableData[key].price;
       const codeSKUCurrent = optionAtributes.value.filter(
         (item) => key === item.codeSKU
       )[0].codeSKU;
       if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
         handleCheckCodeExists(codeSKU, key);
-      } else if (column === "price") {
-        handleCheckNumber(price, key);
       } else {
         isValid.value = true;
         Object.assign(
@@ -474,9 +525,12 @@ const actionProduct = ({ action, namePath, route }) => {
         delete editableData[key];
       }
     } else {
-      isValid.value = false;
-      error.value = $t("product.ACTION.ERROR_REQUIRED");
-      Notification.error($t("product.ACTION.ERROR_REQUIRED"));
+      isValid.value = true;
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        temp
+      );
+      delete editableData[key];
     }
   };
 
@@ -502,23 +556,6 @@ const actionProduct = ({ action, namePath, route }) => {
         delete editableData[key];
       }
     } catch (error) {
-      isValid.value = true;
-      Object.assign(
-        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-        editableData[key]
-      );
-      delete editableData[key];
-    }
-  };
-
-  // xử lý kiểm tra giá tiền có phải là số không
-
-  const handleCheckNumber = async (value, key) => {
-    const isCheckNumber = isStringNumber(value);
-    if (!isCheckNumber) {
-      Notification.error($t("product.ACTION.ERROR_VALID_NUMBER"));
-      error.value = $t("product.ACTION.ERROR_VALID_NUMBER");
-    } else {
       isValid.value = true;
       Object.assign(
         optionAtributes.value.filter((item) => key === item.codeSKU)[0],
@@ -560,7 +597,7 @@ const actionProduct = ({ action, namePath, route }) => {
     return true;
   };
 
-  //
+  // xử lý chuyển đổi số sang dạng 000.000
 
   return {
     formState,

@@ -74,6 +74,7 @@
           :style="{ textAlign: 'end' }"
           :form-sate="formState"
           :is-disable="optionAtributes.length > 0"
+          :is-number="true"
           :tab-index="5"
         />
         <InputForm
@@ -84,6 +85,7 @@
           :style="{ textAlign: 'end' }"
           :form-sate="formState"
           :is-disable="optionAtributes.length > 0"
+          :is-number="true"
           :tab-index="6"
         />
         <SelectForm

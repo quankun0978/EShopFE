@@ -11,7 +11,6 @@ export const getInitials = (productName) => {
 
 // hàm chuyển đổi số thành dạng 000.000
 export const convertNumber = (number) => {
-  console.log(number);
   const normalNumber = convertToNormalNumber(number);
   const strRemoveLetter = removeLettersAndSpecialChars(normalNumber);
   if (isNumeric(strRemoveLetter)) {

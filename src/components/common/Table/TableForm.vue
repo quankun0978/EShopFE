@@ -65,7 +65,8 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { convertNumber } from "@/helpers/Funcs/helper";
+import { convertNumber, isNumeric } from "@/helpers/Funcs/helper";
+import { ref } from "vue";
 const props = defineProps({
   value: String,
   placeholder: String,
@@ -81,4 +82,12 @@ const props = defineProps({
   editableData: Object,
   columnKey: String,
 });
+
+const valueRef = ref();
+
+// const onChangeNumber = (e, key, column) => {
+//   if (!isNumeric(e.target.value)) {
+//     props.editableData[key][column] = "";
+//   }
+// };
 </script>

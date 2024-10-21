@@ -165,11 +165,14 @@ const ListProduct = () => {
           };
           Object.assign(pagination, copy);
           const dt =
-            res.data.data?.map((item) => ({
-              ...item,
-              price: convertNumber(item.price),
-              key: item.id,
-            })) || [];
+            res.data.data?.map((item) => {
+              console.log(item.price);
+              return {
+                ...item,
+                price: convertNumber(item.price.toString()),
+                key: item.id,
+              };
+            }) || [];
           data.value = dt;
         }
       }

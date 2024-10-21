@@ -17,6 +17,13 @@
       :maxlength="maxLength"
     />
     <a-input
+      v-else-if="isNumber"
+      :value="valueRef"
+      @pressEnter.prevent="handlePressEnter"
+      @change="OnChange"
+      :style="style"
+    />
+    <a-input
       v-else
       :value="value"
       :placeholder="placeholder"
@@ -33,6 +40,7 @@ const props = defineProps({
   style: Object,
   OnChange: Function,
   isTextarea: Boolean,
+  isNumber: Boolean,
   rows: Number,
   maxLength: Number,
   handlePressEnter: Function,

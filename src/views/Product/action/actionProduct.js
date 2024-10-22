@@ -115,19 +115,18 @@ const actionProduct = ({ action, namePath, route }) => {
           const { imageBlob, ...coppy } = item;
           return { ...coppy, price: `${item.price}`, sell: `${item.sell}` };
         });
-
         const dt = {
           ...res.data.data,
           sell: convertNumber(`${res.data.data.sell}`),
           price: convertNumber(`${res.data.data.price}`),
           isHide: res.isHide === $t("product.ACTION.NO") ? true : false,
+          imageUrl: action==="copy_product"?"":res.data.data.imageUrl,
           unit:
             res.data.data.unit === "double"
               ? $t("product.ACTION.PAIR")
               : $t("product.ACTION.SINGLE"),
         };
         if (dataAtributes && dataAtributes.length > 0) {
-          console.log(dataAtributes);
           if (action === "update_product") {
             optionAtributes.value = dataAtributes;
           }
@@ -217,7 +216,6 @@ const actionProduct = ({ action, namePath, route }) => {
   const onFinish = async () => {
     try {
       if (isValid.value) {
-        console.log(optionAtributes.value);
         const payload = [...optionAtributes.value].map((item) => {
           return {
             ...item,
@@ -273,18 +271,22 @@ const actionProduct = ({ action, namePath, route }) => {
       }
     } else {
       const { id, imageBlob, ...coppy } = formState;
-      const imageCopy = {
-        fileName: imageFile.value.name,
-        fileData:
-          action === "copy_product"
-            ? formState.imageBlob
-            : imageUrl.value.split(",")[1],
-      };
-      console.log(formState.imageBlob);
+      // const imageCopy = {
+      //   fileName:
+      //     action === "copy_product"
+      //       ? `test${generateRandomId()}`
+      //       : imageFile.value.name,
+      //   fileData: imageUrl.value.split(",")[1]
+      //     ? imageUrl.value.split(",")[1]
+      //     : formState.imageBlob,
+      // };
       const res = await createProduct({
         ...coppy,
         products: payload,
-        image: imageCopy,
+        image: {
+          fileName: imageFile.value.name,
+          fileData: imageUrl.value.split(",")[1],
+        },
         color: "null",
         isHide:
           formState.isHide.length > 0
@@ -343,9 +345,7 @@ const actionProduct = ({ action, namePath, route }) => {
             sell: formState.sell ? `${formState.sell}` : "0",
           };
         });
-      console.log(items);
       const dt = [...optionAtributes.value];
-      console.log(dt);
       if (dt.length > items.length) {
         const dataUpdate = dt
           .filter((item) => items.some((k) => k.color === item.color))

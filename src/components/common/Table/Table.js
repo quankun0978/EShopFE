@@ -41,7 +41,6 @@ const Table = (props) => {
 
   // sự kiện khi thay đổi các combo box
   const onSelectChange = (selectedRowKeys) => {
-    console.log(selectedRowKeys);
     state.selectedRowKeys = selectedRowKeys;
     if (selectedRowKeys && selectedRowKeys.length > 0) {
       idProduct.value = selectedRowKeys[0];

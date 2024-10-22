@@ -166,7 +166,6 @@ const ListProduct = () => {
           Object.assign(pagination, copy);
           const dt =
             res.data.data?.map((item) => {
-              console.log(item.price);
               return {
                 ...item,
                 price: convertNumber(item.price.toString()),

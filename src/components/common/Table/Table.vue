@@ -125,7 +125,6 @@
             {{ record[column.dataIndex] }}
           </div>
           <div v-else>
-            {{ console.log(index) }}
             {{ record[column.dataIndex] }}
           </div>
         </template>

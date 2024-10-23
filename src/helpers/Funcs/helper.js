@@ -16,7 +16,7 @@ export const convertNumber = (number) => {
   if (isNumeric(strRemoveLetter)) {
     return new Intl.NumberFormat("en-US").format(strRemoveLetter).toString();
   }
-  return "";
+  return "0";
 };
 
 // hàm chuyển đổi ngược lại thành dạng 000000

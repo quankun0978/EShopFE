@@ -108,6 +108,7 @@
           :form-sate="formState"
           :on-change="handleChangeIsHide"
           :tab-index="8"
+          :checked="formState.isHide === 'Khác' ? true : false"
         />
       </div>
       <div>

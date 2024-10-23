@@ -5,7 +5,18 @@ const handleError = (error) => {
   const status = error.status ? error.status : error.code;
   switch (status) {
     case HTTP_STATUS.NOT_FOUND:
-      showMessageError($t("product.ACTION.ERROR_NOT_FOUND"));
+      showMessageError(
+        error.response.data &&
+          error.response.data.message &&
+          error.response.data.message
+      );
+      break;
+    case HTTP_STATUS.BAD_REQUEST:
+      showMessageError(
+        error.response.data &&
+          error.response.data.message &&
+          error.response.data.message
+      );
       break;
     case HTTP_STATUS.INTERNAL_SERVER_ERROR:
       showMessageError($t("product.ACTION.ERROR_OCCURRED_SERVER"));

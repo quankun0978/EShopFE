@@ -39,8 +39,8 @@ const actionProduct = ({ action, namePath, route }) => {
     group: "",
     name: "",
     unit: "",
-    price: "",
-    sell: "",
+    price: "0",
+    sell: "0",
     isHide: false,
     type: "",
     managerBy: "",
@@ -52,6 +52,7 @@ const actionProduct = ({ action, namePath, route }) => {
     imageUrl: "",
     id: null,
     imageBlob: "",
+    imageUrl: "",
   });
   const optionAtributes = ref([]);
   const dataValues = ref([]);
@@ -119,8 +120,8 @@ const actionProduct = ({ action, namePath, route }) => {
           ...res.data.data,
           sell: convertNumber(`${res.data.data.sell}`),
           price: convertNumber(`${res.data.data.price}`),
-          isHide: res.isHide === $t("product.ACTION.NO") ? true : false,
-          imageUrl: action==="copy_product"?"":res.data.data.imageUrl,
+          isHide:
+            res.data.data.isHide === $t("product.ACTION.NO") ? true : false,
           unit:
             res.data.data.unit === "double"
               ? $t("product.ACTION.PAIR")
@@ -146,9 +147,7 @@ const actionProduct = ({ action, namePath, route }) => {
           handleGetListCoppy();
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // xử lý khi người dùng enter ô nhập tên
@@ -232,13 +231,9 @@ const actionProduct = ({ action, namePath, route }) => {
         });
         handlePostData(payload);
       } else {
-        Notification.error(error.value);
+        // Notification.error(error.value);
       }
-    } catch (error) {
-      if (error.status === HTTP_STATUS.BAD_REQUEST) {
-        Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
-      }
-    }
+    } catch (error) {}
   };
 
   // xử lý thêm mới hoặc cập nhật sản phẩm
@@ -266,8 +261,6 @@ const actionProduct = ({ action, namePath, route }) => {
         router.push({
           name: "list_product",
         });
-      } else {
-        Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
       }
     } else {
       const { id, imageBlob, ...coppy } = formState;
@@ -299,7 +292,7 @@ const actionProduct = ({ action, namePath, route }) => {
           name: "list_product",
         });
       } else {
-        Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
+        // Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
       }
     }
   };
@@ -514,16 +507,17 @@ const actionProduct = ({ action, namePath, route }) => {
       const codeSKUCurrent = optionAtributes.value.filter(
         (item) => key === item.codeSKU
       )[0].codeSKU;
-      if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-        handleCheckCodeExists(codeSKU, key);
-      } else {
-        isValid.value = true;
-        Object.assign(
-          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-          editableData[key]
-        );
-        delete editableData[key];
-      }
+      // if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
+      //   handleCheckCodeExists(codeSKU, key);
+      // }
+      // else {
+      isValid.value = true;
+      Object.assign(
+        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        editableData[key]
+      );
+      delete editableData[key];
+      // }
     } else {
       isValid.value = true;
       Object.assign(
@@ -539,15 +533,16 @@ const actionProduct = ({ action, namePath, route }) => {
   const handleCheckCodeExists = async (codeSKU, key) => {
     try {
       const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-      error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-      if (!isCheckCodeSku) {
-        Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
-      } else if (!handleCheckDuplicateCodeSku(key, index)) {
-        isValid.value = false;
-        error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-        Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
-        return;
-      } else {
+      // error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
+      // if (!isCheckCodeSku) {
+      //   // Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
+      // } else if (!handleCheckDuplicateCodeSku(key, index)) {
+      //   isValid.value = false;
+      //   // error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
+      //   Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
+      //   return;
+      // }
+      if (isCheckCodeSku) {
         isValid.value = true;
         Object.assign(
           optionAtributes.value.filter((item) => key === item.codeSKU)[0],

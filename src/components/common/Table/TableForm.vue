@@ -32,7 +32,11 @@
           <template v-else>
             <div class="editable-cell">
               <div
-                v-if="editableData[record.codeSKU] && column.key === columnKey"
+                v-if="
+                  editableData[record.codeSKU] &&
+                  column.key === columnKey &&
+                  indexCurrent === index
+                "
                 class="editable-cell-input-wrapper"
               >
                 <a-input
@@ -44,7 +48,7 @@
               </div>
 
               <div
-                @click="handleEdit(record.codeSKU, column.key)"
+                @click="handleEdit(record.codeSKU, column.key, index)"
                 v-else
                 class="editable-cell-text-wrapper"
               >
@@ -81,9 +85,8 @@ const props = defineProps({
   handleEdit: Function,
   editableData: Object,
   columnKey: String,
+  indexCurrent: Number,
 });
-
-const valueRef = ref();
 
 // const onChangeNumber = (e, key, column) => {
 //   if (!isNumeric(e.target.value)) {

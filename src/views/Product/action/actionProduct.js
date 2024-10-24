@@ -15,7 +15,6 @@ import {
   generateListUpdateSKU,
   generateSKU,
   getProductByCodeSku,
-  isCodeSKU,
   updateProduct,
 } from "@/api/apiProduct";
 import { cloneDeep } from "lodash";
@@ -25,11 +24,9 @@ import {
   convertNumber,
   convertToNormalNumber,
   generateRandomId,
-  isStringNumber,
 } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
-import { HTTP_STATUS } from "@/api/apiConfig";
 import { $t } from "@/config/app";
 
 const actionProduct = ({ action, namePath, route }) => {
@@ -58,7 +55,6 @@ const actionProduct = ({ action, namePath, route }) => {
   const dataValues = ref([]);
   const isDisable = ref(false);
   const isDisabledAtribute = ref(true);
-  const error = ref("");
   const isValid = ref(true);
   const router = useRouter();
   const form = Form.useForm(formState);
@@ -66,6 +62,7 @@ const actionProduct = ({ action, namePath, route }) => {
   const listDelete = ref([]);
   const editableData = reactive({});
   const columnValue = ref("");
+  const indexCurrent = ref();
   let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
   onMounted(() => {
     Init();
@@ -78,22 +75,6 @@ const actionProduct = ({ action, namePath, route }) => {
       isDisabledAtribute.value = true;
     }
   });
-
-  // cập nhật giá mua và giá bán khi có thay đổi
-
-  // watchEffect(() => {
-  //   if (optionAtributes.value.length > 0) {
-  //     const price = optionAtributes.value.reduce((accumulator, currrent) => {
-  //       return accumulator + +currrent.price;
-  //     }, 0);
-  //     const sell = optionAtributes.value.reduce((accumulator, currrent) => {
-  //       return accumulator + +currrent.sell;
-  //     }, 0);
-  //     console.log(price, sell);
-  //     formState.sell = `${Math.floor(+sell / optionAtributes.value.length)}`;
-  //     formState.price = `${Math.floor(+price / optionAtributes.value.length)}`;
-  //   }
-  // });
 
   // hàm lấy ra các giá trị ban đầu
 
@@ -173,6 +154,7 @@ const actionProduct = ({ action, namePath, route }) => {
         const dataCP = [...optionAtributes.value].map((item, index) => {
           return {
             ...item,
+            index: index,
             name: formState.name + `(${dataValues.value[index]})`,
             codeSKU: res.data[index],
           };
@@ -264,15 +246,7 @@ const actionProduct = ({ action, namePath, route }) => {
       }
     } else {
       const { id, imageBlob, ...coppy } = formState;
-      // const imageCopy = {
-      //   fileName:
-      //     action === "copy_product"
-      //       ? `test${generateRandomId()}`
-      //       : imageFile.value.name,
-      //   fileData: imageUrl.value.split(",")[1]
-      //     ? imageUrl.value.split(",")[1]
-      //     : formState.imageBlob,
-      // };
+
       const res = await createProduct({
         ...coppy,
         products: payload,
@@ -328,6 +302,7 @@ const actionProduct = ({ action, namePath, route }) => {
         res.data.map((item, index) => {
           return {
             ...formState,
+            index: index,
             isParent: 0,
             isHide: $t("product.ACTION.OTHER"),
             color: dataValues.value[index],
@@ -360,6 +335,8 @@ const actionProduct = ({ action, namePath, route }) => {
       }
     }
   };
+
+  // xử lý lấy ra các mã sku khi nhân bản
 
   const handleGetListCoppy = async () => {
     const res = await generateListSKU(formState.codeSKU, dataValues.value);
@@ -486,16 +463,18 @@ const actionProduct = ({ action, namePath, route }) => {
 
   // xử lý khi người dùng ấn vào 1 ô input để chỉnh sửa của bảng thuộc tính
 
-  const handleEdit = (key, columnKey) => {
+  const handleEdit = (key, columnKey, index) => {
     columnValue.value = columnKey;
-    editableData[key] = cloneDeep(
-      optionAtributes.value.filter((item) => key === item.codeSKU)[0]
-    );
+    indexCurrent.value = index;
+    const dataClone = optionAtributes.value.filter(
+      (item) => item.codeSKU === key
+    )[0];
+    editableData[key] = cloneDeep(dataClone);
   };
 
   // xử lý khi ấn vào nút lưu
 
-  const handleSave = async (key, column) => {
+  const handleSave = async (key, column, index) => {
     const temp = optionAtributes.value.filter(
       (item) => key === item.codeSKU
     )[0];
@@ -503,96 +482,27 @@ const actionProduct = ({ action, namePath, route }) => {
       editableData[key][column] !== null &&
       editableData[key][column] !== ""
     ) {
-      const codeSKU = editableData[key].codeSKU;
-      const codeSKUCurrent = optionAtributes.value.filter(
-        (item) => key === item.codeSKU
-      )[0].codeSKU;
-      // if (column === "codeSKU" && codeSKU && codeSKUCurrent != codeSKU) {
-      //   handleCheckCodeExists(codeSKU, key);
-      // }
-      // else {
       isValid.value = true;
       Object.assign(
         optionAtributes.value.filter((item) => key === item.codeSKU)[0],
         editableData[key]
       );
       delete editableData[key];
-      // }
     } else {
       isValid.value = true;
       Object.assign(
-        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
+        optionAtributes.value.filter(
+          (item) => key === item.codeSKU && index === indexCurrent.value
+        )[0],
         temp
       );
       delete editableData[key];
     }
   };
 
-  // xử lý kiểm tra mã trùng
-
-  const handleCheckCodeExists = async (codeSKU, key) => {
-    try {
-      const isCheckCodeSku = await handleCheckIsCodeSku(codeSKU);
-      // error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-      // if (!isCheckCodeSku) {
-      //   // Notification.error($t("product.ACTION.CODE_SKU_IS_EXSITS"));
-      // } else if (!handleCheckDuplicateCodeSku(key, index)) {
-      //   isValid.value = false;
-      //   // error.value = $t("product.ACTION.CODE_SKU_IS_DUPLICATE");
-      //   Notification.error($t("product.ACTION.CODE_SKU_IS_DUPLICATE"));
-      //   return;
-      // }
-      if (isCheckCodeSku) {
-        isValid.value = true;
-        Object.assign(
-          optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-          editableData[key]
-        );
-        delete editableData[key];
-      }
-    } catch (error) {
-      isValid.value = true;
-      Object.assign(
-        optionAtributes.value.filter((item) => key === item.codeSKU)[0],
-        editableData[key]
-      );
-      delete editableData[key];
-    }
-  };
-
-  // kiểm tra xem mã sku đã tồn tại chưa
-
-  const handleCheckIsCodeSku = async (codeSKU) => {
-    try {
-      const res = await isCodeSKU(codeSKU);
-      if (res.success) {
-        isValid.value = false;
-        error.value = $t("product.ACTION.CODE_SKU_IS_EXSITS");
-        return false;
-      }
-      return true;
-    } catch (error) {
-      return true;
-    }
-  };
-
-  // kiểm tra xem có truyền lên 2 mã trùng nhau không
-
-  const handleCheckDuplicateCodeSku = (codeSKU, index) => {
-    if (codeSKU) {
-      const dataByCodeSku = optionAtributes.value.filter(
-        (item) => editableData[codeSKU].codeSKU === item.codeSKU
-      );
-      if (
-        dataByCodeSku.length > 0 &&
-        optionAtributes.value[index].codeSKU !== editableData[codeSKU].codeSKU
-      )
-        return false;
-    }
-    return true;
-  };
-
-  // xử lý chuyển đổi số sang dạng 000.000
+  // const onChangeNumber = (e ,key) => {
+  //   formState[key]=
+  // };
 
   return {
     formState,
@@ -624,6 +534,7 @@ const actionProduct = ({ action, namePath, route }) => {
     Form,
     form,
     columnValue,
+    indexCurrent,
     editableData,
     options,
   };

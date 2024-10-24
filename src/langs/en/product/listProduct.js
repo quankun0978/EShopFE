@@ -50,5 +50,6 @@ const listProduct = {
   DETAIL_ATRIBUTES: "Detail Atributes",
   CODE_SKU_IS_EXSITS: "Code sku is exsits",
   CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
+  DELETE_PRODUCT: "Do you want to delete the product",
 };
 export default listProduct;

@@ -50,5 +50,6 @@ const listProduct = {
   DETAIL_ATRIBUTES: "Chi tiết thuộc tính",
   CODE_SKU_IS_EXSITS: "Đã có mã SKU tồn tại trong hệ thống",
   CODE_SKU_IS_DUPLICATE: "Đã có mã sku trùng nhau vui lòng thử lại",
+  DELETE_PRODUCT: "Bạn có muốn xóa các sản phẩm này",
 };
 export default listProduct;

@@ -136,6 +136,7 @@ const Table = (props) => {
     HandleClickNextFirstPage,
     HandleClickNextPage,
     HandleClickPrevPage,
+    idProduct,
     HandleClickRefreshPage,
     isDisabled,
   };

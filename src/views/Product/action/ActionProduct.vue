@@ -134,6 +134,7 @@
           :handle-save="handleSave"
           :handle-edit="handleEdit"
           :items="optionAtributes"
+          :index-current="indexCurrent"
           :column-key="columnValue"
           :editable-data="editableData"
           :style="{
@@ -212,6 +213,7 @@ const {
   SelectForm,
   RadioForm,
   CheckboxForm,
+  indexCurrent,
   UploadForm,
   form,
   imageUrl,

@@ -63,12 +63,14 @@
 
     <a-table
       v-if="isInput"
+      :customRow="customRow"
       class="table-custom"
       :bordered="bordered"
       :scroll="{ y: '76vh', scrollToFirstRowOnChange: true, x: 1520 }"
       :row-selection="{
         selectedRowKeys: state.selectedRowKeys,
         onChange: onSelectChange,
+
         // getCheckboxProps: handleGetCheckboxProps,
       }"
       :data-source="items"
@@ -114,17 +116,8 @@
             />
           </div>
         </template>
-        <template :ref="firstRow" #bodyCell="{ record }">
-          <div
-            :key="record.name"
-            v-if="index === 1"
-            ref="firstRow"
-            tabindex="1"
-          >
-            <!-- Thêm ref vào hàng đầu tiên -->
-            {{ record[column.dataIndex] }}
-          </div>
-          <div v-else>
+        <template #bodyCell="{ record }">
+          <div>
             {{ record[column.dataIndex] }}
           </div>
         </template>
@@ -150,7 +143,6 @@
 <script setup>
 import "./table.scss";
 import Table from "./Table.js";
-import { onMounted, ref } from "vue";
 const props = defineProps({
   items: Array,
   columns: Array,
@@ -182,6 +174,7 @@ const {
   HandleClickNextLastPage,
   handlePreventDefault,
   onSelectChange,
+  idProduct,
   isDisabled,
   HandleChangePageSize,
   HandleClickNextFirstPage,
@@ -189,13 +182,26 @@ const {
   HandleClickPrevPage,
   HandleClickRefreshPage,
 } = Table(props);
-const firstRow = ref(null);
-onMounted(() => {
-  if (firstRow.value) {
-    firstRow.value.focus(); // Tự động focus vào hàng đầu tiên
-  }
-});
+
+const customRow = (record) => {
+  return {
+    onClick: () => {
+      idProduct.value = record.key;
+      const currentIndex = state.selectedRowKeys.findIndex(
+        (item) => item === record.key
+      );
+      if (currentIndex > -1) {
+        state.selectedRowKeys = state.selectedRowKeys.filter(
+          (item) => item !== record.key
+        );
+      } else {
+        state.selectedRowKeys.push(record.key);
+      }
+    },
+  };
+};
 </script>
+
 <style lang="scss" scoped>
 @import "./Table.scss";
 </style>

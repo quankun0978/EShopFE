@@ -175,9 +175,7 @@ const ListProduct = () => {
           data.value = dt;
         }
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   };
 
   const handleDeleteData = async (data) => {
@@ -197,7 +195,7 @@ const ListProduct = () => {
   const onClickDelete = (data) => {
     if (data && data.length > 0) {
       showConfirm({
-        title: `Bạn muốn xóa các sản phẩm ?`,
+        title: `${$t("product.LIST.DELETE_PRODUCT")} ?`,
         icon: ExclamationCircleOutlined,
         content: "",
         okText: $t("product.LIST.CONFIRM"),

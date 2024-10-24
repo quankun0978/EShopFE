@@ -45,12 +45,7 @@
   </a-config-provider>
 </template>
 <script setup>
-import {
-  convertNumber,
-  convertToNormalNumber,
-  isNumeric,
-  removeLettersAndSpecialChars,
-} from "@/helpers/Funcs/helper";
+import { convertNumber } from "@/helpers/Funcs/helper";
 
 const props = defineProps({
   value: String,
@@ -69,12 +64,6 @@ const props = defineProps({
   validator: Function,
   isRequired: Boolean,
 });
-
-// watchEffect(() => {
-//   if (props.item.value === "price") {
-//     props.formSate[props.item.value] = convertNumber(props.formSate[props.item.value]);
-//   }
-// });
 
 const pressKeydown = (e) => {
   if (e.key === "Enter") {

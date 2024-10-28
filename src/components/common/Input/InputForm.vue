@@ -36,6 +36,7 @@
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         @keydown="pressKeydown"
+        @blur="OnBlur"
         :disabled="isDisable"
         ref="inputRef"
         :tabindex="tabIndex"
@@ -57,8 +58,10 @@ const props = defineProps({
   isNumber: Boolean,
   rows: Number,
   maxLength: Number,
+  modelValue: String,
   formSate: Object,
   onPressKeyDown: Function,
+  onBlur: Function,
   isDisable: Boolean,
   tabIndex: Number,
   validator: Function,
@@ -75,6 +78,13 @@ const pressKeydown = (e) => {
     }
   }
 };
+
+const OnBlur = (e) => {
+  if (props.onBlur) {
+    props.onBlur(e);
+  }
+};
+
 const rulesDefault =
   props.rules && props.rules.length > 0
     ? props.rules

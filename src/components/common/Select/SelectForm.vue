@@ -19,16 +19,12 @@
         :disabled="isDisabledAtribute"
         :filter-option="filterOption"
         mode="tags"
-        ref="selectRef"
         :tabindex="tabIndex"
         :open="false"
-        @blur="closeDropdown"
         @change="(e) => handleChange(e)"
         show-search
-        @keydown.enter.prevent="showDropdown"
-        @click="showDropdown"
       />
-      <a-select
+      <!-- <a-select
         v-else
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :placeholder="placeholder"
@@ -39,11 +35,22 @@
         ref="selectRef"
         :open="dropdownOpen"
         :filter-option="filterOption"
-        @keydown.enter.prevent="showDropdown"
+        @keydown.prevent="showDropdown"
         @click="showDropdown"
         @blur="closeDropdown"
         show-search
         @change="(e) => handleChange(e)"
+      /> -->
+      <a-select
+        v-else
+        v-model:value="formSate[`${item && item.value && item.value}`]"
+        :placeholder="placeholder"
+        :style="style"
+        :options="options"
+        :disabled="isDisable"
+        :tabindex="tabIndex"
+        :filter-option="filterOption"
+        show-search
       />
     </a-form-item>
   </a-config-provider>
@@ -67,7 +74,6 @@ const props = defineProps({
   tabIndex: Number,
 });
 const items = ref(props.options);
-const selectRef = ref(null);
 const dropdownOpen = ref(false);
 
 watchEffect(() => {
@@ -75,12 +81,6 @@ watchEffect(() => {
     items.value = props.options;
   }
 });
-const showDropdown = () => {
-  dropdownOpen.value = !dropdownOpen.value; // Chuyển đổi trạng thái mở dropdown
-};
-const closeDropdown = () => {
-  dropdownOpen.value = false; // Chuyển đổi trạng thái mở dropdown
-};
 
 const handleChange = (e) => {
   dropdownOpen.value = false;

@@ -25,8 +25,10 @@
           {{ $t("product.ACTION.BASIC_INFOMATION") }}
         </p>
         <RadioForm
+          v-if="route.name === 'update_product'"
           :is-disable="isDisable"
           :options="options.optionsStatus"
+          :default-value="formState.status"
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{
@@ -42,6 +44,7 @@
           :is-required="true"
           :tab-index="2"
           @press-key-down="handlePressEnterName"
+          @blur="handlePressEnterName"
           :form-sate="formState"
           :is-disable="isDisable"
         />
@@ -75,6 +78,7 @@
           :form-sate="formState"
           :is-disable="optionAtributes.length > 0"
           :is-number="true"
+          :model-value="formState.price"
           :tab-index="5"
         />
         <InputForm
@@ -84,6 +88,7 @@
           }"
           :style="{ textAlign: 'end' }"
           :form-sate="formState"
+          :model-value="formState.sell"
           :is-disable="optionAtributes.length > 0"
           :is-number="true"
           :tab-index="6"
@@ -100,6 +105,7 @@
           :tab-index="7"
         />
         <CheckboxForm
+          v-if="route.name === 'update_product'"
           :text="$t('product.ACTION.IS_SHOW_SCREEN')"
           :item="{
             value: 'isHide',
@@ -109,6 +115,18 @@
           :on-change="handleChangeIsHide"
           :tab-index="8"
           :checked="formState.isHide === 'Khác' ? true : false"
+        />
+        <CheckboxForm
+          v-else
+          :text="$t('product.ACTION.IS_SHOW_SCREEN')"
+          :item="{
+            value: 'isHide',
+          }"
+          :options="options.optionsiSHide"
+          :form-sate="formState"
+          :on-change="handleChangeIsHide"
+          :tab-index="8"
+          :checked="true"
         />
       </div>
       <div>

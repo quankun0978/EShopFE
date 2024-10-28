@@ -4,7 +4,7 @@
     <a-layout>
       <Header />
       <a-layout-content :style="{ margin: '8px', height: '80vh' }">
-        <div :style="{ background: '#fff' }">
+        <div :style="{ background: '#fff', height: '100%' }">
           <RouterView />
         </div>
       </a-layout-content>

@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <Table
-      :bordered="true"
-      :isInput="true"
-      :items="data"
-      :columns="columns"
-      :isAction="true"
-      :objectQuery="objectQuery"
-      :pagination="pagination"
-      :handleSearch="handleGetData"
-      :handleRefreshQuery="handleRefreshQuery"
-      :handleDeleteData="onClickDelete"
-    />
-  </div>
+  <Table
+    :bordered="true"
+    :isInput="true"
+    :items="data"
+    :columns="columns"
+    :isAction="true"
+    :objectQuery="objectQuery"
+    :pagination="pagination"
+    :handleSearch="handleGetData"
+    :handleRefreshQuery="handleRefreshQuery"
+    :handleDeleteData="onClickDelete"
+  />
 </template>
 
 <script setup>

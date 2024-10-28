@@ -14,7 +14,7 @@
       <a-radio-group
         :disabled="isDisable"
         :defaultValue="defaultValue"
-        v-model:value="val"
+        v-model:value="formState[`${item && item.value && item.value}`]"
         @change="onChange"
         :placeholder="placeholder"
         :tabindex="tabIndex"

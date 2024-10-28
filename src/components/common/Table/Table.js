@@ -13,7 +13,7 @@ import {
   DeleteOutlined,
   SyncOutlined,
 } from "@ant-design/icons-vue";
-//store
+
 // hàm bổ trợ
 const Table = (props) => {
   const idProduct = ref();

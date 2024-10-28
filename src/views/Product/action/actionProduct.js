@@ -20,11 +20,7 @@ import {
 import { cloneDeep } from "lodash";
 import { Notification } from "@/components/common/Notification/Notification";
 import { useImageUpload } from "@/hooks/useImagrUpload";
-import {
-  convertNumber,
-  convertToNormalNumber,
-  generateRandomId,
-} from "@/helpers/Funcs/helper";
+import { convertNumber, convertToNormalNumber } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
 import { $t } from "@/config/app";
@@ -38,12 +34,11 @@ const actionProduct = ({ action, namePath, route }) => {
     unit: "",
     price: "0",
     sell: "0",
-    isHide: false,
+    isHide: true,
     type: "",
     managerBy: "",
     color: "",
     description: "",
-    barcode: "",
     size: 30,
     isParent: 1,
     imageUrl: "",
@@ -200,8 +195,8 @@ const actionProduct = ({ action, namePath, route }) => {
         const payload = [...optionAtributes.value].map((item) => {
           return {
             ...item,
-            price: item.price ? +item.price : 0,
-            sell: item.sell ? +item.sell : 0,
+            price: item.price ? +convertToNormalNumber(item.price) : 0,
+            sell: item.sell ? +convertToNormalNumber(item.sell) : 0,
             isHide:
               formState.isHide === true
                 ? $t("product.ACTION.OTHER")
@@ -249,6 +244,8 @@ const actionProduct = ({ action, namePath, route }) => {
 
       const res = await createProduct({
         ...coppy,
+        price: formState.price ? +convertToNormalNumber(formState.price) : 0,
+        sell: formState.sell ? +convertToNormalNumber(formState.sell) : 0,
         products: payload,
         image: {
           fileName: imageFile.value.name,
@@ -307,7 +304,6 @@ const actionProduct = ({ action, namePath, route }) => {
             isHide: $t("product.ACTION.OTHER"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
-            barcode: generateRandomId(),
             codeSKU: item,
             price: formState.price ? `${formState.price}` : "0",
             sell: formState.sell ? `${formState.sell}` : "0",
@@ -351,7 +347,6 @@ const actionProduct = ({ action, namePath, route }) => {
             isHide: $t("product.ACTION.OTHER"),
             color: dataValues.value[index],
             name: formState.name + `(${dataValues.value[index]})`,
-            barcode: generateRandomId(),
             codeSKU: item,
             price: formState.price ? `${formState.price}` : "0",
             sell: formState.sell ? `${formState.sell}` : "0",
@@ -390,7 +385,6 @@ const actionProduct = ({ action, namePath, route }) => {
             color: values[index],
             name: formState.name + `(${values[index]})`,
             codeSKU: item,
-            barcode: generateRandomId(),
             price: formState.price ? formState.price : "0",
             sell: formState.sell ? formState.sell : "0",
           };
@@ -470,6 +464,7 @@ const actionProduct = ({ action, namePath, route }) => {
       (item) => item.codeSKU === key
     )[0];
     editableData[key] = cloneDeep(dataClone);
+    // console.log(editableData[key]);
   };
 
   // xử lý khi ấn vào nút lưu

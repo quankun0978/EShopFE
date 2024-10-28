@@ -45,6 +45,14 @@
                     handleSave(record.codeSKU, columnKey, index)
                   "
                 />
+                <!-- <Input
+                  v-else
+                  :is-number="true"
+                  :value="editableData[record.codeSKU][column.key]"
+                  :handle-press-enter="
+                   ()=> handleSave(record.codeSKU, columnKey, index)
+                  "
+                /> -->
               </div>
 
               <div
@@ -69,8 +77,8 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { convertNumber, isNumeric } from "@/helpers/Funcs/helper";
-import { ref } from "vue";
+import { convertNumber } from "@/helpers/Funcs/helper";
+
 const props = defineProps({
   value: String,
   placeholder: String,

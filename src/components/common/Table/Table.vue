@@ -11,7 +11,7 @@
       },
     }"
   >
-    <div style="display: flex; flex-direction: column ; height: 100%;">
+    <div style="display: flex; flex-direction: column; height: 100%">
       <div style="display: flex; flex: 1">
         <div v-if="isAction" class="table-custom-action">
           <RouterLink
@@ -193,6 +193,7 @@ const {
   DeleteOutlined,
   SyncOutlined,
   state,
+  customRow,
   handleColumnInputChange,
   handleColumnSelectChange,
   HandleClickNextLastPage,
@@ -206,27 +207,6 @@ const {
   HandleClickPrevPage,
   HandleClickRefreshPage,
 } = Table(props);
-
-const customRow = (record) => {
-  return {
-    onClick: () => {
-      idProduct.value = record.key;
-      const currentIndex = state.selectedRowKeys.findIndex(
-        (item) => item === record.key
-      );
-      if (currentIndex > -1) {
-        state.selectedRowKeys = state.selectedRowKeys.filter(
-          (item) => item !== record.key
-        );
-      } else {
-        state.selectedRowKeys.push(record.key);
-      }
-    },
-    // onDoubleClick: () => {
-    //   console.log("oke");
-    // },
-  };
-};
 </script>
 
 <style lang="scss" scoped>

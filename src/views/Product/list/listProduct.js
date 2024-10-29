@@ -17,13 +17,13 @@ const ListProduct = () => {
   const objectQuery = reactive({
     codeSKU: "",
     name: "",
-    group: "",
-    unit: "",
-    price: "10000000",
-    isHide: $t("product.LIST.ALL"),
-    type: $t("product.LIST.ALL"),
-    managerBy: $t("product.LIST.ALL"),
-    status: $t("product.LIST.ALL"),
+    group: "0",
+    unit: "0",
+    price: "",
+    isHide: "0",
+    type: "1",
+    managerBy: "0",
+    status: "0",
     pageNumber: "1",
     pageSize: "20",
   });
@@ -71,18 +71,18 @@ const ListProduct = () => {
         options: [
           {
             label: $t("product.LIST.ALL"),
-            value: $t("product.LIST.ALL"),
+            value: 0,
           },
           {
             label: $t("product.LIST.YES"),
-            value: $t("product.LIST.YES"),
+            value: 1,
           },
           {
             label: $t("product.LIST.NO"),
-            value: $t("product.LIST.NO"),
+            value: 2,
           },
         ],
-        defaultValue: $t("product.LIST.ALL"),
+        defaultValue: 0,
       },
       input: objectQuery.isHide,
     },
@@ -95,14 +95,14 @@ const ListProduct = () => {
         options: [
           {
             label: $t("product.LIST.ALL"),
-            value: $t("product.LIST.ALL"),
+            value: 0,
           },
           {
             label: $t("product.LIST.PRODUCT"),
-            value: $t("product.LIST.PRODUCT"),
+            value: 1,
           },
         ],
-        defaultValue: $t("product.LIST.ALL"),
+        defaultValue: 0,
       },
     },
     {
@@ -114,18 +114,18 @@ const ListProduct = () => {
         options: [
           {
             label: $t("product.LIST.ALL"),
-            value: $t("product.LIST.ALL"),
+            value: 0,
           },
           {
             label: $t("product.LIST.IN_BUSINESS"),
-            value: $t("product.LIST.IN_BUSINESS"),
+            value: 1,
           },
           {
             label: $t("product.LIST.OUT_BUSINESS"),
-            value: $t("product.LIST.OUT_BUSINESS"),
+            value: 2,
           },
         ],
-        defaultValue: $t("product.LIST.ALL"),
+        defaultValue: 0,
       },
     },
   ];

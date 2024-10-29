@@ -2,33 +2,33 @@ import { $t } from "@/config/app";
 export const optionsStatus = [
   {
     label: $t("product.ACTION.IN_BUSINESS"),
-    value: $t("product.ACTION.IN_BUSINESS"),
+    value: 1,
   },
   {
     label: $t("product.ACTION.OUT_BUSINESS"),
-    value: $t("product.ACTION.OUT_BUSINESS"),
+    value: 2,
   },
 ];
 
 export const optionsGroup = [
   {
     label: $t("product.ACTION.BOAT_PLATFORM"),
-    value: $t("product.ACTION.BOAT_PLATFORM"),
+    value: 1,
   },
   {
     label: $t("product.ACTION.HOUSEHOLD_GOODS"),
-    value: $t("product.ACTION.HOUSEHOLD_GOODS"),
+    value: 2,
   },
 ];
 
 export const optionsUnit = [
   {
     label: $t("product.ACTION.SINGLE"),
-    value: $t("product.ACTION.SINGLE"),
+    value: 1,
   },
   {
     label: $t("product.ACTION.PAIR"),
-    value: $t("product.ACTION.PAIR"),
+    value: 2,
   },
 ];
 
@@ -68,7 +68,7 @@ export const columnsAtributes = [
 export const optionsiSHide = [
   {
     label: $t("product.ACTION.DISPLAY_ON_SALES_SCREEN"),
-    value: $t("product.ACTION.YES"),
+    value: 1,
   },
 ];
 

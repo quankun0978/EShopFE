@@ -116,6 +116,36 @@ const Table = (props) => {
     }
   };
 
+  const customRow = (record) => {
+    console.log(record.id);
+    return {
+      onClick: () => {
+        idProduct.value = record.key;
+        const currentIndex = state.selectedRowKeys.findIndex(
+          (item) => item === record.key
+        );
+        if (currentIndex > -1) {
+          state.selectedRowKeys = state.selectedRowKeys.filter(
+            (item) => item !== record.key
+          );
+        } else {
+          state.selectedRowKeys.push(record.key);
+        }
+      },
+      onDblclick: () => {
+        router.push({
+          name: "update_product",
+          params: {
+            id: record.id,
+          },
+        });
+      },
+      // onDoubleClick: () => {
+      //   console.log("oke");
+      // },
+    };
+  };
+
   return {
     Input,
     Select,
@@ -126,6 +156,7 @@ const Table = (props) => {
     EditOutlined,
     DeleteOutlined,
     SyncOutlined,
+    customRow,
     state,
     handleColumnInputChange,
     handleColumnSelectChange,

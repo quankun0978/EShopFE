@@ -1,4 +1,4 @@
-import { onMounted, reactive, ref, watchEffect } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 //componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
@@ -17,6 +17,7 @@ import {
 // hàm bổ trợ
 const Table = (props) => {
   const idProduct = ref();
+  const idFocus = ref();
   const state = reactive({
     selectedRowKeys: [],
     loading: false,
@@ -28,14 +29,24 @@ const Table = (props) => {
     if (state.selectedRowKeys.length === 1) {
       isDisabled.value = false;
     } else {
-      isDisabled.value = true;
+      if (state.selectedRowKeys.length > 1) {
+        isDisabled.value = true;
+      } else if ([idFocus.value].length === 1) {
+        isDisabled.value = false;
+      }
     }
   });
 
   watchEffect(() => {
+    // await nextTick();
+
+    // if (firstRow && firstRow.length > 0) {
+    //   console.log(firstRow[0]);
+    //   // firstRow.classList.add("focused-row"); // Thêm class để hiển thị focus
+    // }
     if (props.items && props.items.length > 0) {
-      idProduct.value = props.items[0].id;
-      state.selectedRowKeys = [props.items[0].id];
+      idFocus.value = props.items[0].id;
+      // state.selectedRowKeys = [props.items[0].id];
     }
   });
 
@@ -104,11 +115,12 @@ const Table = (props) => {
   // sự kiện khi thực hiện 1 hành động (thêm mới hoặc chỉnh sửa)
 
   const handlePreventDefault = (e, route) => {
-    if (state.selectedRowKeys.length > 0) {
+    if (state.selectedRowKeys.length > 0 || [idFocus.value].length > 0) {
+      const id = idProduct.value ? idProduct.value : idFocus.value;
       router.push({
         name: route,
         params: {
-          id: idProduct.value,
+          id: id,
         },
       });
     } else {
@@ -117,29 +129,24 @@ const Table = (props) => {
   };
 
   const customRow = (record) => {
-    console.log(record.id);
+    // console.log(record.id);
+    const idCurrent = record.key ? record.key : idFocus.value;
+    const isFocused = idFocus.value === idCurrent;
     return {
-      onClick: () => {
-        idProduct.value = record.key;
-        const currentIndex = state.selectedRowKeys.findIndex(
-          (item) => item === record.key
-        );
-        if (currentIndex > -1) {
-          state.selectedRowKeys = state.selectedRowKeys.filter(
-            (item) => item !== record.key
-          );
-        } else {
-          state.selectedRowKeys.push(record.key);
+      onClick: (e) => {
+        idFocus.value = record.key;
+      },
+      onDblclick: (e) => {
+        if (!e.target.value) {
+          router.push({
+            name: "update_product",
+            params: {
+              id: record.id,
+            },
+          });
         }
       },
-      onDblclick: () => {
-        router.push({
-          name: "update_product",
-          params: {
-            id: record.id,
-          },
-        });
-      },
+      className: isFocused ? "focused-row" : "", // Thêm class nếu hàng được focus
       // onDoubleClick: () => {
       //   console.log("oke");
       // },
@@ -167,6 +174,7 @@ const Table = (props) => {
     HandleClickNextFirstPage,
     HandleClickNextPage,
     HandleClickPrevPage,
+    idFocus,
     idProduct,
     HandleClickRefreshPage,
     isDisabled,

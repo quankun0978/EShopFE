@@ -27,7 +27,7 @@ import { $t } from "@/config/app";
 
 const actionProduct = ({ action, namePath, route }) => {
   const formState = reactive({
-    status: $t("product.ACTION.IN_BUSINESS"),
+    status: "1",
     codeSKU: "",
     group: "",
     name: "",
@@ -36,12 +36,9 @@ const actionProduct = ({ action, namePath, route }) => {
     sell: "0",
     isHide: true,
     type: "",
-    managerBy: "",
     color: "",
     description: "",
-    size: 30,
     isParent: 1,
-    imageUrl: "",
     id: null,
     imageBlob: "",
     imageUrl: "",
@@ -96,13 +93,10 @@ const actionProduct = ({ action, namePath, route }) => {
           ...res.data.data,
           sell: convertNumber(`${res.data.data.sell}`),
           price: convertNumber(`${res.data.data.price}`),
-          isHide:
-            res.data.data.isHide === $t("product.ACTION.NO") ? true : false,
-          unit:
-            res.data.data.unit === "double"
-              ? $t("product.ACTION.PAIR")
-              : $t("product.ACTION.SINGLE"),
+
+          isHide: res.data.data.isHide === 1 ? true : false,
         };
+
         if (dataAtributes && dataAtributes.length > 0) {
           if (action === "update_product") {
             optionAtributes.value = dataAtributes;
@@ -196,13 +190,11 @@ const actionProduct = ({ action, namePath, route }) => {
           return {
             ...item,
             price: item.price ? +convertToNormalNumber(item.price) : 0,
+            type: +formState.type,
             sell: item.sell ? +convertToNormalNumber(item.sell) : 0,
-            isHide:
-              formState.isHide === true
-                ? $t("product.ACTION.OTHER")
-                : $t("product.ACTION.YES"),
+            isHide: formState.isHide === true ? 0 : 1,
             description: formState.description,
-            status: formState.status,
+            status: action !== "update_product" ? 1 : +formState.status,
             id: item.id ? item.id : -1,
           };
         });
@@ -222,10 +214,10 @@ const actionProduct = ({ action, namePath, route }) => {
           ...formState,
           price: formState.price ? +convertToNormalNumber(formState.price) : 0,
           sell: formState.sell ? +convertToNormalNumber(formState.sell) : 0,
+          status: +formState.status,
+          type: 1,
           products: payload,
-          isHide: formState.isHide
-            ? $t("product.ACTION.NO")
-            : $t("product.ACTION.YES"),
+          isHide: formState.isHide ? 1 : 0,
           image: {
             fileName: imageFile.value.name,
             fileData: imageUrl.value.split(",")[1],
@@ -246,16 +238,15 @@ const actionProduct = ({ action, namePath, route }) => {
         ...coppy,
         price: formState.price ? +convertToNormalNumber(formState.price) : 0,
         sell: formState.sell ? +convertToNormalNumber(formState.sell) : 0,
+        type: 1,
         products: payload,
+        status: 1,
         image: {
           fileName: imageFile.value.name,
           fileData: imageUrl.value.split(",")[1],
         },
         color: "null",
-        isHide:
-          formState.isHide.length > 0
-            ? $t("product.ACTION.YES")
-            : $t("product.ACTION.OTHER"),
+        isHide: formState.isHide ? 1 : 0,
       });
       if (res && res.success) {
         Notification.success($t("product.ACTION.ADD_NEW_SUCCESS"));
@@ -338,20 +329,20 @@ const actionProduct = ({ action, namePath, route }) => {
     const res = await generateListSKU(formState.codeSKU, dataValues.value);
     if (res.success) {
       const items =
-        res.data &&
-        res.data.length > 0 &&
-        res.data.map((item, index) => {
-          return {
-            ...formState,
-            isParent: 0,
-            isHide: $t("product.ACTION.OTHER"),
-            color: dataValues.value[index],
-            name: formState.name + `(${dataValues.value[index]})`,
-            codeSKU: item,
-            price: formState.price ? `${formState.price}` : "0",
-            sell: formState.sell ? `${formState.sell}` : "0",
-          };
-        });
+        res.data && res.data.length > 0
+          ? res.data.map((item, index) => {
+              return {
+                ...formState,
+                isParent: 0,
+                isHide: 0,
+                color: dataValues.value[index],
+                name: formState.name + `(${dataValues.value[index]})`,
+                codeSKU: item,
+                price: formState.price ? `${formState.price}` : "0",
+                sell: formState.sell ? `${formState.sell}` : "0",
+              };
+            })
+          : [];
 
       const dataUpdate = items.map((item) => {
         const value = items.find((i) => i.color === item.color);

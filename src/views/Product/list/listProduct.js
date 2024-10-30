@@ -12,18 +12,18 @@ import { Notification } from "@/components/common/Notification/Notification";
 import Table from "@/components/common/Table/Table.vue";
 import { $t } from "@/config/app";
 import { optionPageSize } from "@/constants/options";
+import { isHideMapper, statusMapper, typeMapper } from "@/helpers/mapper";
 
 const ListProduct = () => {
   const objectQuery = reactive({
     codeSKU: "",
     name: "",
-    group: "0",
-    unit: "0",
+    group: "",
+    unit: "",
     price: "",
-    isHide: "0",
-    type: "1",
-    managerBy: "0",
-    status: "0",
+    isHide: 0,
+    type: 0,
+    status: 0,
     pageNumber: "1",
     pageSize: "20",
   });
@@ -84,13 +84,13 @@ const ListProduct = () => {
         ],
         defaultValue: 0,
       },
-      input: objectQuery.isHide,
+      input: objectQuery.isHide.toString(),
     },
     {
       title: $t("product.LIST.TYPE_PRODUCT"),
       dataIndex: "type",
       isSelect: true,
-      input: objectQuery.type,
+      input: objectQuery.type.toString(),
       select: {
         options: [
           {
@@ -109,7 +109,7 @@ const ListProduct = () => {
       title: $t("product.LIST.STATUS"),
       dataIndex: "status",
       isSelect: true,
-      input: objectQuery.status,
+      input: objectQuery.status.toString(),
       select: {
         options: [
           {
@@ -150,30 +150,31 @@ const ListProduct = () => {
 
   const handleGetData = async () => {
     try {
-      if (objectQuery.price) {
-        const res = await getAllProduct({
-          ...objectQuery,
-          price: +parseFormattedNumber(objectQuery.price),
-          pageNumber: +objectQuery.pageNumber,
-          pageSize: +objectQuery.pageSize,
-        });
-        if (res.success) {
-          const copy = {
-            totalPage: res.data.totalPage,
-            pageNumber: res.data.currentPage,
-            totalRecord: res.data.totalRecord,
-          };
-          Object.assign(pagination, copy);
-          const dt =
-            res.data.data?.map((item) => {
-              return {
-                ...item,
-                price: convertNumber(item.price.toString()),
-                key: item.id,
-              };
-            }) || [];
-          data.value = dt;
-        }
+      const res = await getAllProduct({
+        ...objectQuery,
+        price: +parseFormattedNumber(objectQuery.price),
+        pageNumber: +objectQuery.pageNumber,
+        pageSize: +objectQuery.pageSize,
+      });
+      if (res.success) {
+        const copy = {
+          totalPage: res.data.totalPage,
+          pageNumber: res.data.currentPage,
+          totalRecord: res.data.totalRecord,
+        };
+        Object.assign(pagination, copy);
+        const dt =
+          res.data.data?.map((item) => {
+            return {
+              ...item,
+              price: convertNumber(item.price.toString()),
+              isHide: isHideMapper(item.isHide), // Hiện/Ẩn ngẫu nhiên
+              type: typeMapper(item.type), // Loại sản phẩm ngẫu nhiên
+              status: statusMapper(item.status), // Trạng thái ngẫu nhiên
+              key: item.id,
+            };
+          }) || [];
+        data.value = dt;
       }
     } catch (e) {}
   };
@@ -192,7 +193,7 @@ const ListProduct = () => {
     }
   };
 
-  const onClickDelete = (data) => {
+  const onClickDelete = (data, dataFocus) => {
     if (data && data.length > 0) {
       showConfirm({
         title: `${$t("product.LIST.DELETE_PRODUCT")} ?`,
@@ -201,6 +202,15 @@ const ListProduct = () => {
         okText: $t("product.LIST.CONFIRM"),
         cancelText: $t("product.LIST.CANCEL"),
         handleOk: () => handleDeleteData(data),
+      });
+    } else if (dataFocus && dataFocus.length > 0) {
+      showConfirm({
+        title: `${$t("product.LIST.DELETE_PRODUCT")} ?`,
+        icon: ExclamationCircleOutlined,
+        content: "",
+        okText: $t("product.LIST.CONFIRM"),
+        cancelText: $t("product.LIST.CANCEL"),
+        handleOk: () => handleDeleteData(dataFocus),
       });
     }
   };

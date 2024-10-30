@@ -13,22 +13,22 @@ export const optionsStatus = [
 export const optionsGroup = [
   {
     label: $t("product.ACTION.BOAT_PLATFORM"),
-    value: 1,
+    value: $t("product.ACTION.BOAT_PLATFORM"),
   },
   {
     label: $t("product.ACTION.HOUSEHOLD_GOODS"),
-    value: 2,
+    value: $t("product.ACTION.HOUSEHOLD_GOODS"),
   },
 ];
 
 export const optionsUnit = [
   {
     label: $t("product.ACTION.SINGLE"),
-    value: 1,
+    value: $t("product.ACTION.SINGLE"),
   },
   {
     label: $t("product.ACTION.PAIR"),
-    value: 2,
+    value: $t("product.ACTION.PAIR"),
   },
 ];
 

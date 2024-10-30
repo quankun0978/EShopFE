@@ -13,7 +13,7 @@
     >
       <a-radio-group
         :disabled="isDisable"
-        :defaultValue="defaultValue"
+        :defaultValue="+defaultValue"
         v-model:value="formState[`${item && item.value && item.value}`]"
         @change="onChange"
         :placeholder="placeholder"

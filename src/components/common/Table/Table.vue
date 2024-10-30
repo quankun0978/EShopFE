@@ -44,7 +44,7 @@
             :to="{
               name: 'update_product',
               params: {
-                id: state.selectedRowKeys[0] ? state.selectedRowKeys[0] : '#',
+                id: idProduct ? idProduct : '#',
               },
             }"
             class="item-action"
@@ -54,7 +54,7 @@
           </RouterLink>
           <div
             class="item-action"
-            @click="() => handleDeleteData(state.selectedRowKeys)"
+            @click="() => handleDeleteData(state.selectedRowKeys, [idFocus])"
           >
             <DeleteOutlined />
             {{ $t("product.LIST.DELETE") }}
@@ -200,6 +200,7 @@ const {
   handlePreventDefault,
   onSelectChange,
   idProduct,
+  idFocus,
   isDisabled,
   HandleChangePageSize,
   HandleClickNextFirstPage,

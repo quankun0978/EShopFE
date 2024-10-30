@@ -28,7 +28,7 @@
           v-if="route.name === 'update_product'"
           :is-disable="isDisable"
           :options="options.optionsStatus"
-          :default-value="formState.status"
+          :default-value="formState.toString()"
           :form-state="formState"
           :on-change="handleChangeStatus"
           :item="{

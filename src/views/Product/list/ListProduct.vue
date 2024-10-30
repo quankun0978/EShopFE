@@ -2,7 +2,7 @@
   <Table
     :bordered="true"
     :isInput="true"
-    :items="fakeData"
+    :items="data"
     :columns="columns"
     :isAction="true"
     :objectQuery="objectQuery"
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+import { isHideMapper, statusMapper, typeMapper } from "@/helpers/mapper";
 import ListProduct from "./listProduct";
 const {
   data,
@@ -26,20 +27,20 @@ const {
   onClickDelete,
 } = ListProduct();
 
-const fakeData = [];
+// const fakeData = [];
 
-for (let i = 0; i < 50; i++) {
-  fakeData.push({
-    id: i,
-    key: i,
-    codeSKU: Math.random().toString(36).substring(2, 12).toUpperCase(), // Mã sản phẩm ngẫu nhiên
-    name: `Product ${i + 1}`, // Tên sản phẩm
-    group: `${i}`, // Nhóm sản phẩm ngẫu nhiên
-    unit: `${i}`, // Đơn vị ngẫu nhiên
-    price: "1", // Giá sản phẩm ngẫu nhiên
-    isHide: "0", // Hiện/Ẩn ngẫu nhiên
-    type: "1", // Loại sản phẩm ngẫu nhiên
-    status: "1", // Trạng thái ngẫu nhiên
-  });
-}
+// for (let i = 0; i < 50; i++) {
+//   fakeData.push({
+//     id: i,
+//     key: i,
+//     codeSKU: Math.random().toString(36).substring(2, 12).toUpperCase(), // Mã sản phẩm ngẫu nhiên
+//     name: `Product ${i + 1}`, // Tên sản phẩm
+//     group: `${i}`, // Nhóm sản phẩm ngẫu nhiên
+//     unit: `${i}`, // Đơn vị ngẫu nhiên
+//     price: "1", // Giá sản phẩm ngẫu nhiên
+//     isHide: isHideMapper(1), // Hiện/Ẩn ngẫu nhiên
+//     type: typeMapper(1), // Loại sản phẩm ngẫu nhiên
+//     status: statusMapper(1), // Trạng thái ngẫu nhiên
+//   });
+// }
 </script>

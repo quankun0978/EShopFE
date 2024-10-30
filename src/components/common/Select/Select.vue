@@ -24,7 +24,7 @@ const props = defineProps({
   options: Array,
   placeholder: String,
   style: Object,
-  defaultValue: String,
+  defaultValue: Number,
   OnChange: Function,
 });
 const items = ref(props.options);

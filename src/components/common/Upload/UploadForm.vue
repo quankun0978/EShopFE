@@ -13,7 +13,6 @@
           @keydown.enter.prevent="handleEnterLabel"
         >
           <div
-            @keydown="handleTest"
             style="
               display: flex;
               justify-content: flex-end;
@@ -30,7 +29,7 @@
             v-if="imageUrl"
             :src="imageUrl"
             v-show="imageUrl"
-            alt="Avatar"
+            alt="ảnh hàng hóa"
           />
         </label>
       </a-form-item>
@@ -58,7 +57,6 @@ const props = defineProps({
   placeholder: String,
   style: Object,
   defaultValue: String,
-  OnChange: Function,
   dragger: Object,
   item: Object,
   handleImageSelected: Function,

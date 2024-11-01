@@ -40,19 +40,25 @@
                 class="editable-cell-input-wrapper"
               >
                 <a-input
+                  v-if="column.key !== 'price' && column.key !== 'sell'"
                   v-model:value="editableData[record.codeSKU][column.key]"
                   @pressEnter.prevent="
                     handleSave(record.codeSKU, columnKey, index)
                   "
                 />
-                <!-- <Input
+                <Input
                   v-else
                   :is-number="true"
+                  :form-sate="editableData"
+                  :item="{
+                    value: column.key,
+                  }"
+                  :keyword="record.codeSKU"
                   :value="editableData[record.codeSKU][column.key]"
                   :handle-press-enter="
-                   ()=> handleSave(record.codeSKU, columnKey, index)
+                    () => handleSave(record.codeSKU, columnKey, index)
                   "
-                /> -->
+                />
               </div>
 
               <div
@@ -78,6 +84,7 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { convertNumber } from "@/helpers/Funcs/helper";
+import Input from "../Input/Input.vue";
 
 const props = defineProps({
   value: String,
@@ -97,8 +104,13 @@ const props = defineProps({
 });
 
 // const onChangeNumber = (e, key, column) => {
-//   if (!isNumeric(e.target.value)) {
-//     props.editableData[key][column] = "";
+//   if (key === "price" || key === "sell") {
+//     if (props.editableData) {
+//       console.log(1);
+//       const dt = props.editableData;
+//       dt[key][column] = convertNumber(e.target.value);
+//       Object.assign(props.editableData,dt)
+//     }
 //   }
 // };
 </script>

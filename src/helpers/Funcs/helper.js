@@ -11,6 +11,7 @@ export const getInitials = (productName) => {
 
 // hàm chuyển đổi số thành dạng 000.000
 export const convertNumber = (number) => {
+  // console.log(number);
   const normalNumber = convertToNormalNumber(number);
   const strRemoveLetter = removeLettersAndSpecialChars(normalNumber);
   if (isNumeric(strRemoveLetter)) {
@@ -36,15 +37,7 @@ export const parseFormattedNumber = (formattedNumber) => {
   return parseInt(formattedNumber.replace(/\./g, ""), 10);
 };
 
-// export const validateNumber = (rule, value) => {
-//   if (!value) {
-//     return Promise.reject();
-//   } else if (isNaN(value)) {
-//     return Promise.reject();
-//   } else {
-//     return Promise.resolve();
-//   }
-// };
+// kiểm tra chuỗi số
 
 export const isNumeric = (value) => {
   return !isNaN(value) && !isNaN(parseFloat(value));
@@ -56,21 +49,22 @@ export const isNumeric = (value) => {
 //   return Math.floor(10000 + Math.random() * 90000).toString();
 // };
 
+// kiểm tra chuỗi chữ cái
+
 export const isStringNumber = (value) => {
   return /^\d+$/.test(value);
 };
+
+// lấy ra các pathname tương ứng
 
 export const getNamePath = (action) => {
   switch (action) {
     case "create_product":
       return $t("product.ACTION.ADD");
-      break;
     case "update_product":
       return $t("product.ACTION.EDIT");
-      break;
     case "copy_product":
       return $t("product.ACTION.COPPY");
-      break;
     default:
       return "Thêm mới";
   }

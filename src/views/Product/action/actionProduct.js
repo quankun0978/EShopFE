@@ -199,8 +199,6 @@ const actionProduct = ({ action, namePath, route }) => {
           };
         });
         handlePostData(payload);
-      } else {
-        // Notification.error(error.value);
       }
     } catch (error) {}
   };
@@ -253,8 +251,6 @@ const actionProduct = ({ action, namePath, route }) => {
         router.push({
           name: "list_product",
         });
-      } else {
-        // Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
       }
     }
   };
@@ -317,7 +313,6 @@ const actionProduct = ({ action, namePath, route }) => {
         const index =
           optionAtributes.value.length === 0 ? 0 : dataValues.value.length - 1;
         dt.push(items[index]);
-
         optionAtributes.value = dt;
       }
     }
@@ -451,19 +446,30 @@ const actionProduct = ({ action, namePath, route }) => {
   const handleEdit = (key, columnKey, index) => {
     columnValue.value = columnKey;
     indexCurrent.value = index;
-    const dataClone = optionAtributes.value.filter(
-      (item) => item.codeSKU === key
-    )[0];
+    const dataClone = optionAtributes.value
+      .map((item) => {
+        return {
+          ...item,
+          price: convertNumber(item.price),
+          sell: convertNumber(item.sell),
+        };
+      })
+      .filter((item) => item.codeSKU === key)[0];
     editableData[key] = cloneDeep(dataClone);
-    // console.log(editableData[key]);
   };
 
   // xử lý khi ấn vào nút lưu
 
   const handleSave = async (key, column, index) => {
-    const temp = optionAtributes.value.filter(
-      (item) => key === item.codeSKU
-    )[0];
+    const temp = optionAtributes.value
+      .map((item) => {
+        return {
+          ...item,
+          price: convertNumber(item.price),
+          sell: convertNumber(item.sell),
+        };
+      })
+      .filter((item) => key === item.codeSKU)[0];
     if (
       editableData[key][column] !== null &&
       editableData[key][column] !== ""
@@ -485,10 +491,6 @@ const actionProduct = ({ action, namePath, route }) => {
       delete editableData[key];
     }
   };
-
-  // const onChangeNumber = (e ,key) => {
-  //   formState[key]=
-  // };
 
   return {
     formState,

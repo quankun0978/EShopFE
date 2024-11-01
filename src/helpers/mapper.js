@@ -1,4 +1,7 @@
 import { $t } from "@/config/app";
+
+// thực hiện map các option của các trạng thái
+
 export const statusMapper = (value) => {
   switch (value) {
     case 1:
@@ -10,6 +13,8 @@ export const statusMapper = (value) => {
   }
 };
 
+// thực hiện map các option của loại sản phẩm
+
 export const typeMapper = (value) => {
   switch (value) {
     case 1:
@@ -19,6 +24,8 @@ export const typeMapper = (value) => {
       break;
   }
 };
+
+// thực hiện map các option của checkbox ẩn hiện lên màn hình bán hàng
 
 export const isHideMapper = (value) => {
   switch (value) {

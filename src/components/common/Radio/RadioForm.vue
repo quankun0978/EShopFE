@@ -47,12 +47,9 @@ const props = defineProps({
   tabIndex: Number,
 });
 
-const val = ref(props.formState[props.item.value]);
-
 const handleChange = (e) => {
   if (props.onChange) {
-    // Kiểm tra xem onChange có phải là hàm không
-    props.onChange(e); // Gọi hàm onChange với giá trị đã chọn
+    props.onChange(e);
   }
 };
 </script>

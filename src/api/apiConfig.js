@@ -12,8 +12,8 @@ export const HTTP_PATH_API = {
   PRODUCT_ADD: "/product/add",
   PRODUCT_UPDATE: "/product/update",
   PRODUCT_DELETE: "/product/delete",
-  PRODUCT_GENERATE_SKU: "/product/generate_SKU",
-  PRODUCT_GENERATE_LIST_SKU: "/product/list_generate_SKU",
-  PRODUCT_GENERATE_LIST_SKU_UPDATE: "/product/list_generate_SKU_update",
+  PRODUCT_GENERATE_SKU: "/product/generate_sku",
+  PRODUCT_GENERATE_LIST_SKU: "/product/list_generate_sku",
+  PRODUCT_GENERATE_LIST_SKU_UPDATE: "/product/list_generate_sku_update",
   PRODUCT_Is_CODE_SKU: "/product/is_code_sku",
 };

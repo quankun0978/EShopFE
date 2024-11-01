@@ -1,4 +1,4 @@
-import { reactive, ref, watchEffect } from "vue";
+import { onUpdated, reactive, ref, watchEffect } from "vue";
 //componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
@@ -25,6 +25,16 @@ const Table = (props) => {
   const router = useRouter();
   const isDisabled = ref(false);
 
+  // cập nhật khi id focus vào thay đổi
+
+  onUpdated(() => {
+    if (props.items && props.items.length > 0) {
+      idFocus.value = props.items[0].id;
+    }
+  });
+
+  // thực hiện disable action nhân bản và chỉnh sửa khi người dùng chọn nhiểu hơn 1 sản phẩm
+
   watchEffect(() => {
     if (state.selectedRowKeys.length === 1) {
       isDisabled.value = false;
@@ -34,19 +44,6 @@ const Table = (props) => {
       } else if ([idFocus.value].length === 1) {
         isDisabled.value = false;
       }
-    }
-  });
-
-  watchEffect(() => {
-    // await nextTick();
-
-    // if (firstRow && firstRow.length > 0) {
-    //   console.log(firstRow[0]);
-    //   // firstRow.classList.add("focused-row"); // Thêm class để hiển thị focus
-    // }
-    if (props.items && props.items.length > 0) {
-      idFocus.value = props.items[0].id;
-      // state.selectedRowKeys = [props.items[0].id];
     }
   });
 
@@ -128,12 +125,13 @@ const Table = (props) => {
     }
   };
 
+  // custom lại hàng của bảng
+
   const customRow = (record) => {
-    // console.log(record.id);
     const idCurrent = record.key ? record.key : idFocus.value;
     const isFocused = idFocus.value === idCurrent;
     return {
-      onClick: (e) => {
+      onClick: () => {
         idFocus.value = record.key;
       },
       onDblclick: (e) => {
@@ -146,10 +144,7 @@ const Table = (props) => {
           });
         }
       },
-      className: isFocused ? "focused-row" : "", // Thêm class nếu hàng được focus
-      // onDoubleClick: () => {
-      //   console.log("oke");
-      // },
+      className: isFocused ? "focused-row" : "",
     };
   };
 

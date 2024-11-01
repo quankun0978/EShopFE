@@ -1,4 +1,7 @@
 import { $t } from "@/config/app";
+
+// option các trạng thái
+
 export const optionsStatus = [
   {
     label: $t("product.ACTION.IN_BUSINESS"),
@@ -9,6 +12,8 @@ export const optionsStatus = [
     value: 2,
   },
 ];
+
+// option các nhóm
 
 export const optionsGroup = [
   {
@@ -21,6 +26,8 @@ export const optionsGroup = [
   },
 ];
 
+// option các đơn vị
+
 export const optionsUnit = [
   {
     label: $t("product.ACTION.SINGLE"),
@@ -31,6 +38,8 @@ export const optionsUnit = [
     value: $t("product.ACTION.PAIR"),
   },
 ];
+
+// các cột của bảng thuộc tính
 
 export const columnsAtributes = [
   {
@@ -59,11 +68,14 @@ export const columnsAtributes = [
   },
 
   {
+    width: "5%",
     title: "",
     dataIndex: "action",
     key: "action",
   },
 ];
+
+// option hiển thị lên màn hình bán hàng
 
 export const optionsiSHide = [
   {
@@ -71,6 +83,8 @@ export const optionsiSHide = [
     value: 1,
   },
 ];
+
+// option số bản ghi mỗi trang
 
 export const optionPageSize = [
   { label: "5", value: 5 },

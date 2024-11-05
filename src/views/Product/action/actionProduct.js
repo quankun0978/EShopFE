@@ -275,6 +275,11 @@ const actionProduct = ({ action, namePath, route }) => {
     formState.unit = value;
   };
 
+  const handleDeleteImage = () => {
+    imageUrl.value = "";
+    formState.imageUrl = "";
+  };
+
   // xử lý lấy ra danh sách mã sku
 
   const handleGetListCode = async () => {
@@ -514,6 +519,7 @@ const actionProduct = ({ action, namePath, route }) => {
     SelectForm,
     isDisable,
     RadioForm,
+    handleDeleteImage,
     CheckboxForm,
     UploadForm,
     imageFile,

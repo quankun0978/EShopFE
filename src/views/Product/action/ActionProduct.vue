@@ -188,6 +188,7 @@
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"
+          :handle-cancel="handleDeleteImage"
           :image-url="imageUrl"
         />
       </div>
@@ -227,6 +228,7 @@ const {
   handleSave,
   Action,
   InputForm,
+  handleDeleteImage,
   TableForm,
   SelectForm,
   RadioForm,

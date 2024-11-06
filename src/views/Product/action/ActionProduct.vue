@@ -163,6 +163,7 @@
             label: $t('product.ACTION.DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
+          @changeInputNumber="handleChangeInputNumber"
         />
       </div>
       <div>
@@ -188,7 +189,7 @@
             value: 'image',
           }"
           :handle-image-selected="handleImageSelected"
-          :handle-cancel="handleDeleteImage"
+          :handle-cancel="clearImage"
           :image-url="imageUrl"
         />
       </div>
@@ -228,7 +229,6 @@ const {
   handleSave,
   Action,
   InputForm,
-  handleDeleteImage,
   TableForm,
   SelectForm,
   RadioForm,
@@ -238,6 +238,8 @@ const {
   form,
   imageUrl,
   isDisable,
+  handleChangeInputNumber,
+  clearImage,
   columnValue,
   handleChangeStatus,
   editableData,

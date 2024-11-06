@@ -47,6 +47,9 @@
                   "
                 />
                 <Input
+                  @changeNumber="
+                    (v) => handleChangeNumber(v, record.codeSKU, column.key)
+                  "
                   v-else
                   :is-number="true"
                   :form-sate="editableData"
@@ -113,4 +116,23 @@ const props = defineProps({
 //     }
 //   }
 // };
+
+const emit = defineEmits(["changeInputNumber"]);
+
+const handleChangeNumber = (v, key, column) => {
+  if (v === "") {
+    Object.assign(
+      props.items.filter((item) => key === item.codeSKU)[0],
+      props.editableData[key]
+    );
+  } else {
+    props.editableData[key][column] = convertNumber(v);
+    Object.assign(
+      props.items.filter((item) => key === item.codeSKU)[0],
+      props.editableData[key]
+    );
+  }
+
+  // console.log(v, key);
+};
 </script>

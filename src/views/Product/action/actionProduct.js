@@ -55,7 +55,8 @@ const actionProduct = ({ action, namePath, route }) => {
   const editableData = reactive({});
   const columnValue = ref("");
   const indexCurrent = ref();
-  let { imageFile, imageUrl, handleImageSelected } = useImageUpload();
+  let { imageFile, imageUrl, handleImageSelected, clearImage } =
+    useImageUpload();
   onMounted(() => {
     Init();
   });
@@ -66,6 +67,10 @@ const actionProduct = ({ action, namePath, route }) => {
     } else {
       isDisabledAtribute.value = true;
     }
+  });
+
+  watchEffect(() => {
+    formState.imageUrl = imageUrl.value;
   });
 
   // hàm lấy ra các giá trị ban đầu
@@ -114,7 +119,7 @@ const actionProduct = ({ action, namePath, route }) => {
         imageUrl.value = formState.imageUrl;
         if (action === "copy_product") {
           formState.codeSKU = await hanldeGetCode(formState.name, "", true);
-          handleGetListCoppy();
+          handleGetListCoppy(dataAtributes);
         }
       }
     } catch (error) {}
@@ -124,13 +129,15 @@ const actionProduct = ({ action, namePath, route }) => {
 
   const handlePressEnterName = async (e) => {
     // e.preventDefault();
-    if (formState.name) {
-      formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
-      if (optionAtributes.value.length > 0) {
-        handleGetListCodeChild();
+    if (action === "create_product") {
+      if (formState.name) {
+        formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
+        if (optionAtributes.value.length > 0) {
+          handleGetListCodeChild();
+        }
+      } else {
+        formState.codeSKU = "";
       }
-    } else {
-      formState.codeSKU = "";
     }
   };
 
@@ -215,7 +222,7 @@ const actionProduct = ({ action, namePath, route }) => {
           status: +formState.status,
           type: 1,
           products: payload,
-          isHide: formState.isHide ? 1 : 0,
+          isHide: formState.isHide ? 1 : 2,
           image: {
             fileName: imageFile.value.name,
             fileData: imageUrl.value.split(",")[1],
@@ -275,11 +282,6 @@ const actionProduct = ({ action, namePath, route }) => {
     formState.unit = value;
   };
 
-  const handleDeleteImage = () => {
-    imageUrl.value = "";
-    formState.imageUrl = "";
-  };
-
   // xử lý lấy ra danh sách mã sku
 
   const handleGetListCode = async () => {
@@ -325,7 +327,7 @@ const actionProduct = ({ action, namePath, route }) => {
 
   // xử lý lấy ra các mã sku khi nhân bản
 
-  const handleGetListCoppy = async () => {
+  const handleGetListCoppy = async (dataAtributes) => {
     const res = await generateListSKU(formState.codeSKU, dataValues.value);
     if (res.success) {
       const items =
@@ -338,8 +340,12 @@ const actionProduct = ({ action, namePath, route }) => {
                 color: dataValues.value[index],
                 name: formState.name + `(${dataValues.value[index]})`,
                 codeSKU: item,
-                price: formState.price ? `${formState.price}` : "0",
-                sell: formState.sell ? `${formState.sell}` : "0",
+                price: dataAtributes[index].price
+                  ? `${dataAtributes[index].price}`
+                  : "0",
+                sell: dataAtributes[index].sell
+                  ? `${dataAtributes[index].sell}`
+                  : "0",
               };
             })
           : [];
@@ -497,6 +503,11 @@ const actionProduct = ({ action, namePath, route }) => {
     }
   };
 
+  const handleChangeInputNumber = (v, key, column) => {
+    if (v !== "") {
+    }
+  };
+
   return {
     formState,
     optionAtributes,
@@ -519,10 +530,10 @@ const actionProduct = ({ action, namePath, route }) => {
     SelectForm,
     isDisable,
     RadioForm,
-    handleDeleteImage,
     CheckboxForm,
     UploadForm,
     imageFile,
+    handleChangeInputNumber,
     imageUrl,
     handleImageSelected,
     Form,
@@ -531,6 +542,7 @@ const actionProduct = ({ action, namePath, route }) => {
     indexCurrent,
     editableData,
     options,
+    clearImage,
   };
 };
 

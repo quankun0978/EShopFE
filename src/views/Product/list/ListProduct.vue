@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { isHideMapper, statusMapper, typeMapper } from "@/helpers/mapper";
 import ListProduct from "./listProduct";
 const {
   data,

@@ -18,7 +18,7 @@
     />
     <a-input
       v-else-if="isNumber"
-      v-model:value="formSate[`${item && item.value && item.value}`]"
+      :value="value"
       @pressEnter.prevent="handlePressEnter"
       @change="onChangeNumber"
       :style="style"
@@ -48,18 +48,15 @@ const props = defineProps({
   isNumber: Boolean,
   item: Object,
   formSate: Object,
-  keyword:String,
+  keyword: String,
   rows: Number,
   maxLength: Number,
   handlePressEnter: Function,
 });
 
-const valueRefNumber = ref(props.value);
-
-const cp = reactive(props.formSate);
-
+const emit = defineEmits(["changeNumber"]);
 const onChangeNumber = (e) => {
-  props.formSate[props.keyword][props.item.value] = convertNumber(e.target.value);
+  emit("changeNumber", e.target.value);
   // Object.assign(props.formSate, cp);
 };
 

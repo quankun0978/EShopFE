@@ -11,7 +11,6 @@ export const getInitials = (productName) => {
 
 // hàm chuyển đổi số thành dạng 000.000
 export const convertNumber = (number) => {
-  // console.log(number);
   const normalNumber = convertToNormalNumber(number);
   const strRemoveLetter = removeLettersAndSpecialChars(normalNumber);
   if (isNumeric(strRemoveLetter)) {
@@ -23,7 +22,7 @@ export const convertNumber = (number) => {
 // hàm chuyển đổi ngược lại thành dạng 000000
 
 export const convertToNormalNumber = (value) => {
-  return value.replace(/\,/g, "");
+  return value.replace(/[^\d]/g, "");
 };
 
 // hàm xóa ký tự
@@ -68,4 +67,14 @@ export const getNamePath = (action) => {
     default:
       return "Thêm mới";
   }
+};
+
+export const calculateAverage = (numbers, defaultValue) => {
+  if (numbers.length === 0) return defaultValue; // Trả về 0 nếu mảng rỗng
+
+  const sum = numbers.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+  return sum / numbers.length; // Tính trung bình cộng
 };

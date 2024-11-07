@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { productRoute } from "./router";
 // khai báo các route của ứng dụng
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,27 +16,34 @@ const router = createRouter({
           children: [
             {
               path: "",
-              name: "list_product",
+              name: productRoute.LIST_PRODUCT,
               component: () => import("@/views/Product/list/ListProduct.vue"),
             },
             {
-              name: "create_product",
+              name: productRoute.CREATE_PRODUCT,
               path: "create",
-              component: () => import("@/views/Product/action/ActionProduct.vue"),
+              component: () =>
+                import("@/views/Product/action/ActionProduct.vue"),
             },
             {
-              name: "update_product",
+              name: productRoute.UPDATE_PRODUCT,
               path: "update/:id",
-              component: () => import("@/views/Product/action/ActionProduct.vue"),
+              component: () =>
+                import("@/views/Product/action/ActionProduct.vue"),
             },
             {
-              name: "copy_product",
+              name: productRoute.COPPY_PRODUCT,
               path: "copy/:id",
-              component: () => import("@/views/Product/action/ActionProduct.vue"),
+              component: () =>
+                import("@/views/Product/action/ActionProduct.vue"),
             },
           ],
         },
       ],
+    },
+    {
+      path: "/:catchAll(.*)",
+      redirect: { name: productRoute.LIST_PRODUCT },
     },
   ],
 });

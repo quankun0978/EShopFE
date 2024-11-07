@@ -106,18 +106,7 @@ const props = defineProps({
   indexCurrent: Number,
 });
 
-// const onChangeNumber = (e, key, column) => {
-//   if (key === "price" || key === "sell") {
-//     if (props.editableData) {
-//       console.log(1);
-//       const dt = props.editableData;
-//       dt[key][column] = convertNumber(e.target.value);
-//       Object.assign(props.editableData,dt)
-//     }
-//   }
-// };
-
-const emit = defineEmits(["changeInputNumber"]);
+// xử lý format dữ liệu
 
 const handleChangeNumber = (v, key, column) => {
   if (v === "") {
@@ -132,7 +121,5 @@ const handleChangeNumber = (v, key, column) => {
       props.editableData[key]
     );
   }
-
-  // console.log(v, key);
 };
 </script>

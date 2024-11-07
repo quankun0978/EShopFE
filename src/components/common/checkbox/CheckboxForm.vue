@@ -42,6 +42,9 @@ const checked = ref(props.checked);
 watchEffect(() => {
   checked.value = props.checked;
 });
+
+// xử lý khi thay đổi check
+
 const toggleCheckbox = () => {
   // Đảo ngược giá trị checkbox hiện tại
   const currentValue = props.formSate[props.item.value];

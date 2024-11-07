@@ -47,6 +47,8 @@ const props = defineProps({
   tabIndex: Number,
 });
 
+// xử lý sự kiện change khi người dùng thao tác
+
 const handleChange = (e) => {
   if (props.onChange) {
     props.onChange(e);

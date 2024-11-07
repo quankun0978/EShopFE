@@ -24,6 +24,7 @@ import { convertNumber, convertToNormalNumber } from "@/helpers/Funcs/helper";
 
 import * as options from "@/constants/options";
 import { $t } from "@/config/app";
+import { productRoute } from "@/router/router";
 
 const actionProduct = ({ action, namePath, route }) => {
   const formState = reactive({
@@ -79,7 +80,7 @@ const actionProduct = ({ action, namePath, route }) => {
     useMenuStore().updateHeader({
       namePath: `${$t("product.ACTION.PRODUCT")} / ${namePath}`,
     });
-    if (action !== "create_product") {
+    if (action !== productRoute.CREATE_PRODUCT) {
       handleGetData();
     }
   };
@@ -103,7 +104,7 @@ const actionProduct = ({ action, namePath, route }) => {
         };
 
         if (dataAtributes && dataAtributes.length > 0) {
-          if (action === "update_product") {
+          if (action === productRoute.UPDATE_PRODUCT) {
             optionAtributes.value = dataAtributes;
           }
           const dataColor = dataAtributes.map((item) => {
@@ -117,7 +118,7 @@ const actionProduct = ({ action, namePath, route }) => {
         }
         Object.assign(formState, dt);
         imageUrl.value = formState.imageUrl;
-        if (action === "copy_product") {
+        if (action === "coppy_product") {
           formState.codeSKU = await hanldeGetCode(formState.name, "", true);
           handleGetListCoppy(dataAtributes);
         }
@@ -128,8 +129,7 @@ const actionProduct = ({ action, namePath, route }) => {
   // xử lý khi người dùng enter ô nhập tên
 
   const handlePressEnterName = async (e) => {
-    // e.preventDefault();
-    if (action === "create_product") {
+    if (action === productRoute.CREATE_PRODUCT) {
       if (formState.name) {
         formState.codeSKU = await hanldeGetCode(e.target.value, "", true);
         if (optionAtributes.value.length > 0) {
@@ -184,7 +184,7 @@ const actionProduct = ({ action, namePath, route }) => {
 
   const onClickExit = () => {
     router.push({
-      name: "list_product",
+      name: productRoute.LIST_PRODUCT,
     });
   };
 
@@ -201,7 +201,7 @@ const actionProduct = ({ action, namePath, route }) => {
             sell: item.sell ? +convertToNormalNumber(item.sell) : 0,
             isHide: formState.isHide === true ? 0 : 1,
             description: formState.description,
-            status: action !== "update_product" ? 1 : +formState.status,
+            status: action !== productRoute.UPDATE_PRODUCT ? 1 : +formState.status,
             id: item.id ? item.id : -1,
           };
         });
@@ -213,7 +213,7 @@ const actionProduct = ({ action, namePath, route }) => {
   // xử lý thêm mới hoặc cập nhật sản phẩm
 
   const handlePostData = async (payload) => {
-    if (action === "update_product") {
+    if (action === productRoute.UPDATE_PRODUCT) {
       const res = await updateProduct({
         listSkuUpdate: {
           ...formState,
@@ -233,7 +233,7 @@ const actionProduct = ({ action, namePath, route }) => {
       if (res && res.success) {
         Notification.success($t("product.ACTION.UPDATE_SUCCESS"));
         router.push({
-          name: "list_product",
+          name: productRoute.LIST_PRODUCT,
         });
       }
     } else {
@@ -256,7 +256,7 @@ const actionProduct = ({ action, namePath, route }) => {
       if (res && res.success) {
         Notification.success($t("product.ACTION.ADD_NEW_SUCCESS"));
         router.push({
-          name: "list_product",
+          name: productRoute.LIST_PRODUCT,
         });
       }
     }
@@ -419,7 +419,7 @@ const actionProduct = ({ action, namePath, route }) => {
     formState.sell = formState.sell ? formState.sell : 0;
     if (values && values.length > 0) {
       dataValues.value = values;
-      if (action === "update_product") {
+      if (action === productRoute.UPDATE_PRODUCT) {
         handleGetListCodeUpdate(values);
       } else {
         handleGetListCode();
@@ -503,11 +503,6 @@ const actionProduct = ({ action, namePath, route }) => {
     }
   };
 
-  const handleChangeInputNumber = (v, key, column) => {
-    if (v !== "") {
-    }
-  };
-
   return {
     formState,
     optionAtributes,
@@ -533,7 +528,6 @@ const actionProduct = ({ action, namePath, route }) => {
     CheckboxForm,
     UploadForm,
     imageFile,
-    handleChangeInputNumber,
     imageUrl,
     handleImageSelected,
     Form,

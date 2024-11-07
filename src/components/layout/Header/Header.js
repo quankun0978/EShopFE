@@ -12,7 +12,6 @@ import {
 } from "@ant-design/icons-vue";
 //store
 import { useMenuStore } from "@/store/menu";
-// hàm bổ trợ
 const Header = () => {
   const options = [
     {

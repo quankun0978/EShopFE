@@ -29,6 +29,9 @@ const props = defineProps({
 });
 const items = ref(props.options);
 const value = ref([props.defaultValue]);
+
+// thực hiện tìm kiếm khi người dùng gõ trên select
+
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };

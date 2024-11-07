@@ -12,6 +12,9 @@ export function useImageUpload() {
     }
     imageFile.value = event.target.files[0];
   }
+
+  // xử lý khi xóa ảnh
+
   function clearImage() {
     imageFile.value = null; // Reset imageFile
     imageUrl.value = ""; // Reset imageUrl

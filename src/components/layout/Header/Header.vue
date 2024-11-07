@@ -7,7 +7,7 @@
       <a-space class="align-center">
         <router-link
           :to="{
-            name: 'list_product',
+            name: productRoute.LIST_PRODUCT,
           }"
           v-if="menuStore.isBack"
         >
@@ -34,6 +34,7 @@
   </a-layout-header>
 </template>
 <script setup>
+import { productRoute } from "@/router/router";
 import Header from "./Header";
 const {
   options,

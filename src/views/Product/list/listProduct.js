@@ -15,6 +15,8 @@ import { optionPageSize } from "@/constants/options";
 import { isHideMapper, statusMapper, typeMapper } from "@/helpers/mapper";
 
 const ListProduct = () => {
+
+  // các tham số truyền lên để lấy ra các sản phẩm
   const objectQuery = reactive({
     codeSKU: "",
     name: "",
@@ -28,6 +30,8 @@ const ListProduct = () => {
     pageSize: "20",
   });
 
+  // thông tin trang 
+
   const pagination = reactive({
     pageNumber: objectQuery.pageNumber,
     pageSize: objectQuery.pageSize,
@@ -35,6 +39,8 @@ const ListProduct = () => {
     totalRecord: "96",
     optionPageSize: optionPageSize,
   });
+
+  // các cột dữ liệu của bảng sản phẩm
 
   const columns = [
     {
@@ -144,9 +150,13 @@ const ListProduct = () => {
     handleGetData();
   };
 
+  // Xử lý khi bấm reload lại 
+
   const handleRefreshQuery = () => {
     handleGetData();
   };
+
+  // lấy ra dữ liệu của sản phẩm
 
   const handleGetData = async () => {
     try {
@@ -179,6 +189,8 @@ const ListProduct = () => {
     } catch (e) {}
   };
 
+  // xử lý xóa sản phẩm
+
   const handleDeleteData = async (data) => {
     try {
       const res = await deleteProduct(data);
@@ -192,6 +204,8 @@ const ListProduct = () => {
       Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
     }
   };
+
+  // Xử lý khi người dùng bấm nút xóa
 
   const onClickDelete = (data, dataFocus) => {
     if (data && data.length > 0) {

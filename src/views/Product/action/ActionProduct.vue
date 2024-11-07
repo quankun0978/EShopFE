@@ -25,7 +25,7 @@
           {{ $t("product.ACTION.BASIC_INFOMATION") }}
         </p>
         <RadioForm
-          v-if="route.name === 'update_product'"
+          v-if="route.name === productRoute.UPDATE_PRODUCT"
           :is-disable="isDisable"
           :options="options.optionsStatus"
           :default-value="formState.toString()"
@@ -105,7 +105,7 @@
           :tab-index="7"
         />
         <CheckboxForm
-          v-if="route.name === 'update_product'"
+          v-if="route.name === productRoute.UPDATE_PRODUCT"
           :text="$t('product.ACTION.IS_SHOW_SCREEN')"
           :item="{
             value: 'isHide',
@@ -163,7 +163,6 @@
             label: $t('product.ACTION.DETAIL_ATRIBUTES'),
             name: 'detail',
           }"
-          @changeInputNumber="handleChangeInputNumber"
         />
       </div>
       <div>
@@ -210,6 +209,8 @@
 import { useRoute } from "vue-router";
 import actionProduct from "./actionProduct";
 import { getNamePath } from "@/helpers/Funcs/helper";
+import { productRoute } from "@/router/router";
+
 const route = useRoute();
 const {
   formState,
@@ -238,7 +239,6 @@ const {
   form,
   imageUrl,
   isDisable,
-  handleChangeInputNumber,
   clearImage,
   columnValue,
   handleChangeStatus,

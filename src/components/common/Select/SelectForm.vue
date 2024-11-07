@@ -82,6 +82,8 @@ watchEffect(() => {
   }
 });
 
+// xử lý sự kiện change khi người dùng thao tác với select
+
 const handleChange = (e) => {
   dropdownOpen.value = false;
   if (props.OnChange) {
@@ -89,6 +91,9 @@ const handleChange = (e) => {
     props.OnChange(e); // Gọi hàm onChange với giá trị đã chọn
   }
 };
+
+// thực hiện tìm kiếm khi người dùng gõ trên select
+
 const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };

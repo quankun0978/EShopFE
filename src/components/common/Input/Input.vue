@@ -34,9 +34,6 @@
   </a-config-provider>
 </template>
 <script setup>
-import { convertNumber } from "@/helpers/Funcs/helper";
-import { onUpdated, reactive, ref, watchEffect } from "vue";
-
 const props = defineProps({
   value: String,
   placeholder: String,
@@ -55,6 +52,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["changeNumber"]);
+
+// xử lý sự kiện change cho input number
+
 const onChangeNumber = (e) => {
   emit("changeNumber", e.target.value);
   // Object.assign(props.formSate, cp);

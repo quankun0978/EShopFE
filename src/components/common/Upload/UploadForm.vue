@@ -72,15 +72,9 @@ const props = defineProps({
   imageUrl: String,
   tabIndex: Number, // Thêm tabIndex vào props
 });
+
+// xử lý mở cửa sổ chọn file
 const handleOpen = () => {
-  // isimg.value = true;
-  // props.handleImageSelected(e);
   document.getElementById("image-upload").click();
 };
-
-// const handleCancel = () => {
-//   // isimg.value = true;
-//   // props.handleImageSelected(e);
-//   props.imageUrl = "";
-// };
 </script>

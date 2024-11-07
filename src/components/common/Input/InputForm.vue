@@ -19,7 +19,6 @@
         v-model:value="formSate[`${item && item.value && item.value}`]"
         :rows="rows"
         :maxlength="maxLength"
-        ref="inputRef"
         :tabindex="tabIndex"
       />
       <a-input
@@ -28,7 +27,6 @@
         @keydown="pressKeydown"
         @change="onChangeNumber"
         :disabled="isDisable"
-        ref="inputRef"
         :tabindex="tabIndex"
         :style="style"
       />
@@ -38,7 +36,6 @@
         @keydown="pressKeydown"
         @blur="OnBlur"
         :disabled="isDisable"
-        ref="inputRef"
         :tabindex="tabIndex"
         :style="style"
       />
@@ -68,6 +65,7 @@ const props = defineProps({
   isRequired: Boolean,
 });
 
+// xử lý khi thao tác với bàn phím
 const pressKeydown = (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -79,12 +77,14 @@ const pressKeydown = (e) => {
   }
 };
 
+// xử lý kiện khi blur
 const OnBlur = (e) => {
   if (props.onBlur) {
     props.onBlur(e);
   }
 };
 
+// rule mặc định ban đầu
 const rulesDefault =
   props.rules && props.rules.length > 0
     ? props.rules
@@ -94,6 +94,8 @@ const rulesDefault =
           message: `Vui lòng không bỏ trống ${props.item.label}!`,
         },
       ];
+
+// xử kiện change khi người dùng thao tác với input có kiểu number
 const onChangeNumber = (e) => {
   props.formSate[props.item.value] = convertNumber(e.target.value);
 };

@@ -13,6 +13,7 @@ import {
   DeleteOutlined,
   SyncOutlined,
 } from "@ant-design/icons-vue";
+import { productRoute } from "@/router/router";
 
 // hàm bổ trợ
 const Table = (props) => {
@@ -137,7 +138,7 @@ const Table = (props) => {
       onDblclick: (e) => {
         if (!e.target.value) {
           router.push({
-            name: "update_product",
+            name: productRoute.UPDATE_PRODUCT,
             params: {
               id: record.id,
             },

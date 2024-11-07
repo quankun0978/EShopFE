@@ -16,7 +16,7 @@
         <div v-if="isAction" class="table-custom-action">
           <RouterLink
             :to="{
-              name: 'create_product',
+              name: productRoute.CREATE_PRODUCT,
             }"
             class="item-action"
           >
@@ -26,10 +26,10 @@
           <RouterLink
             :class="isDisabled && 'action-disabled'"
             @click.prevent.capture="
-              (e) => handlePreventDefault(e, 'copy_product')
+              (e) => handlePreventDefault(e, 'coppy_product')
             "
             :to="{
-              name: 'create_product',
+              name: productRoute.CREATE_PRODUCT,
             }"
             class="item-action"
           >
@@ -39,10 +39,10 @@
           <RouterLink
             :class="isDisabled && 'action-disabled'"
             @click.prevent.capture="
-              (e) => handlePreventDefault(e, 'update_product')
+              (e) => handlePreventDefault(e, productRoute.UPDATE_PRODUCT)
             "
             :to="{
-              name: 'update_product',
+              name: productRoute.UPDATE_PRODUCT,
               params: {
                 id: idProduct ? idProduct : '#',
               },
@@ -128,7 +128,7 @@
               class="item-cell"
               v-if="column.dataIndex === 'name'"
               :to="{
-                name: 'update_product',
+                name: productRoute.UPDATE_PRODUCT,
                 params: {
                   id: record.id ? record.id : '#',
                 },
@@ -167,6 +167,7 @@
 <script setup>
 import "./table.scss";
 import Table from "./Table.js";
+import { productRoute } from "@/router/router";
 const props = defineProps({
   items: Array,
   columns: Array,

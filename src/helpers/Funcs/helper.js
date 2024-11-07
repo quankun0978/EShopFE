@@ -1,4 +1,5 @@
 import { $t } from "@/config/app";
+import { productRoute } from "@/router/router";
 
 // hàm tạo ra chuỗi gồm các chữ cái đầu viết hoa của tên
 export const getInitials = (productName) => {
@@ -42,12 +43,6 @@ export const isNumeric = (value) => {
   return !isNaN(value) && !isNaN(parseFloat(value));
 };
 
-// lấy ngẫu nhiên mã barcode
-
-// export const generateRandomId = () => {
-//   return Math.floor(10000 + Math.random() * 90000).toString();
-// };
-
 // kiểm tra chuỗi chữ cái
 
 export const isStringNumber = (value) => {
@@ -58,23 +53,13 @@ export const isStringNumber = (value) => {
 
 export const getNamePath = (action) => {
   switch (action) {
-    case "create_product":
+    case productRoute.CREATE_PRODUCT:
       return $t("product.ACTION.ADD");
-    case "update_product":
+    case productRoute.UPDATE_PRODUCT:
       return $t("product.ACTION.EDIT");
-    case "copy_product":
+    case productRoute.COPPY_PRODUCT:
       return $t("product.ACTION.COPPY");
     default:
       return "Thêm mới";
   }
-};
-
-export const calculateAverage = (numbers, defaultValue) => {
-  if (numbers.length === 0) return defaultValue; // Trả về 0 nếu mảng rỗng
-
-  const sum = numbers.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
-    0
-  );
-  return sum / numbers.length; // Tính trung bình cộng
 };

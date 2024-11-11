@@ -181,7 +181,12 @@ const props = defineProps({
   pagination: Object,
   handleRefreshQuery: Function,
   handleDeleteData: Function,
+  state: Object,
+  idProduct: Number,
+  idFocus: Number,
 });
+
+const emit = defineEmits(["changeIdFocus", "changeIdProduct"]);
 
 const {
   Input,
@@ -193,22 +198,19 @@ const {
   EditOutlined,
   DeleteOutlined,
   SyncOutlined,
-  state,
   customRow,
   handleColumnInputChange,
   handleColumnSelectChange,
   HandleClickNextLastPage,
   handlePreventDefault,
   onSelectChange,
-  idProduct,
-  idFocus,
   isDisabled,
   HandleChangePageSize,
   HandleClickNextFirstPage,
   HandleClickNextPage,
   HandleClickPrevPage,
   HandleClickRefreshPage,
-} = Table(props);
+} = Table(props, emit);
 </script>
 
 <style lang="scss" scoped>

@@ -52,7 +52,7 @@
         pagination.pageNumber > 1
           ? valPageSize * (pagination.pageNumber - 1) + 1
           : 1
-      }}-{{ valPageSize && valPageSize * pagination.pageNumber }} trên
+      }}-{{ pagination.pageSize && pagination.pageSize }} trên
       {{ pagination.totalRecord && pagination.totalRecord }} kết quả
     </div>
   </div>

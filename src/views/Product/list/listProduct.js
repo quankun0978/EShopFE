@@ -1,4 +1,4 @@
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, onUpdated, watchEffect } from "vue";
 // api
 import { deleteProduct, getAllProduct } from "@/api/apiProduct";
 // hàm hỗ trợ
@@ -15,6 +15,15 @@ import { optionPageSize } from "@/constants/options";
 import { isHideMapper, statusMapper, typeMapper } from "@/helpers/mapper";
 
 const ListProduct = () => {
+  const idFocus = ref();
+  const idProduct = ref();
+  const isInit = ref(true);
+  const data = ref([]);
+
+  const state = reactive({
+    selectedRowKeys: [],
+    loading: false,
+  });
 
   // các tham số truyền lên để lấy ra các sản phẩm
   const objectQuery = reactive({
@@ -30,7 +39,7 @@ const ListProduct = () => {
     pageSize: "20",
   });
 
-  // thông tin trang 
+  // thông tin trang
 
   const pagination = reactive({
     pageNumber: objectQuery.pageNumber,
@@ -136,10 +145,14 @@ const ListProduct = () => {
     },
   ];
 
-  const data = ref([]);
-
   onMounted(() => {
     Init();
+  });
+
+  onUpdated(() => {
+    if (data.value && data.value.length > 0 && isInit.value) {
+      idFocus.value = data.value[0].id;
+    }
   });
 
   const Init = () => {
@@ -150,7 +163,7 @@ const ListProduct = () => {
     handleGetData();
   };
 
-  // Xử lý khi bấm reload lại 
+  // Xử lý khi bấm reload lại
 
   const handleRefreshQuery = () => {
     handleGetData();
@@ -184,7 +197,9 @@ const ListProduct = () => {
               key: item.id,
             };
           }) || [];
+        pagination.pageSize = res.data.pageSize;
         data.value = dt;
+        idProduct.value = null;
       }
     } catch (e) {}
   };
@@ -193,16 +208,16 @@ const ListProduct = () => {
 
   const handleDeleteData = async (data) => {
     try {
+      isInit.value = true;
       const res = await deleteProduct(data);
       if (res?.success) {
+        state.selectedRowKeys = [];
         Notification.success($t("product.LIST.DELETE_SUCCESS"));
         handleGetData();
       } else {
         Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
       }
-    } catch (error) {
-      Notification.error($t("product.LIST.ERROR_OCCURRED_TRY_AGAIN"));
-    }
+    } catch (error) {}
   };
 
   // Xử lý khi người dùng bấm nút xóa
@@ -229,6 +244,18 @@ const ListProduct = () => {
     }
   };
 
+  // xử lý khi thay đổi id focus
+  const handleChangeIdFocus = (id) => {
+    isInit.value = false;
+    idFocus.value = id;
+  };
+
+  // xử lý khi thay đổi id selected
+  const handleChangeIdProduct = (id) => {
+    isInit.value = false;
+    idProduct.value = id;
+  };
+
   return {
     data,
     columns,
@@ -237,7 +264,12 @@ const ListProduct = () => {
     handleGetData,
     handleRefreshQuery,
     onClickDelete,
+    idFocus,
+    idProduct,
     Table,
+    handleChangeIdFocus,
+    handleChangeIdProduct,
+    state,
   };
 };
 export default ListProduct;

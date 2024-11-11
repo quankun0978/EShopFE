@@ -1,4 +1,4 @@
-import { onUpdated, reactive, ref, watchEffect } from "vue";
+import { onUpdated, ref, watchEffect } from "vue";
 //componeny
 import Input from "../Input/Input.vue";
 import Select from "../Select/Select.vue";
@@ -16,33 +16,26 @@ import {
 import { productRoute } from "@/router/router";
 
 // hàm bổ trợ
-const Table = (props) => {
-  const idProduct = ref();
-  const idFocus = ref();
-  const state = reactive({
-    selectedRowKeys: [],
-    loading: false,
-  });
+const Table = (props, emit) => {
   const router = useRouter();
   const isDisabled = ref(false);
-
   // cập nhật khi id focus vào thay đổi
-
-  onUpdated(() => {
-    if (props.items && props.items.length > 0) {
-      idFocus.value = props.items[0].id;
-    }
-  });
 
   // thực hiện disable action nhân bản và chỉnh sửa khi người dùng chọn nhiểu hơn 1 sản phẩm
 
+  // onUpdated(() => {
+  //   if (props.items && props.items.length > 0) {
+  //     emit("changeIdFocus", props.items[0].id);
+  //   }
+  // });
+
   watchEffect(() => {
-    if (state.selectedRowKeys.length === 1) {
+    if (props.state.selectedRowKeys.length === 1) {
       isDisabled.value = false;
     } else {
-      if (state.selectedRowKeys.length > 1) {
+      if (props.state.selectedRowKeys.length > 1) {
         isDisabled.value = true;
-      } else if ([idFocus.value].length === 1) {
+      } else if ([props.idFocus].length === 1) {
         isDisabled.value = false;
       }
     }
@@ -50,9 +43,9 @@ const Table = (props) => {
 
   // sự kiện khi thay đổi các combo box
   const onSelectChange = (selectedRowKeys) => {
-    state.selectedRowKeys = selectedRowKeys;
+    props.state.selectedRowKeys = selectedRowKeys;
     if (selectedRowKeys && selectedRowKeys.length > 0) {
-      idProduct.value = selectedRowKeys[0];
+      emit("changeIdProduct", selectedRowKeys[0]);
     }
   };
   // sự kiện khi thay đổi các select tìm kiếm
@@ -113,8 +106,8 @@ const Table = (props) => {
   // sự kiện khi thực hiện 1 hành động (thêm mới hoặc chỉnh sửa)
 
   const handlePreventDefault = (e, route) => {
-    if (state.selectedRowKeys.length > 0 || [idFocus.value].length > 0) {
-      const id = idProduct.value ? idProduct.value : idFocus.value;
+    if (props.state.selectedRowKeys.length > 0 || [props.idFocus].length > 0) {
+      const id = props.idProduct ? props.idProduct : props.idFocus;
       router.push({
         name: route,
         params: {
@@ -129,11 +122,11 @@ const Table = (props) => {
   // custom lại hàng của bảng
 
   const customRow = (record) => {
-    const idCurrent = record.key ? record.key : idFocus.value;
-    const isFocused = idFocus.value === idCurrent;
+    const idCurrent = record.key ? record.key : props.idFocus;
+    const isFocused = props.idFocus === idCurrent;
     return {
       onClick: () => {
-        idFocus.value = record.key;
+        emit("changeIdFocus", record.key);
       },
       onDblclick: (e) => {
         if (!e.target.value) {
@@ -160,7 +153,6 @@ const Table = (props) => {
     DeleteOutlined,
     SyncOutlined,
     customRow,
-    state,
     handleColumnInputChange,
     handleColumnSelectChange,
     HandleClickNextLastPage,
@@ -170,8 +162,6 @@ const Table = (props) => {
     HandleClickNextFirstPage,
     HandleClickNextPage,
     HandleClickPrevPage,
-    idFocus,
-    idProduct,
     HandleClickRefreshPage,
     isDisabled,
   };

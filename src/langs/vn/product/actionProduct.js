@@ -56,5 +56,6 @@ const actionProduct = {
   CODE_SKU_IS_DUPLICATE: "Đã có mã sku trùng nhau vui lòng thử lại",
   BASIC_INFOMATION: "Thông tin cơ bản",
   ADDITIONAL_INFOMATION: "Thông tin bổ sung",
+  UNSUPPORTED_MEDIA_TYPE:"Không thể xử lý yêu cầu của bạn"
 };
 export default actionProduct;

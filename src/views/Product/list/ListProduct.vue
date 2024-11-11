@@ -10,6 +10,11 @@
     :handleSearch="handleGetData"
     :handleRefreshQuery="handleRefreshQuery"
     :handleDeleteData="onClickDelete"
+    :state="state"
+    :idProduct="idProduct"
+    :idFocus="idFocus"
+    @changeIdFocus="handleChangeIdFocus"
+    @changeIdProduct="handleChangeIdProduct"
   />
 </template>
 
@@ -17,12 +22,17 @@
 import ListProduct from "./listProduct";
 const {
   data,
+  state,
   Table,
   columns,
   objectQuery,
   pagination,
   handleGetData,
   handleRefreshQuery,
+  idFocus,
+  idProduct,
+  handleChangeIdFocus,
+  handleChangeIdProduct,
   onClickDelete,
 } = ListProduct();
 </script>

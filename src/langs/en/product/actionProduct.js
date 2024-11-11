@@ -52,5 +52,6 @@ const actionProduct = {
   CODE_SKU_IS_DUPLICATE: "Code sku is duplicate",
   BASIC_INFOMATION: "Basic infomation",
   ATRIBUTES_INFOMATION: "Additional infomation",
+  UNSUPPORTED_MEDIA_TYPE: "Your request cannot be processed",
 };
 export default actionProduct;

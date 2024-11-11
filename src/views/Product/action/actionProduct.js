@@ -201,7 +201,8 @@ const actionProduct = ({ action, namePath, route }) => {
             sell: item.sell ? +convertToNormalNumber(item.sell) : 0,
             isHide: formState.isHide === true ? 0 : 1,
             description: formState.description,
-            status: action !== productRoute.UPDATE_PRODUCT ? 1 : +formState.status,
+            status:
+              action !== productRoute.UPDATE_PRODUCT ? 1 : +formState.status,
             id: item.id ? item.id : -1,
           };
         });

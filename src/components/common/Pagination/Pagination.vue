@@ -49,10 +49,10 @@
     <div>
       Hiển thị
       {{
-        pagination.pageNumber > 1
+        pagination.pageNumber > 0
           ? valPageSize * (pagination.pageNumber - 1) + 1
           : 1
-      }}-{{ pagination.pageSize && pagination.pageSize }} trên
+      }}-{{ pagination.pageNumber * valPageSize > pagination.totalRecord ? pagination.totalRecord : pagination.pageNumber * valPageSize }} trên
       {{ pagination.totalRecord && pagination.totalRecord }} kết quả
     </div>
   </div>

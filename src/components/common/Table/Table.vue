@@ -82,7 +82,7 @@
           :pagination="false"
         >
           <a-column
-            v-for="(column, index) in columns"
+            v-for="column in columns"
             :key="column.dataIndex"
             :dataIndex="column.dataIndex"
           >

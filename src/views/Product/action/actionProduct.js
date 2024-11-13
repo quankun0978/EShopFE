@@ -252,7 +252,7 @@ const actionProduct = ({ action, namePath, route }) => {
           fileData: imageUrl.value.split(",")[1],
         },
         color: "null",
-        isHide: formState.isHide ? 1 : 0,
+        isHide: formState.isHide ? 1 : 2,
       });
       if (res && res.success) {
         Notification.success($t("product.ACTION.ADD_NEW_SUCCESS"));

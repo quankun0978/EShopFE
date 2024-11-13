@@ -51,12 +51,14 @@ const Table = (props, emit) => {
   // sự kiện khi thay đổi các select tìm kiếm
 
   const handleColumnInputChange = (event, dataIndex) => {
+    props.objectQuery.pageNumber = 1;
     props.objectQuery[dataIndex] = event.target.value;
   };
 
   // sự kiện khi thay đổi các select tìm kiếm
 
   const handleColumnSelectChange = (value, dataIndex) => {
+    props.objectQuery.pageNumber = 1;
     props.objectQuery[dataIndex] = value;
     props.handleSearch();
   };
